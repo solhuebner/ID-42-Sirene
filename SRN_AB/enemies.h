@@ -5,4 +5,10 @@
 #include "globals.h"
 
 
+void drawPirateShip()
+{
+  sprites.drawSelfMasked(21 + (22 * i), 60, menuText, i);
+}
+
+
 #endif
