@@ -25,10 +25,6 @@
 #define GAME_LEFT                    0
 #define GAME_RIGHT                   112
 
-#define FACING_SOUTH                 0
-#define FACING_WEST                  1
-#define FACING_NORTH                 2
-#define FACING_EAST                  3
 
 
 Arduboy arduboy;
