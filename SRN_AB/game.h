@@ -27,6 +27,7 @@ void stateGamePlaying()
 {
   checkInputs();
   drawPlayer();
+  drawPirateShip();
 };
 
 void stateGamePause()
