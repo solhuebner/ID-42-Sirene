@@ -29,6 +29,7 @@ void stateGamePlaying()
   drawPirateShip();
   checkInputs();
   checkWeapons();
+  checkMermaid();
   drawPlayer();
   drawWeapons();
 };
