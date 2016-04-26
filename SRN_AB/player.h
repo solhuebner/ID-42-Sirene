@@ -9,6 +9,7 @@ byte currentBullets[] = {0, 0, 0, 0};
 byte maxBullets[] = {2, 2, 5, 0};
 int ySpeed[] = {0, 1, -1, 0, 1, -1,};
 byte magicFrame = 0;
+byte bubblesFrame = false;
 byte coolDown[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COOLDOWN_SEASHELL, WEAPON_COOLDOWN_MAGIC};
 byte coolDownMax[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COOLDOWN_SEASHELL, WEAPON_COOLDOWN_MAGIC}; 
 
@@ -139,6 +140,8 @@ void checkWeapons()
       trident[i].isActive = false;
     }
   }
+
+  if (arduboy.everyXFrames(3)) bubblesFrame = !bubblesFrame;
   for (byte i = 0; i < 3; i++)
   {
     if (bubbles[i].isActive) bubbles[i].x += bubbles[i].xSpeed;
@@ -186,7 +189,7 @@ void drawWeapons()
   }
   for (byte i = 0; i < 3; i++)
   {
-    if (bubbles[i].isActive) sprites.drawPlusMask(bubbles[i].x, bubbles[i].y, bubbles2_plus_mask, 0);
+    if (bubbles[i].isActive) sprites.drawPlusMask(bubbles[i].x, bubbles[i].y, bubbles_plus_mask, bubblesFrame);
   }
   for (byte i = 0; i < 3; i++)
   {

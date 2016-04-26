@@ -34,6 +34,11 @@ void checkInputs()
     coolDown[mermaid.weaponType]--;
     shootWeapon[mermaid.weaponType]();
   }
+  if (buttons.pressed(B_BUTTON) && (coolDown[mermaid.weaponType] == coolDownMax[mermaid.weaponType]) && mermaid.weaponType == WEAPON_TYPE_BUBBLES)
+  {
+    coolDown[mermaid.weaponType]--;
+    shootWeapon[mermaid.weaponType]();
+  }
 }
 
 
