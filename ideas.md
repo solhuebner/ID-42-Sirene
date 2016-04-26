@@ -15,9 +15,9 @@ The mermaid has 4 weapons.
 
 
 ## WEAPONS LIST
-| **SPRITE** | **SIZE** | **FRAMES** | **AMOUNT** | **DAMAGE** | **LIFETIME** |
-| ---        | ---      | ---        | ---       | ---             | ---             |
-| **Trident** | 16x8 | 1 | 2 | -2 HP| 1 HIT |
-| **Bubble** | 8x8 | 1 | 3 | -1 HP | 1 HIT |
-| **3 Shells** | 8x8 | 1 | 2x3 | -1 HP | 1 HIT |
-| **Magic** | 8x8 | 4 | 1 | -3 HP | CONTINUES HITS |
+| **SPRITE** | **SIZE** | **FRAMES** | **AMOUNT** | **DAMAGE** | **SPEED** | **LIFETIME** |
+| ---        | ---      | ---        | ---       | ---             | ---             | ---             |
+| **Trident** | 16x8 | 1 | 2 | -2 HP | 2 | 1 HIT |
+| **Bubble** | 8x8 | 1 | 3 | -1 HP | 3 | 1 HIT |
+| **3 Shells** | 8x8 | 1 | 2x3 | -1 HP | 2 | 1 HIT |
+| **Magic** | 8x8 | 4 | 1 | -3 HP | 1 | CONTINUE HIT |
