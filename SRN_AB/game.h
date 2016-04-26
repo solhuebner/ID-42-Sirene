@@ -12,7 +12,8 @@
 void stateGamePrepareLevel()
 {
   level = 1;
-  scorePlayer = 0; 
+  scorePlayer = 0;
+  setWeapons();
   gameState = STATE_GAME_NEXT_LEVEL;
 };
 
@@ -25,9 +26,11 @@ void stateGameNextLevel()
 
 void stateGamePlaying()
 {
-  checkInputs();
-  drawPlayer();
   drawPirateShip();
+  checkInputs();
+  checkWeapons();
+  drawPlayer();
+  drawWeapons();
 };
 
 void stateGamePause()

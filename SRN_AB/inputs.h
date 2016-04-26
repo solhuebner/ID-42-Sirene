@@ -24,8 +24,12 @@ void checkInputs()
     mermaid.x++;
   }
 
-  if (buttons.justPressed(A_BUTTON)) gameState = STATE_GAME_PAUSE;
-  if (buttons.justPressed(B_BUTTON));
+  if (buttons.justPressed(A_BUTTON))
+  {
+    mermaid.weaponType++;
+    if (mermaid.weaponType > 3) mermaid.weaponType = 0;
+  }
+  if (buttons.justPressed(B_BUTTON)) shootWeapon[mermaid.weaponType]();
 }
 
 
