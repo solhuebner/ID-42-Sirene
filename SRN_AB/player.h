@@ -6,9 +6,11 @@
 
 byte mermaidFrame = 0;
 byte currentBullets[] = {0, 0, 0, 0};
-byte maxBullets[] = {1, 2, 5, 0};
+byte maxBullets[] = {2, 2, 5, 0};
 int ySpeed[] = {0, 1, -1, 0, 1, -1,};
 byte magicFrame = 0;
+byte coolDown[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COOLDOWN_SEASHELL, WEAPON_COOLDOWN_MAGIC};
+byte coolDownMax[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COOLDOWN_SEASHELL, WEAPON_COOLDOWN_MAGIC}; 
 
 struct Players
 {
@@ -30,7 +32,7 @@ struct Weapons
 };
 
 Players mermaid = { .x = 20, .y = 20, .weaponType = WEAPON_TYPE_TRIDENT};
-Weapons trident[2];
+Weapons trident[3];
 Weapons bubbles[3];
 Weapons seaShell[6];
 Weapons magic[1];
@@ -98,7 +100,7 @@ FunctionPointer shootWeapon[] = {
 
 void setWeapons()
 {
-  for (byte i = 0; i < 2; i++)
+  for (byte i = 0; i < 3; i++)
   {
     trident[i].xSpeed = 2;
     trident[i].damage = 2;
@@ -123,7 +125,12 @@ void setWeapons()
 
 void checkWeapons()
 {
-  for (byte i = 0; i < 2; i++)
+  if (coolDown[mermaid.weaponType] < coolDownMax[mermaid.weaponType])
+  {
+    coolDown[mermaid.weaponType]--;
+    if (coolDown[mermaid.weaponType] < 1) coolDown[mermaid.weaponType] = coolDownMax[mermaid.weaponType];
+  }
+  for (byte i = 0; i < 3; i++)
   {
     if (trident[i].isActive) trident[i].x += trident[i].xSpeed;
     if (trident[i].x > 128)
@@ -155,8 +162,6 @@ void checkWeapons()
       seaShell[i].isActive = false;
     }
   }
-
-
   if (magic[0].isActive) magic[0].x += magic[0].xSpeed;
   if (magic[0].x > 128)
   {
@@ -175,7 +180,7 @@ void checkMermaid()
 
 void drawWeapons()
 {
-  for (byte i = 0; i < 2; i++)
+  for (byte i = 0; i < 3; i++)
   {
     if (trident[i].isActive) sprites.drawPlusMask(trident[i].x, trident[i].y, trident_plus_mask, 0);
   }

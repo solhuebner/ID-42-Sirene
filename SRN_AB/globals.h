@@ -30,6 +30,11 @@
 #define WEAPON_TYPE_SEASHELL         2
 #define WEAPON_TYPE_MAGIC            3
 
+#define WEAPON_COOLDOWN_TRIDENT      36
+#define WEAPON_COOLDOWN_BUBBLES      24
+#define WEAPON_COOLDOWN_SEASHELL     24
+#define WEAPON_COOLDOWN_MAGIC        24
+
 
 
 

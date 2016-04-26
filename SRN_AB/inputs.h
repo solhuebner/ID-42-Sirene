@@ -29,7 +29,11 @@ void checkInputs()
     mermaid.weaponType++;
     if (mermaid.weaponType > 3) mermaid.weaponType = 0;
   }
-  if (buttons.justPressed(B_BUTTON)) shootWeapon[mermaid.weaponType]();
+  if (buttons.justPressed(B_BUTTON) && (coolDown[mermaid.weaponType] == coolDownMax[mermaid.weaponType]))
+  {
+    coolDown[mermaid.weaponType]--;
+    shootWeapon[mermaid.weaponType]();
+  }
 }
 
 
