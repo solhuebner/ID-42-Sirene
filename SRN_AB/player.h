@@ -25,7 +25,7 @@ struct Weapons
 {
   public:
     byte x;
-    byte y;
+    int y;
     byte damage;
     byte xSpeed;
     byte frame = 0;
@@ -158,7 +158,7 @@ void checkWeapons()
       seaShell[i].x += seaShell[i].xSpeed;
       seaShell[i].y += ySpeed[i];
     }
-    if (seaShell[i].x > 128 || seaShell[i].y < 1 || seaShell[i].y > 64)
+    if (seaShell[i].x > 128 || seaShell[i].y +8< 1 || seaShell[i].y > 64)
     {
       seaShell[i].x = 0;
       seaShell[i].y = 0;
