@@ -29,10 +29,21 @@ void checkInputs()
     mermaid.weaponType++;
     if (mermaid.weaponType > 3) mermaid.weaponType = 0;
   }
-  if (buttons.justPressed(B_BUTTON) && (coolDown[mermaid.weaponType] == coolDownMax[mermaid.weaponType]))
+  if (buttons.justPressed(B_BUTTON))
   {
-    coolDown[mermaid.weaponType]--;
-    shootWeapon[mermaid.weaponType]();
+    if (coolDown[mermaid.weaponType] == coolDownMax[mermaid.weaponType])
+    {
+      if (mermaid.weaponType == WEAPON_TYPE_SEASHELL)
+      {
+        coolDown[mermaid.weaponType]--;
+        shootWeapon[mermaid.weaponType]();
+      }
+      if (mermaid.weaponType == WEAPON_TYPE_TRIDENT)
+      {
+        coolDown[mermaid.weaponType]--;
+        shootWeapon[mermaid.weaponType]();
+      }
+    }
   }
   if (buttons.pressed(B_BUTTON) && (coolDown[mermaid.weaponType] == coolDownMax[mermaid.weaponType]) && mermaid.weaponType == WEAPON_TYPE_BUBBLES)
   {
