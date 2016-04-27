@@ -29,40 +29,41 @@ void checkInputs()
     mermaid.weaponType++;
     if (mermaid.weaponType > 3) mermaid.weaponType = 0;
   }
-  if (buttons.justPressed(B_BUTTON))
+  if (buttons.justPressed(B_BUTTON) && (coolDown[mermaid.weaponType] == coolDownMax[mermaid.weaponType]))
   {
-    if (coolDown[mermaid.weaponType] == coolDownMax[mermaid.weaponType])
-    {
-      if (mermaid.weaponType == WEAPON_TYPE_TRIDENT)
-      {
-        coolDown[mermaid.weaponType]--;
-        shootWeapon[mermaid.weaponType]();
-      }
-      if ((mermaid.weaponType == WEAPON_TYPE_SEASHELL))
-      {
-        if ((seaShell[0].isActive == false) && (seaShell[1].isActive == false) && (seaShell[2].isActive == false))
-        {
-          coolDown[mermaid.weaponType]--;
-          shootWeapon[mermaid.weaponType]();
-        }
-        if ((seaShell[3].isActive == false) && (seaShell[4].isActive == false) && (seaShell[5].isActive == false))
-        {
-          coolDown[mermaid.weaponType]--;
-          shootWeapon[mermaid.weaponType]();
-        }
-      }
-      if (mermaid.weaponType == WEAPON_TYPE_MAGIC)
-      {
-        coolDown[mermaid.weaponType]--;
-        shootWeapon[mermaid.weaponType]();
-      }
 
+    if (mermaid.weaponType == WEAPON_TYPE_TRIDENT)
+    {
+      coolDown[mermaid.weaponType]--;
+      shootWeapon[mermaid.weaponType]();
+    }
+    if ((mermaid.weaponType == WEAPON_TYPE_SEASHELL))
+    {
+      if ((seaShell[0].isActive == false) && (seaShell[1].isActive == false) && (seaShell[2].isActive == false))
+      {
+        coolDown[mermaid.weaponType]--;
+        shootWeapon[mermaid.weaponType]();
+      }
+      if ((seaShell[3].isActive == false) && (seaShell[4].isActive == false) && (seaShell[5].isActive == false))
+      {
+        coolDown[mermaid.weaponType]--;
+        shootWeapon[mermaid.weaponType]();
+      }
     }
   }
-  if (buttons.pressed(B_BUTTON) && (coolDown[mermaid.weaponType] == coolDownMax[mermaid.weaponType]) && mermaid.weaponType == WEAPON_TYPE_BUBBLES)
+  if (buttons.pressed(B_BUTTON) && (coolDown[mermaid.weaponType] == coolDownMax[mermaid.weaponType]))
   {
-    coolDown[mermaid.weaponType]--;
-    shootWeapon[mermaid.weaponType]();
+    if (mermaid.weaponType == WEAPON_TYPE_BUBBLES)
+    {
+      coolDown[mermaid.weaponType]--;
+      shootWeapon[mermaid.weaponType]();
+    }
+    if (mermaid.weaponType == WEAPON_TYPE_MAGIC)
+    {
+      //magicCharge++;
+      coolDown[mermaid.weaponType]--;
+      shootWeapon[mermaid.weaponType]();
+    }
   }
 }
 

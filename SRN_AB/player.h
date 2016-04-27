@@ -9,9 +9,13 @@ byte currentBullets[] = {0, 0, 0, 0};
 byte maxBullets[] = {2, 2, 5, 0};
 int ySpeed[] = {0, 1, -1, 0, 1, -1,};
 byte magicFrame = 0;
+byte magicCharge = 0;
 byte bubblesFrame = false;
 byte coolDown[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COOLDOWN_SEASHELL, WEAPON_COOLDOWN_MAGIC};
-byte coolDownMax[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COOLDOWN_SEASHELL, WEAPON_COOLDOWN_MAGIC}; 
+byte coolDownMax[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COOLDOWN_SEASHELL, WEAPON_COOLDOWN_MAGIC};
+byte tridentBubblesActive = 0b00000000;
+byte seaShellMagicActive =  0b00000000;
+
 
 struct Players
 {
@@ -158,7 +162,7 @@ void checkWeapons()
       seaShell[i].x += seaShell[i].xSpeed;
       seaShell[i].y += ySpeed[i];
     }
-    if (seaShell[i].x > 128 || seaShell[i].y +8< 1 || seaShell[i].y > 64)
+    if (seaShell[i].x > 128 || seaShell[i].y + 8 < 1 || seaShell[i].y > 64)
     {
       seaShell[i].x = 0;
       seaShell[i].y = 0;
@@ -202,7 +206,7 @@ void drawWeapons()
   for (byte i = 0; i < 1; i++)
   {
     if (magic[i].isActive) sprites.drawPlusMask(magic[i].x, magic[i].y, magic_plus_mask, magicFrame);
-    if (magic[i].isActive) sprites.drawPlusMask(magic[i].x-8, magic[i].y, magicTrail_plus_mask, 0);
+    if (magic[i].isActive) sprites.drawPlusMask(magic[i].x - 8, magic[i].y, magicTrail_plus_mask, 0);
   }
 }
 
