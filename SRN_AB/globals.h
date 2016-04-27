@@ -21,9 +21,9 @@
 #define STATE_GAME_OVER              10
 
 #define GAME_TOP                     0
-#define GAME_BOTTOM                  48
+#define GAME_BOTTOM                  64
 #define GAME_LEFT                    0
-#define GAME_RIGHT                   112
+#define GAME_RIGHT                   128
 
 #define WEAPON_TYPE_TRIDENT          0
 #define WEAPON_TYPE_BUBBLES          1
@@ -32,10 +32,8 @@
 
 #define WEAPON_COOLDOWN_TRIDENT      24
 #define WEAPON_COOLDOWN_BUBBLES      16
-#define WEAPON_COOLDOWN_SEASHELL     20
+#define WEAPON_COOLDOWN_SEASHELL     24
 #define WEAPON_COOLDOWN_MAGIC        24
-
-
 
 
 Arduboy arduboy;

@@ -7,7 +7,7 @@
 
 void checkInputs()
 {
-  if (buttons.pressed(DOWN_BUTTON) && (mermaid.y < GAME_BOTTOM))
+  if (buttons.pressed(DOWN_BUTTON) && (mermaid.y < GAME_BOTTOM - 16))
   {
     mermaid.y++;
   }
@@ -19,7 +19,7 @@ void checkInputs()
   {
     mermaid.y--;
   }
-  if (buttons.pressed(RIGHT_BUTTON) && (mermaid.x < GAME_RIGHT))
+  if (buttons.pressed(RIGHT_BUTTON) && (mermaid.x < GAME_RIGHT-16))
   {
     mermaid.x++;
   }
@@ -39,12 +39,7 @@ void checkInputs()
     }
     if ((mermaid.weaponType == WEAPON_TYPE_SEASHELL))
     {
-      if ((seaShell[0].isActive == false) && (seaShell[1].isActive == false) && (seaShell[2].isActive == false))
-      {
-        coolDown[mermaid.weaponType]--;
-        shootWeapon[mermaid.weaponType]();
-      }
-      if ((seaShell[3].isActive == false) && (seaShell[4].isActive == false) && (seaShell[5].isActive == false))
+      if (((seaShell[0].isActive == false) && (seaShell[1].isActive == false) && (seaShell[2].isActive == false)) || ((seaShell[3].isActive == false) && (seaShell[4].isActive == false) && (seaShell[5].isActive == false)))
       {
         coolDown[mermaid.weaponType]--;
         shootWeapon[mermaid.weaponType]();
