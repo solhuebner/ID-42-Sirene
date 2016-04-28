@@ -21,3 +21,13 @@ The mermaid has 4 weapons.
 | **Bubble** | 8x8 | 1 | 3 | -1 HP | 3 | 1 HIT |
 | **3 Shells** | 8x8 | 1 | 2x3 | -1 HP | 2 | 1 HIT |
 | **Magic** | 8x8 | 4 | 1 | -3 HP | 1 | CONTINUE HIT |
+
+HUD
+
+upper left corner LIFE, upper right corner POINTS
+
+The remaining LIFE is displayed with 3 hearts. When the game starts, the mermaid has 3 full hearts. Everytime the mermaid is hit, she loses a heart (displayed with an empty heart). When you lose all 3 hearts, it's GAME OVER. When this happens GAME OVER screen is displayed with your current HIGHSCORE and when you press a button, you go back to the title screen. 
+
+There's 7 digits displayed for the points. When the game starts, you have 0 000 000 points. Destroying enemies and collecting items can give you points. 
+
+At the start of every level there's a quick message displaying what stage you're at. 
