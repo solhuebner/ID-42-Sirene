@@ -9,7 +9,7 @@ byte currentBullets[] = {0, 0, 0};
 byte maxBullets[] = {2, 2, 5};
 int ySpeed[] = {0, 1, -1, 0, 1, -1,};
 byte magicFrame = 0;
-byte magicCharge = 0;
+boolean magicCharging = false;
 byte bubblesFrame = false;
 byte coolDown[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COOLDOWN_SEASHELL, WEAPON_COOLDOWN_MAGIC};
 byte coolDownMax[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COOLDOWN_SEASHELL, WEAPON_COOLDOWN_MAGIC};
@@ -34,12 +34,22 @@ struct Weapons
     boolean isActive = false;
 };
 
+struct Sparkles
+{
+  public:
+    int x;
+    int y;
+    int xSpeed;
+    int ySpeed;
+    byte frame;
+};
+
 Players mermaid = { .x = 20, .y = 20, .weaponType = WEAPON_TYPE_TRIDENT, .isActive = true};
 Weapons trident[3];
 Weapons bubbles[3];
 Weapons seaShell[6];
 Weapons magic;
-
+Sparkles sparkle[8];
 
 void rotateBullets()
 {
@@ -118,6 +128,14 @@ void setWeapons()
   }
   magic.xSpeed = 3;
   magic.damage = 1;
+  sparkle[0] = { .x = 18, .y = -6, .xSpeed = -2, .ySpeed = 3, .frame = 0};
+  sparkle[1] = { .x = -6, .y = 6, .xSpeed = 2, .ySpeed = 0, .frame = 7};
+  sparkle[2] = { .x = 18, .y = 18, .xSpeed = -2, .ySpeed = -3, .frame = 6};
+  sparkle[3] = { .x = 8, .y = -7, .xSpeed = 0, .ySpeed = 2, .frame = 5};
+  sparkle[4] = { .x = -5, .y = 18, .xSpeed = 2, .ySpeed = -3, .frame = 4};
+  sparkle[5] = { .x = 19, .y = 6, .xSpeed = -2, .ySpeed = 0, .frame = 3};
+  sparkle[6] = { .x = -5, .y = -6, .xSpeed = 2, .ySpeed = 3, .frame = 2};
+  sparkle[7] = { .x = 7, .y = 19, .xSpeed = 0, .ySpeed = -2, .frame = 1};
 
 }
 
@@ -176,6 +194,11 @@ void checkMermaid()
 {
   if (arduboy.everyXFrames(10)) mermaidFrame++;
   if (mermaidFrame > 5 ) mermaidFrame = 0;
+  for (byte i = 0; i < 8; i++)
+  {
+    if (arduboy.everyXFrames(5)) sparkle[i].frame++;
+    if (sparkle[i].frame > 7 ) sparkle[i].frame = 0;
+  }
 }
 
 void drawWeapons()
@@ -193,6 +216,7 @@ void drawWeapons()
 void drawPlayer()
 {
   if (mermaid.isActive) sprites.drawPlusMask(mermaid.x, mermaid.y, mermaid_plus_mask, mermaidFrame);
+  if (magicCharging) for (byte i = 0; i < 8; i++) sprites.drawSelfMasked(mermaid.x + sparkle[i].x + (sparkle[i].xSpeed*sparkle[i].frame), mermaid.y + sparkle[i].y + (sparkle[i].ySpeed*sparkle[i].frame), chargeSparkles, sparkle[i].frame);
 }
 
 #endif

@@ -7,6 +7,7 @@
 
 void checkInputs()
 {
+  magicCharging = false;
   if (buttons.pressed(DOWN_BUTTON) && (mermaid.y < GAME_BOTTOM - 16))
   {
     mermaid.y++;
@@ -46,16 +47,16 @@ void checkInputs()
       }
     }
   }
-  if (buttons.pressed(B_BUTTON) && (coolDown[mermaid.weaponType] == coolDownMax[mermaid.weaponType]))
+  if (buttons.pressed(B_BUTTON))
   {
-    if (mermaid.weaponType == WEAPON_TYPE_BUBBLES)
+    if ((mermaid.weaponType == WEAPON_TYPE_BUBBLES) && (coolDown[WEAPON_TYPE_BUBBLES] == coolDownMax[WEAPON_TYPE_BUBBLES]))
     {
       coolDown[mermaid.weaponType]--;
       shootWeapon[mermaid.weaponType]();
     }
     if (mermaid.weaponType == WEAPON_TYPE_MAGIC)
     {
-      //magicCharge++;
+      magicCharging = true;
       coolDown[mermaid.weaponType]--;
       shootWeapon[mermaid.weaponType]();
     }
