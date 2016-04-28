@@ -31,3 +31,35 @@ The remaining LIFE is displayed with 3 hearts. When the game starts, the mermaid
 There's 7 digits displayed for the points. When the game starts, you have 0 000 000 points. Destroying enemies and collecting items can give you points. 
 
 At the start of every level there's a quick message displaying what stage you're at. 
+
+
+## ENEMIES
+| **SPRITE** | **SIZE** | **FRAMES** | **NAME** | **HP** | **POINTS** |
+| ---        | ---      | ---        | ---       | ---             | ---             | ---             |
+| **Small Fish** | 8x8 | 4 | fish01 | 2 HP |   |
+| **Big Fish** | 16x16 | 4 | fish02 | 4 HP |   |
+| **Eel** | 32x8 | 4 | eel | 4 HP |   |
+| **Jellyfish** | 16x16 | 5 | jellyfish | 2 HP |  | 
+| **Octopus** | 16x16 | 4 | octopus | 4 HP |  | 
+
+Behaviors
+
+Small Fish:
+Swims offscreen from right to left. Small and weak, usually they swim in packs. 
+Nice to have depending on how difficult it is:
+1. have a variant that swims faster
+2. have the ability to swim in a path other than a straight line: arc, sinewave. This might not be necessary but good to bring it up to consider it
+
+Big Fish:
+Same behavior as small fish, but a larger target with higher HP. 
+
+Eel:
+Swims in a straight line from offscreen. At a fixed interval will shoot a zap projectile at the mermaid. 
+
+Jellyfish:
+Swims in a stop and go pattern from the bottom of the screen upwards. 
+
+Octopus: 
+Swims offscreen from right to left. At a fixed interval shoots a bullet (meant to be ink) at the mermaid. 
+1. If variable swimming patterns are possible, would be nice to apply them to the octopus as well. 
+
