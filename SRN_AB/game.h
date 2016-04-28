@@ -13,6 +13,7 @@ void stateGamePrepareLevel()
 {
   level = 1;
   scorePlayer = 0;
+  mermaid.life = 3;
   setWeapons();
   gameState = STATE_GAME_NEXT_LEVEL;
 };
@@ -32,6 +33,7 @@ void stateGamePlaying()
   checkMermaid();
   drawPlayer();
   drawWeapons();
+  drawLife();
 };
 
 void stateGamePause()

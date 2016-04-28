@@ -23,6 +23,7 @@ struct Players
     byte y;
     byte weaponType;
     boolean isActive;
+    byte life;
 };
 
 struct Weapons
@@ -45,7 +46,7 @@ struct Sparkles
     byte frame;
 };
 
-Players mermaid = { .x = 20, .y = 20, .weaponType = WEAPON_TYPE_TRIDENT, .isActive = true};
+Players mermaid = { .x = 20, .y = 20, .weaponType = WEAPON_TYPE_TRIDENT, .isActive = true, .life = 4};
 Weapons trident[3];
 Weapons bubbles[3];
 Weapons seaShell[6];
@@ -220,9 +221,14 @@ void drawPlayer()
   if (mermaid.isActive) sprites.drawPlusMask(mermaid.x, mermaid.y, mermaid_plus_mask, mermaidFrame);
   if (magicCharging)
   {
-    for (byte i = 0; i < 8; i++) sprites.drawSelfMasked(mermaid.x + sparkle[i].x + (sparkle[i].xSpeed*sparkle[i].frame), mermaid.y + sparkle[i].y + (sparkle[i].ySpeed*sparkle[i].frame), chargeSparkles, sparkle[i].frame);
+    for (byte i = 0; i < 8; i++) sprites.drawSelfMasked(mermaid.x + sparkle[i].x + (sparkle[i].xSpeed * sparkle[i].frame), mermaid.y + sparkle[i].y + (sparkle[i].ySpeed * sparkle[i].frame), chargeSparkles, sparkle[i].frame);
     sprites.drawPlusMask(mermaid.x, mermaid.y, chargeBar_plus_mask, chargeBarFrame);
   }
+}
+
+void drawLife()
+{
+  sprites.drawPlusMask(0, 0,hearts_plus_mask, mermaid.life-2);  
 }
 
 #endif
