@@ -7,7 +7,6 @@
 
 void checkInputs()
 {
-  magicCharging = false;
   if (buttons.pressed(DOWN_BUTTON) && (mermaid.y < GAME_BOTTOM - 16))
   {
     mermaid.y++;
@@ -57,9 +56,16 @@ void checkInputs()
     if (mermaid.weaponType == WEAPON_TYPE_MAGIC)
     {
       magicCharging = true;
-      coolDown[mermaid.weaponType]--;
-      shootWeapon[mermaid.weaponType]();
+      if (arduboy.everyXFrames(30)) chargeBarFrame ++;
+      if (chargeBarFrame > 4) chargeBarFrame = 4;
     }
+  }
+  if (buttons.notPressed(B_BUTTON) && (mermaid.weaponType == WEAPON_TYPE_MAGIC) && (magicCharging == true))
+  {
+    magicCharging = false;
+    chargeBarFrame = 0;
+    coolDown[mermaid.weaponType]--;
+    shootWeapon[mermaid.weaponType]();
   }
 }
 

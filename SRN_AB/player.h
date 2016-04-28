@@ -10,6 +10,7 @@ byte maxBullets[] = {2, 2, 5};
 int ySpeed[] = {0, 1, -1, 0, 1, -1,};
 byte magicFrame = 0;
 boolean magicCharging = false;
+byte chargeBarFrame = 0;
 byte bubblesFrame = false;
 byte coolDown[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COOLDOWN_SEASHELL, WEAPON_COOLDOWN_MAGIC};
 byte coolDownMax[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COOLDOWN_SEASHELL, WEAPON_COOLDOWN_MAGIC};
@@ -100,6 +101,7 @@ void shootMagic()
     magic.isActive = true;
     magic.x = mermaid.x + 8;
     magic.y = mermaid.y + 6;
+    chargeBarFrame = 0;
   }
 }
 
@@ -216,7 +218,11 @@ void drawWeapons()
 void drawPlayer()
 {
   if (mermaid.isActive) sprites.drawPlusMask(mermaid.x, mermaid.y, mermaid_plus_mask, mermaidFrame);
-  if (magicCharging) for (byte i = 0; i < 8; i++) sprites.drawSelfMasked(mermaid.x + sparkle[i].x + (sparkle[i].xSpeed*sparkle[i].frame), mermaid.y + sparkle[i].y + (sparkle[i].ySpeed*sparkle[i].frame), chargeSparkles, sparkle[i].frame);
+  if (magicCharging)
+  {
+    for (byte i = 0; i < 8; i++) sprites.drawSelfMasked(mermaid.x + sparkle[i].x + (sparkle[i].xSpeed*sparkle[i].frame), mermaid.y + sparkle[i].y + (sparkle[i].ySpeed*sparkle[i].frame), chargeSparkles, sparkle[i].frame);
+    sprites.drawPlusMask(mermaid.x, mermaid.y, chargeBar_plus_mask, chargeBarFrame);
+  }
 }
 
 #endif
