@@ -33,7 +33,8 @@ void stateGamePlaying()
   checkMermaid();
   drawPlayer();
   drawWeapons();
-  drawLife();
+  drawLifeHUD();
+  drawScoreHUD();
 };
 
 void stateGamePause()
@@ -45,6 +46,8 @@ void stateGameOver()
 {
   
 };
+
+
 
 
 
