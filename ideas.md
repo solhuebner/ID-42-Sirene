@@ -61,5 +61,15 @@ Swims in a stop and go pattern from the bottom of the screen upwards.
 
 Octopus: 
 Swims offscreen from right to left. At a fixed interval shoots a bullet (meant to be ink) at the mermaid. 
-1. If variable swimming patterns are possible, would be nice to apply them to the octopus as well. 
+1. If variable swimming patterns are possible, would be nice to apply them to the octopus as well.
+
+## ENEMIE WAVES
+| **NUMBER** | **ENEMY TYPE**  | **ENEMY AMOUNT** | **ENEMY SPEED** | **ENEMY START** | **ENEMY BEHAVIOR** |
+| ---        | ---             | ---              | ---             | ---             | ---                |
+| **000** | - | - | - |
+| **001** | FISHY | 3 | 1 |start at the top | all swim in a straight Line |
+| **002** | FISHY | 3 | 1 |start at the middle | all swim in a straight Line |
+| **003** | FISHY | 3 | 1 |start at the bottom | all swim in a straight Line |
+| **004** | FISHY | 3 | 1 |start at the top | start in a straight Line, swim to the middle |
+| **005** | FISHY | 3 | 1 |start at the bottom | start in a straight Line, swim to the middle |
 
