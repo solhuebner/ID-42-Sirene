@@ -44,6 +44,7 @@ void stateGamePlaying()
   drawWeapons();
   drawLifeHUD();
   drawScoreHUD();
+  //Serial.println(sizeof(&Level01));
 };
 
 void stateGamePause()

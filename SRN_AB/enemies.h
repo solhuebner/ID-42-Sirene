@@ -6,9 +6,9 @@
 
 #define MAX_ONSCREEN_FISHY           3
 #define MAX_ONSCREEN_FISH            3
-#define MAX_ONSCREEN_EEL             3
+#define MAX_ONSCREEN_EEL             2
 #define MAX_ONSCREEN_JELLYFISH       3
-#define MAX_ONSCREEN_OCTOPUS         3
+#define MAX_ONSCREEN_OCTOPUS         2
 
 
 #define ENEMIE_TYPE_FISHY            0
@@ -52,9 +52,11 @@ void checkEnemies()
     {
       enemyFrame[i]++;
       if (enemyFrame[i] > enemyMaxFrame[i]) enemyFrame[i] = 0;
+      if (enemy[i].x < -32) enemy[i].isActive = false;
     }
   }
 }
+
 
 void checkBosses()
 {
