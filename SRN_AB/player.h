@@ -4,14 +4,22 @@
 #include <Arduino.h>
 #include "globals.h"
 
-byte mermaidFrame = 0;
-byte currentBullets[] = {0, 0, 0};
-byte maxBullets[] = {2, 2, 5};
-int ySpeed[] = {0, 1, -1, 0, 1, -1,};
-byte magicFrame = 0;
+#define MAX_ONSCREEN_TRIDENT         3
+#define MAX_ONSCREEN_BUBBLES         3
+#define MAX_ONSCREEN_SEASHELL        6
+#define MAX_ONSCREEN_MAGIC           1
+#define MAX_ONSCREEN_SPARKLES        8
+
+int seaShellSpeedY[] = {0, 1, -1, 0, 1, -1,};
 boolean magicCharging = false;
+
+byte mermaidFrame = 0;
+byte magicFrame = 0;
 byte chargeBarFrame = 0;
-byte bubblesFrame = false;
+boolean bubblesFrame = false;
+
+byte currentBullets[] = {0, 0, 0, 0};
+byte maxBullets[] = {MAX_ONSCREEN_TRIDENT, MAX_ONSCREEN_BUBBLES, MAX_ONSCREEN_SEASHELL, MAX_ONSCREEN_MAGIC};
 byte coolDown[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COOLDOWN_SEASHELL, WEAPON_COOLDOWN_MAGIC};
 byte coolDownMax[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COOLDOWN_SEASHELL, WEAPON_COOLDOWN_MAGIC};
 
@@ -32,7 +40,7 @@ struct Weapons
     byte x;
     int y;
     byte damage;
-    byte xSpeed;
+    byte speedX;
     boolean isActive = false;
 };
 
@@ -41,22 +49,22 @@ struct Sparkles
   public:
     int x;
     int y;
-    int xSpeed;
-    int ySpeed;
+    int speedX;
+    int speedY;
     byte frame;
 };
 
-Players mermaid = { .x = 20, .y = 20, .weaponType = WEAPON_TYPE_TRIDENT, .isActive = true, .life = 4};
-Weapons trident[3];
-Weapons bubbles[3];
-Weapons seaShell[6];
-Weapons magic;
-Sparkles sparkle[8];
+Players mermaid = { .x = 0, .y = 20, .weaponType = WEAPON_TYPE_TRIDENT, .isActive = true, .life = 4};
+Weapons trident[MAX_ONSCREEN_TRIDENT];
+Weapons bubbles[MAX_ONSCREEN_BUBBLES];
+Weapons seaShell[MAX_ONSCREEN_SEASHELL];
+Weapons magic[MAX_ONSCREEN_MAGIC];
+Sparkles sparkle[MAX_ONSCREEN_SPARKLES];
 
 void rotateBullets()
 {
   currentBullets[mermaid.weaponType]++;
-  if (currentBullets[mermaid.weaponType] > maxBullets[mermaid.weaponType]) currentBullets[mermaid.weaponType] = 0;
+  if (currentBullets[mermaid.weaponType] > (maxBullets[mermaid.weaponType] - 1)) currentBullets[mermaid.weaponType] = 0;
 }
 
 void shootTrident()
@@ -97,11 +105,11 @@ void shootSeaShell()
 
 void shootMagic()
 {
-  if (!magic.isActive)
+  if (!magic[0].isActive)
   {
-    magic.isActive = true;
-    magic.x = mermaid.x + 8;
-    magic.y = mermaid.y + 6;
+    magic[0].isActive = true;
+    magic[0].x = mermaid.x + 8;
+    magic[0].y = mermaid.y + 6;
     chargeBarFrame = 0;
   }
 }
@@ -120,25 +128,26 @@ void setWeapons()
 {
   for (byte i = 0; i < 3; i++)
   {
-    trident[i].xSpeed = 2;
+    trident[i].speedX = 2;
     trident[i].damage = 2;
-    bubbles[i].xSpeed = 3;
+    bubbles[i].speedX = 3;
     bubbles[i].damage = 1;
-    seaShell[i].xSpeed = 2;
+    seaShell[i].speedX = 2;
     seaShell[i].damage = 1;
-    seaShell[i + 3].xSpeed = 2;
+    seaShell[i + 3].speedX = 2;
     seaShell[i + 3].damage = 1;
   }
-  magic.xSpeed = 3;
-  magic.damage = 1;
-  sparkle[0] = { .x = 18, .y = -6, .xSpeed = -2, .ySpeed = 3, .frame = 0};
-  sparkle[1] = { .x = -6, .y = 6, .xSpeed = 2, .ySpeed = 0, .frame = 7};
-  sparkle[2] = { .x = 18, .y = 18, .xSpeed = -2, .ySpeed = -3, .frame = 6};
-  sparkle[3] = { .x = 8, .y = -7, .xSpeed = 0, .ySpeed = 2, .frame = 5};
-  sparkle[4] = { .x = -5, .y = 18, .xSpeed = 2, .ySpeed = -3, .frame = 4};
-  sparkle[5] = { .x = 19, .y = 6, .xSpeed = -2, .ySpeed = 0, .frame = 3};
-  sparkle[6] = { .x = -5, .y = -6, .xSpeed = 2, .ySpeed = 3, .frame = 2};
-  sparkle[7] = { .x = 7, .y = 19, .xSpeed = 0, .ySpeed = -2, .frame = 1};
+  magic[0].speedX = 3;
+  magic[0].damage = 1;
+
+  sparkle[0] = { .x = 18, .y = -6, .speedX = -2, .speedY = 3, .frame = 0};
+  sparkle[1] = { .x = -6, .y = 6, .speedX = 2, .speedY = 0, .frame = 7};
+  sparkle[2] = { .x = 18, .y = 18, .speedX = -2, .speedY = -3, .frame = 6};
+  sparkle[3] = { .x = 8, .y = -7, .speedX = 0, .speedY = 2, .frame = 5};
+  sparkle[4] = { .x = -5, .y = 18, .speedX = 2, .speedY = -3, .frame = 4};
+  sparkle[5] = { .x = 19, .y = 6, .speedX = -2, .speedY = 0, .frame = 3};
+  sparkle[6] = { .x = -5, .y = -6, .speedX = 2, .speedY = 3, .frame = 2};
+  sparkle[7] = { .x = 7, .y = 19, .speedX = 0, .speedY = -2, .frame = 1};
 
 }
 
@@ -151,7 +160,7 @@ void checkWeapons()
   }
   for (byte i = 0; i < 3; i++)
   {
-    if (trident[i].isActive) trident[i].x += trident[i].xSpeed;
+    if (trident[i].isActive) trident[i].x += trident[i].speedX;
     if (trident[i].x > 128)
     {
       trident[i].x = 0;
@@ -162,7 +171,7 @@ void checkWeapons()
   if (arduboy.everyXFrames(3)) bubblesFrame = !bubblesFrame;
   for (byte i = 0; i < 3; i++)
   {
-    if (bubbles[i].isActive) bubbles[i].x += bubbles[i].xSpeed;
+    if (bubbles[i].isActive) bubbles[i].x += bubbles[i].speedX;
     if (bubbles[i].x > 128)
     {
       bubbles[i].x = 0;
@@ -173,8 +182,8 @@ void checkWeapons()
   {
     if (seaShell[i].isActive)
     {
-      seaShell[i].x += seaShell[i].xSpeed;
-      seaShell[i].y += ySpeed[i];
+      seaShell[i].x += seaShell[i].speedX;
+      seaShell[i].y += seaShellSpeedY[i];
     }
     if (seaShell[i].x > 128 || seaShell[i].y + 8 < 1 || seaShell[i].y > 64)
     {
@@ -183,11 +192,11 @@ void checkWeapons()
       seaShell[i].isActive = false;
     }
   }
-  if (magic.isActive) magic.x += magic.xSpeed;
-  if (magic.x > 128)
+  if (magic[0].isActive) magic[0].x += magic[0].speedX;
+  if (magic[0].x > 128)
   {
-    magic.x = 0;
-    magic.isActive = false;
+    magic[0].x = 0;
+    magic[0].isActive = false;
   }
   if (arduboy.everyXFrames(2)) magicFrame++;
   if (magicFrame > 3) magicFrame = 0;
@@ -212,23 +221,24 @@ void drawWeapons()
     if (bubbles[i].isActive) sprites.drawPlusMask(bubbles[i].x, bubbles[i].y, bubbles_plus_mask, bubblesFrame);
     if (seaShell[i].isActive) sprites.drawPlusMask(seaShell[i].x, seaShell[i].y, seaShell_plus_mask, i);
     if (seaShell[i + 3].isActive) sprites.drawPlusMask(seaShell[i + 3].x, seaShell[i + 3].y, seaShell_plus_mask, i);
-    if (magic.isActive) sprites.drawPlusMask(magic.x, magic.y, magic_plus_mask, magicFrame);
   }
+  if (magic[0].isActive) sprites.drawPlusMask(magic[0].x, magic[0].y, magic_plus_mask, magicFrame);
 }
+
 
 void drawPlayer()
 {
   if (mermaid.isActive) sprites.drawPlusMask(mermaid.x, mermaid.y, mermaid_plus_mask, mermaidFrame);
   if (magicCharging)
   {
-    for (byte i = 0; i < 8; i++) sprites.drawSelfMasked(mermaid.x + sparkle[i].x + (sparkle[i].xSpeed * sparkle[i].frame), mermaid.y + sparkle[i].y + (sparkle[i].ySpeed * sparkle[i].frame), chargeSparkles, sparkle[i].frame);
+    for (byte i = 0; i < 8; i++) sprites.drawSelfMasked(mermaid.x + sparkle[i].x + (sparkle[i].speedX * sparkle[i].frame), mermaid.y + sparkle[i].y + (sparkle[i].speedY * sparkle[i].frame), chargeSparkles, sparkle[i].frame);
     sprites.drawPlusMask(mermaid.x, mermaid.y, chargeBar_plus_mask, chargeBarFrame);
   }
 }
 
 void drawLifeHUD()
 {
-  sprites.drawPlusMask(0, 0,hearts_plus_mask, mermaid.life-2);  
+  sprites.drawPlusMask(0, 0, hearts_plus_mask, mermaid.life - 2);
 }
 
 void drawScoreHUD()
@@ -238,7 +248,7 @@ void drawScoreHUD()
   ltoa(scorePlayer, buf, 10);
   char charLen = strlen(buf);
   char pad = 7 - charLen;
-  
+
   //draw 0 padding
   for (byte i = 0; i < pad; i++)
   {

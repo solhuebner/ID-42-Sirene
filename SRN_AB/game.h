@@ -27,10 +27,14 @@ void stateGameNextLevel()
 
 void stateGamePlaying()
 {
-  drawPirateShip();
   checkInputs();
   checkWeapons();
   checkMermaid();
+  checkEnemies();
+  checkBosses();
+
+  drawBosses();
+  drawEnemies();
   drawPlayer();
   drawWeapons();
   drawLifeHUD();
@@ -44,7 +48,7 @@ void stateGamePause()
 
 void stateGameOver()
 {
-  
+
 };
 
 
