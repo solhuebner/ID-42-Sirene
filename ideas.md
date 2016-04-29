@@ -36,13 +36,13 @@ At the start of every level there's a quick message displaying what stage you're
 ## ENEMIES
 | **SPRITE** | **SIZE** | **FRAMES** | **NAME** | **HP** | **POINTS** | **MAX AMOUNT** |
 | ---        | ---      | ---        | ---      | ---    | ---        | ---           |
-| **Small Fish** | 8x8 | 4 | enemyFishy | 2 HP |   |   |
-| **Big Fish** | 16x16 | 4 | enemyFish | 4 HP |   |   |
-| **Eel** | 32x8 | 4 | enemyEel | 4 HP |   |   |
-| **Jellyfish** | 16x16 | 5 | enemyJellyfish | 2 HP |  |    |
-| **Octopus** | 16x16 | 4 | enemyOctopus | 4 HP |  |    |
+| **Small Fish** | 8x8 | 4 | enemyFishy | 2 HP |   | 3  |
+| **Big Fish** | 16x16 | 4 | enemyFish | 4 HP |   | 3  |
+| **Eel** | 32x8 | 4 | enemyEel | 4 HP |   | 2  |
+| **Jellyfish** | 16x16 | 5 | enemyJellyfish | 2 HP |  | 3  |
+| **Octopus** | 16x16 | 4 | enemyOctopus | 4 HP |  | 2  |
 
-Behaviors
+Enemy behaviors
 
 Small Fish:
 Swims offscreen from right to left. Small and weak, usually they swim in packs. 
@@ -63,6 +63,17 @@ Octopus:
 Swims offscreen from right to left. At a fixed interval shoots a bullet (meant to be ink) at the mermaid. 
 1. If variable swimming patterns are possible, would be nice to apply them to the octopus as well.
 
+## BOSSES
+| **SPRITE** | **SIZE** | **FRAMES** | **NAME** | **HP** | **POINTS** | 
+| ---        | ---      | ---        | ---      | ---    | ---        | 
+| **Shark** | 32x16 | 4 | enemyShark | ? HP |   |   
+| **?** | ? | ? | ? | ? HP |   |   
+| **Pirate Ship** | 64x64 | 1 | PirateshipShip | ? HP |     
+
+Boss behaviors
+
+Still to come...
+
 ## ENEMIE WAVES
 | **NUMBER** | **TYPE**  | **AMOUNT** | **SPEED** | **START** | **BEHAVIOR** |
 | ---        | ---       | ---        | ---       | ---       | ---          |
@@ -72,4 +83,14 @@ Swims offscreen from right to left. At a fixed interval shoots a bullet (meant t
 | **003** | FISHY | 3 | 1 |start at the bottom | all swim in a straight Line |
 | **004** | FISHY | 3 | 1 |start at the top | start in a straight Line, swim to the middle |
 | **005** | FISHY | 3 | 1 |start at the bottom | start in a straight Line, swim to the middle |
-
+| **006** | FISHY | 3 | 1 |start at the middle | all swim in a sinewave Line |
+| **007** | FISHY | 1 | 1 |start at the top | swims in a straight Line |
+| **008** | FISHY | 1 | 1 |start at the middle | swims in a straight Line |
+| **009** | FISHY | 1 | 1 |start at the bottom | swims in a straight Line |
+| **010** | FISHY | 1 | 2 |start at the top | swims fast in a straight Line |
+| **011** | FISHY | 1 | 2 |start at the middle | swims fast in a straight Line |
+| **012** | FISHY | 1 | 2 |start at the bottom | swims fast in a straight Line |
+| **013** | JELLYFISH | 3 | 1 |bottom right to left | swims upward each one slighty offset form each other |
+| **014** | JELLYFISH | 3 | 1 |bottom left to right | swims upward each one slighty offset form each other |
+| **015** | JELLYFISH | 3 | 1 |bottom  | swims upward simultaneously |
+| **016** | JELLYFISH | 2 | 1 |bottom  | swims upward simultaneously |
