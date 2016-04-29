@@ -34,13 +34,13 @@ At the start of every level there's a quick message displaying what stage you're
 
 
 ## ENEMIES
-| **SPRITE** | **SIZE** | **FRAMES** | **NAME** | **HP** | **POINTS** |
-| ---        | ---      | ---        | ---       | ---             | ---             | ---             |
-| **Small Fish** | 8x8 | 4 | enemyFishy | 2 HP |   |
-| **Big Fish** | 16x16 | 4 | enemyFish | 4 HP |   |
-| **Eel** | 32x8 | 4 | enemyEel | 4 HP |   |
-| **Jellyfish** | 16x16 | 5 | enemyJellyfish | 2 HP |  | 
-| **Octopus** | 16x16 | 4 | enemyOctopus | 4 HP |  | 
+| **SPRITE** | **SIZE** | **FRAMES** | **NAME** | **HP** | **POINTS** | **MAX AMOUNT** |
+| ---        | ---      | ---        | ---      | ---    | ---        | ---           |
+| **Small Fish** | 8x8 | 4 | enemyFishy | 2 HP |   |   |
+| **Big Fish** | 16x16 | 4 | enemyFish | 4 HP |   |   |
+| **Eel** | 32x8 | 4 | enemyEel | 4 HP |   |   |
+| **Jellyfish** | 16x16 | 5 | enemyJellyfish | 2 HP |  |    |
+| **Octopus** | 16x16 | 4 | enemyOctopus | 4 HP |  |    |
 
 Behaviors
 
