@@ -4,50 +4,39 @@
 #include <Arduino.h>
 #include "globals.h"
 
-#define MAX_ONSCREEN_EEL             1
-#define MAX_ONSCREEN_FISHY           1
-#define MAX_ONSCREEN_FISH            1
-#define MAX_ONSCREEN_JELLYFISH       1
-#define MAX_ONSCREEN_SHARK           1
-#define MAX_ONSCREEN_OCTOPUS         1
+#define MAX_ONSCREEN_FISHY           3
+#define MAX_ONSCREEN_FISH            3
+#define MAX_ONSCREEN_EEL             3
+#define MAX_ONSCREEN_JELLYFISH       3
+#define MAX_ONSCREEN_OCTOPUS         3
 
-#define ENEMIE_TYPE_EEL              0
-#define ENEMIE_TYPE_FISHY            1
-#define ENEMIE_TYPE_FISH             2
+
+#define ENEMIE_TYPE_FISHY            0
+#define ENEMIE_TYPE_FISH             1
+#define ENEMIE_TYPE_EEL              2
 #define ENEMIE_TYPE_JELLYFISH        3
-#define ENEMIE_TYPE_SHARK            4
-#define ENEMIE_TYPE_OCTOPUS          5
+#define ENEMIE_TYPE_OCTOPUS          4
 
-byte enemyFrame[] = {0, 0, 0, 0, 0, 0};
-byte enemyMaxFrame[] = {3, 3, 3, 4, 3, 3};
-const byte maxAmountEnemies = MAX_ONSCREEN_EEL + MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_JELLYFISH + MAX_ONSCREEN_SHARK + MAX_ONSCREEN_OCTOPUS;
-const byte enemyType[] =
-{
-  ENEMIE_TYPE_EEL,
-  ENEMIE_TYPE_FISHY,
-  ENEMIE_TYPE_FISH,
-  ENEMIE_TYPE_JELLYFISH,
-  ENEMIE_TYPE_SHARK,
-  ENEMIE_TYPE_OCTOPUS,
-};
+byte enemyFrame[] = {0, 0, 0, 0, 0};
+byte enemyMaxFrame[] = {3, 3, 3, 4, 3};
+const byte maxAmountEnemies =  MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL + MAX_ONSCREEN_JELLYFISH +  MAX_ONSCREEN_OCTOPUS;
 
 struct Enemies
 {
   public:
-    byte x = 32;
-    int y = 12;
-    byte HP;
-    byte isActive = true;
-    byte type = 0;
+    int x;
+    byte y;
+    int HP;
+    boolean isActive = false;
 };
 
 struct EndBoss
 {
   public:
-    byte x = 64;
+    int x = 64;
     byte y = 12;
-    byte HP;
-    byte isActive = false;
+    int HP;
+    boolean isActive = false;
 
 };
 
@@ -74,29 +63,25 @@ void checkBosses()
 
 void drawEnemies()
 {
-  for (byte i = 0; i < MAX_ONSCREEN_EEL; i++)
+  for (byte i = 0; i < MAX_ONSCREEN_FISHY; i++)
+  {
+    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFishy_plus_mask, enemyFrame[ENEMIE_TYPE_FISHY]);
+  }
+  for (byte i = MAX_ONSCREEN_FISHY; i < MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH; i++)
+  {
+    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFish_plus_mask, enemyFrame[ENEMIE_TYPE_FISH]);
+  }
+  for (byte i = MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH; i < MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL; i++)
   {
     if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyEel_plus_mask, enemyFrame[ENEMIE_TYPE_EEL]);
   }
-  for (byte i = 0; i < ENEMIE_TYPE_FISHY; i++)
+  for (byte i = MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL; i < MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL + MAX_ONSCREEN_JELLYFISH; i++)
   {
-    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y+16, enemyFishy_plus_mask, enemyFrame[ENEMIE_TYPE_FISHY]);
+    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyJellyfish_plus_mask, enemyFrame[ENEMIE_TYPE_JELLYFISH]);
   }
-  for (byte i = 0; i < MAX_ONSCREEN_FISH; i++)
+  for (byte i = MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL + MAX_ONSCREEN_JELLYFISH; i < MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL + MAX_ONSCREEN_JELLYFISH +  MAX_ONSCREEN_OCTOPUS; i++)
   {
-    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y+32, enemyFish_plus_mask, enemyFrame[ENEMIE_TYPE_FISH]);
-  }
-  for (byte i = 0; i < MAX_ONSCREEN_JELLYFISH; i++)
-  {
-    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x+64, enemy[i].y+8, enemyJellyfish_plus_mask, enemyFrame[ENEMIE_TYPE_JELLYFISH]);
-  }
-  for (byte i = 0; i < MAX_ONSCREEN_SHARK; i++)
-  {
-    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x+24, enemy[i].y+24, enemyShark_plus_mask, enemyFrame[ENEMIE_TYPE_SHARK]);
-  }
-  for (byte i = 0; i < MAX_ONSCREEN_OCTOPUS; i++)
-  {
-    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x+64, enemy[i].y+32, enemyOctopus_plus_mask, enemyFrame[ENEMIE_TYPE_OCTOPUS]);
+    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyOctopus_plus_mask, enemyFrame[ENEMIE_TYPE_OCTOPUS]);
   }
 }
 

@@ -20,8 +20,9 @@
 #include "game.h"
 #include "inputs.h"
 #include "player.h"
-#include "elements.h"
 #include "enemies.h"
+#include "elements.h"
+#include "levels.h"
 
 typedef void (*FunctionPointer) ();
 
@@ -47,6 +48,7 @@ void setup() {
   menuSelection = STATE_MENU_PLAY;                          // PLAY menu item is pre-selected
   if (EEPROM.read(EEPROM_AUDIO_ON_OFF)) soundYesNo = true;  // check EEPROM if sound is OFF or ON
   arduboy.initRandomSeed();
+  Serial.begin(9600);
 }
 
 
