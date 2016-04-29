@@ -45,6 +45,8 @@ boolean soundYesNo;
 int menuSelection;
 byte counter = 0;
 byte level;
+byte currentWave;
+byte waveDuration = 0;
 unsigned long scorePlayer; 
 
 #endif

@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include "globals.h"
 #include "inputs.h"
+#include "levels.h"
 #include "player.h"
 #include "enemies.h"
 #include "elements.h"
@@ -12,6 +13,7 @@
 void stateGamePrepareLevel()
 {
   level = 1;
+  currentWave = 0;
   scorePlayer = 0;
   mermaid.life = 3;
   setWeapons();
@@ -32,7 +34,9 @@ void stateGamePlaying()
   checkMermaid();
   checkEnemies();
   checkBosses();
-
+  updateLevel();
+  Level01[currentWave];
+  
   drawBosses();
   drawEnemies();
   drawPlayer();
