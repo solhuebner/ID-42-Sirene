@@ -64,8 +64,8 @@ Swims offscreen from right to left. At a fixed interval shoots a bullet (meant t
 1. If variable swimming patterns are possible, would be nice to apply them to the octopus as well.
 
 ## ENEMIE WAVES
-| **NUMBER** | **ENEMY TYPE**  | **ENEMY AMOUNT** | **ENEMY SPEED** | **ENEMY START** | **ENEMY BEHAVIOR** |
-| ---        | ---             | ---              | ---             | ---             | ---                |
+| **NUMBER** | **TYPE**  | **AMOUNT** | **SPEED** | **START** | **BEHAVIOR** |
+| ---        | ---       | ---        | ---       | ---       | ---          |
 | **000** | - | - | - |
 | **001** | FISHY | 3 | 1 |start at the top | all swim in a straight Line |
 | **002** | FISHY | 3 | 1 |start at the middle | all swim in a straight Line |
