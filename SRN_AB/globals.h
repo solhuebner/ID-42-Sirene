@@ -45,6 +45,7 @@ boolean soundYesNo;
 int menuSelection;
 byte counter = 0;
 byte level;
+byte levelSize;
 byte currentWave;
 byte previousWave;
 byte waveDuration = 0;

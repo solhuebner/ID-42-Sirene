@@ -26,6 +26,7 @@ void stateGameNextLevel()
   gameState = STATE_GAME_PLAYING;
   currentWave = 0;
   previousWave = 255;
+  calculateLevelSize();
 };
 
 
@@ -37,14 +38,14 @@ void stateGamePlaying()
   checkEnemies();
   checkBosses();
   updateLevel();
-  Level01[currentWave]();
+  if (arduboy.everyXFrames(2))Level01[currentWave]();
   drawBosses();
   drawEnemies();
   drawPlayer();
   drawWeapons();
   drawLifeHUD();
   drawScoreHUD();
-  //Serial.println(sizeof(&Level01));
+
 };
 
 void stateGamePause()

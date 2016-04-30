@@ -18,14 +18,15 @@
 #define ENEMIE_TYPE_OCTOPUS          4
 
 byte enemyFrame[] = {0, 0, 0, 0, 0};
-byte enemyMaxFrame[] = {3, 3, 3, 4, 3};
+byte enemyMaxFrame[] = {3, 3, 3, 10, 3};
+byte jellyFrame = 0;
 const byte maxAmountEnemies =  MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL + MAX_ONSCREEN_JELLYFISH +  MAX_ONSCREEN_OCTOPUS;
 
 struct Enemies
 {
   public:
     int x;
-    byte y;
+    int y;
     int HP;
     boolean isActive = false;
 };
@@ -46,7 +47,7 @@ EndBoss pirateShip;
 
 void checkEnemies()
 {
-  if (arduboy.everyXFrames(10))
+  if (arduboy.everyXFrames(6))
   {
     for (byte i = 0; i < maxAmountEnemies; i++)
     {
@@ -79,7 +80,9 @@ void drawEnemies()
   }
   for (byte i = MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL; i < MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL + MAX_ONSCREEN_JELLYFISH; i++)
   {
-    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyJellyfish_plus_mask, enemyFrame[ENEMIE_TYPE_JELLYFISH]);
+    jellyFrame = enemyFrame[ENEMIE_TYPE_JELLYFISH];
+    if (jellyFrame > 4) jellyFrame = 0;
+    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyJellyfish_plus_mask, jellyFrame);
   }
   for (byte i = MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL + MAX_ONSCREEN_JELLYFISH; i < MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL + MAX_ONSCREEN_JELLYFISH +  MAX_ONSCREEN_OCTOPUS; i++)
   {

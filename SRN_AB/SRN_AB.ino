@@ -48,7 +48,7 @@ void setup() {
   menuSelection = STATE_MENU_PLAY;                          // PLAY menu item is pre-selected
   if (EEPROM.read(EEPROM_AUDIO_ON_OFF)) soundYesNo = true;  // check EEPROM if sound is OFF or ON
   arduboy.initRandomSeed();
-  //Serial.begin(9600);
+  Serial.begin(9600);
 }
 
 
