@@ -94,3 +94,7 @@ Still to come...
 | **014** | JELLYFISH | 3 | 1 |bottom left to right | swims upward each one slighty offset form each other |
 | **015** | JELLYFISH | 3 | 1 |bottom  | swims upward simultaneously |
 | **016** | JELLYFISH | 2 | 1 |bottom  | swims upward simultaneously |
+| **017** | EEL | 1 | 1 |top  | swims in a straight line, shooting zap projectiles aimed towards mermaid at fixed intervals |
+| **018** | OCTOPUS | 1 | 1 |top  | swims in a straight line, shooting bullet projectiles aimed towards mermaid at fixed intervals |
+| **019** | FISH | 3 | 2 |start at the middle | all swim in a straight Line |
+| **020** | FISH | 3 | 2 |start at the middle | all swim in a sinewave Line |
