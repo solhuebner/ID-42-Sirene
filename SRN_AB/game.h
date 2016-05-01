@@ -38,7 +38,7 @@ void stateGamePlaying()
   checkMermaid();
   checkEnemies();
   checkBosses();
-  updateLevel();
+  //updateLevel();
   if (arduboy.everyXFrames(2))Level01[currentWave]();
   drawBosses();
   drawEnemies();
