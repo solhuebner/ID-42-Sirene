@@ -62,8 +62,8 @@ void enemySwimDownUp(byte firstEnemy, byte lastEnemy, byte speedEnemy)
 {
   for (byte i = firstEnemy; i < lastEnemy; i++)
   {
-    if (enemyFrame[ENEMIE_TYPE_JELLYFISH] > 4 && enemyFrame[ENEMIE_TYPE_JELLYFISH] < 7 )enemy[i].y = enemy[i].y - speedEnemy - 1;
-    if (enemyFrame[ENEMIE_TYPE_JELLYFISH] > 6 )enemy[i].y = enemy[i].y - speedEnemy;
+    if (enemy[i].frame > 4 && enemy[i].frame < 7 )enemy[i].y = enemy[i].y - speedEnemy - 1;
+    if (enemy[i].frame > 6 )enemy[i].y = enemy[i].y - speedEnemy;
   }
 }
 
@@ -171,8 +171,6 @@ void wave016()
 typedef void (*FunctionPointer) ();
 
 FunctionPointer Level01[] = {
-  wave000,
-  wave001,
   wave000,
   wave001,
   wave002,

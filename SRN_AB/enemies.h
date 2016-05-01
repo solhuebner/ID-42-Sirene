@@ -17,10 +17,26 @@
 #define ENEMIE_TYPE_JELLYFISH        3
 #define ENEMIE_TYPE_OCTOPUS          4
 
-byte enemyFrame[] = {0, 0, 0, 0, 0};
-byte enemyMaxFrame[] = {3, 3, 3, 10, 3};
+#define MAX_FRAME_FISHY              3
+#define MAX_FRAME_FISH               3
+#define MAX_FRAME_EEL                3
+#define MAX_FRAME_JELLYFISH          10
+#define MAX_FRAME_OCTOPUS            3
+
+#define ARRAY_START_FISHY            0
+#define ARRAY_START_FISH             MAX_ONSCREEN_FISHY
+#define ARRAY_START_EEL              MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH
+#define ARRAY_START_JELLYFISH        MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL
+#define ARRAY_START_OCTOPUS          MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL + MAX_ONSCREEN_JELLYFISH
+
+#define ARRAY_MAX_AMOUNT             MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL + MAX_ONSCREEN_JELLYFISH +  MAX_ONSCREEN_OCTOPUS
+
+
+
+byte enemiesMaxFrames[] = {MAX_FRAME_FISHY, MAX_FRAME_FISH, MAX_FRAME_EEL, MAX_FRAME_JELLYFISH, MAX_FRAME_OCTOPUS};
+byte enemiesArrayLocation[] = {ARRAY_START_FISHY, ARRAY_START_FISH, ARRAY_START_EEL, ARRAY_START_JELLYFISH, ARRAY_START_OCTOPUS, ARRAY_MAX_AMOUNT};
 byte jellyFrame = 0;
-const byte maxAmountEnemies =  MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL + MAX_ONSCREEN_JELLYFISH +  MAX_ONSCREEN_OCTOPUS;
+
 
 struct Enemies
 {
@@ -29,6 +45,7 @@ struct Enemies
     int y;
     int HP;
     boolean isActive = false;
+    byte frame;
 };
 
 struct EndBoss
@@ -41,19 +58,34 @@ struct EndBoss
 
 };
 
-Enemies enemy[maxAmountEnemies];
-
+Enemies enemy[ARRAY_MAX_AMOUNT];
 EndBoss pirateShip;
+
+void setEnemies()
+{
+  for (byte g = 0; g < sizeof(enemiesMaxFrames); g++)
+    {
+      for (byte i = enemiesArrayLocation[g]; i < enemiesArrayLocation[g+1]; i++)
+      {
+        enemy[i].frame += i;
+      }
+    }
+}
+
 
 void checkEnemies()
 {
   if (arduboy.everyXFrames(6))
   {
-    for (byte i = 0; i < maxAmountEnemies; i++)
+    for (byte g = 0; g < sizeof(enemiesMaxFrames); g++)
     {
-      enemyFrame[i]++;
-      if (enemyFrame[i] > enemyMaxFrame[i]) enemyFrame[i] = 0;
-      if (enemy[i].x < -32) enemy[i].isActive = false;
+      for (byte i = enemiesArrayLocation[g]; i < enemiesArrayLocation[g+1]; i++)
+      {
+        enemy[i].frame++;
+        if (enemy[i].frame > enemiesMaxFrames[g]) enemy[i].frame = 0;
+        if (enemy[i].x < -32) enemy[i].isActive = false;
+        if (enemy[i].y < -32) enemy[i].isActive = false;
+      }
     }
   }
 }
@@ -66,27 +98,27 @@ void checkBosses()
 
 void drawEnemies()
 {
-  for (byte i = 0; i < MAX_ONSCREEN_FISHY; i++)
+  for (byte i = ARRAY_START_FISHY; i < ARRAY_START_FISH; i++)
   {
-    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFishy_plus_mask, enemyFrame[ENEMIE_TYPE_FISHY]);
+    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFishy_plus_mask, enemy[i].frame);
   }
-  for (byte i = MAX_ONSCREEN_FISHY; i < MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH; i++)
+  for (byte i = ARRAY_START_FISH; i < ARRAY_START_EEL; i++)
   {
-    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFish_plus_mask, enemyFrame[ENEMIE_TYPE_FISH]);
+    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFish_plus_mask, enemy[i].frame);
   }
-  for (byte i = MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH; i < MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL; i++)
+  for (byte i = ARRAY_START_EEL; i < ARRAY_START_JELLYFISH; i++)
   {
-    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyEel_plus_mask, enemyFrame[ENEMIE_TYPE_EEL]);
+    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyEel_plus_mask, enemy[i].frame);
   }
-  for (byte i = MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL; i < MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL + MAX_ONSCREEN_JELLYFISH; i++)
+  for (byte i = ARRAY_START_JELLYFISH; i < ARRAY_START_OCTOPUS; i++)
   {
-    jellyFrame = enemyFrame[ENEMIE_TYPE_JELLYFISH];
+    jellyFrame = enemy[i].frame;
     if (jellyFrame > 4) jellyFrame = 0;
     if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyJellyfish_plus_mask, jellyFrame);
   }
-  for (byte i = MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL + MAX_ONSCREEN_JELLYFISH; i < MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL + MAX_ONSCREEN_JELLYFISH +  MAX_ONSCREEN_OCTOPUS; i++)
+  for (byte i = ARRAY_START_OCTOPUS; i < ARRAY_MAX_AMOUNT; i++)
   {
-    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyOctopus_plus_mask, enemyFrame[ENEMIE_TYPE_OCTOPUS]);
+    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyOctopus_plus_mask, enemy[i].frame);
   }
 }
 

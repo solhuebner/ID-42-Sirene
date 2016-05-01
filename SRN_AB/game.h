@@ -17,6 +17,7 @@ void stateGamePrepareLevel()
   scorePlayer = 0;
   mermaid.life = 3;
   setWeapons();
+  setEnemies();
   gameState = STATE_GAME_NEXT_LEVEL;
 };
 
