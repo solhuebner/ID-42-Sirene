@@ -64,12 +64,12 @@ EndBoss pirateShip;
 void setEnemies()
 {
   for (byte g = 0; g < sizeof(enemiesMaxFrames); g++)
+  {
+    for (byte i = enemiesArrayLocation[g]; i < enemiesArrayLocation[g + 1]; i++)
     {
-      for (byte i = enemiesArrayLocation[g]; i < enemiesArrayLocation[g+1]; i++)
-      {
-        enemy[i].frame += i;
-      }
+      enemy[i].frame += i;
     }
+  }
 }
 
 
@@ -79,7 +79,7 @@ void checkEnemies()
   {
     for (byte g = 0; g < sizeof(enemiesMaxFrames); g++)
     {
-      for (byte i = enemiesArrayLocation[g]; i < enemiesArrayLocation[g+1]; i++)
+      for (byte i = enemiesArrayLocation[g]; i < enemiesArrayLocation[g + 1]; i++)
       {
         enemy[i].frame++;
         if (enemy[i].frame > enemiesMaxFrames[g]) enemy[i].frame = 0;

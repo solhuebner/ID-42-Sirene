@@ -198,11 +198,64 @@ void wave016()
   checkEndWave();
 }
 
+void wave017()
+{
+ if (checkWaveStart())enemySetInLine(ARRAY_START_EEL, ARRAY_START_EEL +1, 128, 12, 0, 0);
+ enemySwimLeftRight(ARRAY_START_EEL, ARRAY_START_EEL +1, 1);
+ checkEndWave();
+}
+
+void wave018()
+{
+ if (checkWaveStart())enemySetInLine(11, 12, 128, 12, 0, 0);
+ enemySwimLeftRight(11, 12, 1);
+ checkEndWave();
+}
+
+void wave019()
+{
+ if (checkWaveStart())enemySetInLine(3, 6, 128, 12, 24, 0);
+ enemySwimLeftRight(ARRAY_START_FISH, ARRAY_START_EEL, 1);
+ checkEndWave();
+}
+
+void wave020()
+{
+ if (checkWaveStart())enemySetInLine(3, 6, 128, 48, 24, 0);
+ enemySwimLeftRight(ARRAY_START_FISH, ARRAY_START_EEL, 1);
+ checkEndWave();
+}
+
 
 
 typedef void (*FunctionPointer) ();
 
 FunctionPointer Level01[] = {
+  wave020,
+  wave019,
+  wave018,
+  wave017,
+  wave016,
+  wave015,
+  wave014,
+  wave013,
+  wave012,
+  wave011,
+  wave010,
+  wave009,
+  wave008,
+  wave007,
+  wave006,
+  wave005,
+  wave004,
+  wave003,
+  wave002,
+  wave001,
+  wave000,
+
+};
+
+FunctionPointer Level02[] = {
  // wave000,
   wave001,
   wave002,
@@ -220,27 +273,6 @@ FunctionPointer Level01[] = {
   wave014,
   wave015,
   wave016,
-};
-
-FunctionPointer Level02[] = {
-  wave000,
-  wave016,
-  wave015,
-  wave014,
-  wave013,
-  wave012,
-  wave011,
-  wave010,
-  wave009,
-  wave008,
-  wave007,
-  wave006,
-  wave005,
-  wave004,
-  wave003,
-  wave002,
-  wave001,
-  wave000,
 };
 
 
