@@ -31,7 +31,7 @@ boolean checkEndWave()
 
 boolean checkEndLevel()
 {
-  if (currentWave > TOTAL_AMOUNT_OF_WAVES)
+  if (currentWave > TOTAL_AMOUNT_OF_WAVES-1)
   {
     return true;
   }
