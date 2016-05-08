@@ -10,12 +10,11 @@
 #define MAX_ONSCREEN_JELLYFISH       3
 #define MAX_ONSCREEN_OCTOPUS         2
 
-
-#define ENEMIE_TYPE_FISHY            0
-#define ENEMIE_TYPE_FISH             1
-#define ENEMIE_TYPE_EEL              2
-#define ENEMIE_TYPE_JELLYFISH        3
-#define ENEMIE_TYPE_OCTOPUS          4
+#define HP_TYPE_FISHY                2
+#define HP_TYPE_FISH                 4
+#define HP_TYPE_EEL                  4
+#define HP_TYPE_JELLYFISH            2
+#define HP_TYPE_OCTOPUS              4
 
 #define MAX_FRAME_FISHY              3
 #define MAX_FRAME_FISH               3
