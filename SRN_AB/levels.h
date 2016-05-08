@@ -5,10 +5,10 @@
 #include "globals.h"
 #include "enemies.h"
 
-#define WAVE_SPEED             3
-#define WAVE_DURATION          128
+#define TOTAL_AMOUNT_OF_LEVELS  2
+#define TOTAL_AMOUNT_OF_WAVES   20
 
-boolean checkWaveStart()
+boolean checkStartWave()
 {
   if (currentWave != previousWave)
   {
@@ -18,6 +18,7 @@ boolean checkWaveStart()
   return false;
 }
 
+
 boolean checkEndWave()
 {
   byte test = 0;
@@ -26,6 +27,15 @@ boolean checkEndWave()
     test = test + enemy[i].isActive;
   }
   if (test < 1) currentWave++;
+}
+
+boolean checkEndLevel()
+{
+  if (currentWave > TOTAL_AMOUNT_OF_WAVES)
+  {
+    return true;
+  }
+  return false;
 }
 
 void enemySetInLine(byte firstEnemy, byte lastEnemy, byte x, byte y, int spacingX, int spacingY)
@@ -88,140 +98,140 @@ void wave000()
 
 void wave001()
 {
-  if (checkWaveStart())enemySetInLine(ARRAY_START_FISHY, MAX_ONSCREEN_FISHY, 128, 12, 20, 0);
+  if (checkStartWave())enemySetInLine(ARRAY_START_FISHY, MAX_ONSCREEN_FISHY, 128, 12, 20, 0);
   enemySwimRightLeft(ARRAY_START_FISHY, MAX_ONSCREEN_FISHY, 1);
   checkEndWave();
 }
 
 void wave002()
 {
-  if (checkWaveStart())enemySetInLine(ARRAY_START_FISHY, MAX_ONSCREEN_FISHY, 128, 32, 20, 0);
+  if (checkStartWave())enemySetInLine(ARRAY_START_FISHY, MAX_ONSCREEN_FISHY, 128, 32, 20, 0);
   enemySwimRightLeft(ARRAY_START_FISHY, MAX_ONSCREEN_FISHY, 1);
   checkEndWave();
 }
 
 void wave003()
 {
-  if (checkWaveStart())enemySetInLine(ARRAY_START_FISHY, MAX_ONSCREEN_FISHY, 128, 56, 20, 0);
+  if (checkStartWave())enemySetInLine(ARRAY_START_FISHY, MAX_ONSCREEN_FISHY, 128, 56, 20, 0);
   enemySwimRightLeft(ARRAY_START_FISHY, MAX_ONSCREEN_FISHY, 1);
   checkEndWave();
 }
 
 void wave004()
 {
-  if (checkWaveStart())enemySetInLine(ARRAY_START_FISHY, MAX_ONSCREEN_FISHY, 128, 12, 20, 0);
+  if (checkStartWave())enemySetInLine(ARRAY_START_FISHY, MAX_ONSCREEN_FISHY, 128, 12, 20, 0);
   enemySwimToMiddle(ARRAY_START_FISHY, MAX_ONSCREEN_FISHY, 1);
   checkEndWave();
 }
 
 void wave005()
 {
-  if (checkWaveStart())enemySetInLine(ARRAY_START_FISHY, MAX_ONSCREEN_FISHY, 128, 56, 20, 0);
+  if (checkStartWave())enemySetInLine(ARRAY_START_FISHY, MAX_ONSCREEN_FISHY, 128, 56, 20, 0);
   enemySwimToMiddle(ARRAY_START_FISHY, MAX_ONSCREEN_FISHY, 1);
   checkEndWave();
 }
 
 void wave006()
 {
-  if (checkWaveStart())enemySetInLine(ARRAY_START_FISHY, MAX_ONSCREEN_FISHY, 128, 32, 20, 0);
+  if (checkStartWave())enemySetInLine(ARRAY_START_FISHY, MAX_ONSCREEN_FISHY, 128, 32, 20, 0);
   enemySwimSine(ARRAY_START_FISHY, MAX_ONSCREEN_FISHY, 1);
   checkEndWave();
 }
 
 void wave007()
 {
-  if (checkWaveStart())enemySetInLine(ARRAY_START_FISHY, ARRAY_START_FISHY + 1, 128, 12, 0, 0);
+  if (checkStartWave())enemySetInLine(ARRAY_START_FISHY, ARRAY_START_FISHY + 1, 128, 12, 0, 0);
   enemySwimRightLeft(ARRAY_START_FISHY, ARRAY_START_FISHY + 1, 1);
   checkEndWave();
 }
 
 void wave008()
 {
-  if (checkWaveStart())enemySetInLine(ARRAY_START_FISHY, 1, 128, 32, 0, 0);
+  if (checkStartWave())enemySetInLine(ARRAY_START_FISHY, ARRAY_START_FISHY + 1, 128, 32, 0, 0);
   enemySwimRightLeft(ARRAY_START_FISHY, ARRAY_START_FISHY + 1, 1);
   checkEndWave();
 }
 
 void wave009()
 {
-  if (checkWaveStart())enemySetInLine(ARRAY_START_FISHY, 1, 128, 56, 0, 0);
+  if (checkStartWave())enemySetInLine(ARRAY_START_FISHY, ARRAY_START_FISHY + 1, 128, 56, 0, 0);
   enemySwimRightLeft(ARRAY_START_FISHY, ARRAY_START_FISHY + 1, 1);
   checkEndWave();
 }
 
 void wave010()
 {
-  if (checkWaveStart())enemySetInLine(ARRAY_START_FISHY, 1, 128, 12, 0, 0);
+  if (checkStartWave())enemySetInLine(ARRAY_START_FISHY, ARRAY_START_FISHY + 1, 128, 12, 0, 0);
   enemySwimRightLeft(ARRAY_START_FISHY, ARRAY_START_FISHY + 1, 2);
   checkEndWave();
 }
 
 void wave011()
 {
-  if (checkWaveStart())enemySetInLine(ARRAY_START_FISHY, 1, 128, 32, 0, 0);
+  if (checkStartWave())enemySetInLine(ARRAY_START_FISHY, ARRAY_START_FISHY + 1, 128, 32, 0, 0);
   enemySwimRightLeft(ARRAY_START_FISHY, ARRAY_START_FISHY + 1, 2);
   checkEndWave();
 }
 
 void wave012()
 {
-  if (checkWaveStart())enemySetInLine(ARRAY_START_FISHY, 1, 128, 56, 0, 0);
+  if (checkStartWave())enemySetInLine(ARRAY_START_FISHY, ARRAY_START_FISHY + 1, 128, 56, 0, 0);
   enemySwimRightLeft(ARRAY_START_FISHY, ARRAY_START_FISHY + 1, 2);
   checkEndWave();
 }
 
 void wave013()
 {
-  if (checkWaveStart())enemySetInLine(ARRAY_START_JELLYFISH, ARRAY_START_OCTOPUS, 96, 64, -40, 16);
+  if (checkStartWave())enemySetInLine(ARRAY_START_JELLYFISH, ARRAY_START_OCTOPUS, 96, 64, -40, 16);
   enemySwimDownUp(ARRAY_START_JELLYFISH, ARRAY_START_OCTOPUS, 1);
   checkEndWave();
 }
 
 void wave014()
 {
-  if (checkWaveStart())enemySetInLine(ARRAY_START_JELLYFISH, ARRAY_START_OCTOPUS, 16, 64, 40, 16);
+  if (checkStartWave())enemySetInLine(ARRAY_START_JELLYFISH, ARRAY_START_OCTOPUS, 16, 64, 40, 16);
   enemySwimDownUp(ARRAY_START_JELLYFISH, ARRAY_START_OCTOPUS, 1);
   checkEndWave();
 }
 
 void wave015()
 {
-  if (checkWaveStart())enemySetInLine(ARRAY_START_JELLYFISH, ARRAY_START_OCTOPUS, 16, 64, 40, 0);
+  if (checkStartWave())enemySetInLine(ARRAY_START_JELLYFISH, ARRAY_START_OCTOPUS, 16, 64, 40, 0);
   enemySwimDownUp(ARRAY_START_JELLYFISH, ARRAY_START_OCTOPUS, 1);
   checkEndWave();
 }
 
 void wave016()
 {
-  if (checkWaveStart())enemySetInLine(ARRAY_START_JELLYFISH, ARRAY_START_OCTOPUS - 1, 32, 64, 48, 0);
+  if (checkStartWave())enemySetInLine(ARRAY_START_JELLYFISH, ARRAY_START_OCTOPUS - 1, 32, 64, 48, 0);
   enemySwimDownUp(ARRAY_START_JELLYFISH, ARRAY_START_OCTOPUS - 1, 1);
   checkEndWave();
 }
 
 void wave017()
 {
-  if (checkWaveStart())enemySetInLine(ARRAY_START_EEL, ARRAY_START_EEL + 1, 128, 12, 0, 0);
+  if (checkStartWave())enemySetInLine(ARRAY_START_EEL, ARRAY_START_EEL + 1, 128, 12, 0, 0);
   enemySwimRightLeft(ARRAY_START_EEL, ARRAY_START_EEL + 1, 1);
   checkEndWave();
 }
 
 void wave018()
 {
-  if (checkWaveStart())enemySetInLine(11, 12, 128, 12, 0, 0);
+  if (checkStartWave())enemySetInLine(ARRAY_START_OCTOPUS, ARRAY_START_OCTOPUS + 1, 128, 12, 0, 0);
   enemySwimRightLeft(ARRAY_START_OCTOPUS, ARRAY_START_OCTOPUS + 1, 1);
   checkEndWave();
 }
 
 void wave019()
 {
-  if (checkWaveStart())enemySetInLine(ARRAY_START_FISH, ARRAY_START_EEL, 128, 12, 24, 0);
+  if (checkStartWave())enemySetInLine(ARRAY_START_FISH, ARRAY_START_EEL, 128, 12, 24, 0);
   enemySwimRightLeft(ARRAY_START_FISH, ARRAY_START_EEL, 1);
   checkEndWave();
 }
 
 void wave020()
 {
-  if (checkWaveStart())enemySetInLine(ARRAY_START_FISH, ARRAY_START_EEL, 128, 48, 24, 0);
+  if (checkStartWave())enemySetInLine(ARRAY_START_FISH, ARRAY_START_EEL, 128, 48, 24, 0);
   enemySwimRightLeft(ARRAY_START_FISH, ARRAY_START_EEL, 1);
   checkEndWave();
 }
@@ -230,74 +240,54 @@ void wave020()
 
 typedef void (*FunctionPointer) ();
 
-FunctionPointer Level01[] = {
-  wave020,
-  wave019,
-  wave018,
-  wave017,
-  wave016,
-  wave015,
-  wave014,
-  wave013,
-  wave012,
-  wave011,
-  wave010,
-  wave009,
-  wave008,
-  wave007,
-  wave006,
-  wave005,
-  wave004,
-  wave003,
-  wave002,
-  wave001,
-  wave000,
-
-};
-
-FunctionPointer Level02[] = {
-  // wave000,
-  wave001,
-  wave002,
-  wave003,
-  wave004,
-  wave005,
-  wave006,
-  wave007,
-  wave008,
-  wave009,
-  wave010,
-  wave011,
-  wave012,
-  wave013,
-  wave014,
-  wave015,
-  wave016,
-};
-
-
-void updateLevel()
+FunctionPointer Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAVES] =
 {
-  if (arduboy.everyXFrames(WAVE_SPEED))waveDuration++;
-  if (waveDuration > WAVE_DURATION)
-  {
-    waveDuration = 0;
-    currentWave++;
+  { //LEVEL 01
+    wave020,
+    wave019,
+    wave018,
+    wave017,
+    wave016,
+    wave015,
+    wave014,
+    wave013,
+    wave012,
+    wave011,
+    wave010,
+    wave009,
+    wave008,
+    wave007,
+    wave006,
+    wave005,
+    wave004,
+    wave003,
+    wave002,
+    wave001,
+    //wave000,
+  },
+  { //LEVEL 02
+    wave001,
+    wave002,
+    wave003,
+    wave004,
+    wave005,
+    wave006,
+    wave007,
+    wave008,
+    wave009,
+    wave010,
+    wave011,
+    wave012,
+    wave013,
+    wave014,
+    wave015,
+    wave016,
+    wave017,
+    wave018,
+    wave019,
+    wave020,
+    //wave000,
   }
-  if (currentWave > levelSize) currentWave = levelSize;
-}
-
-void calculateLevelSize()
-{
-  switch (level)
-  {
-    case 1:
-      levelSize = sizeof(Level01) / sizeof(Level01[0]) - 1;
-      break;
-    case 2:
-      levelSize = sizeof(Level02) / sizeof(Level02[0]) - 1;
-      break;
-  }
-}
+};
 
 #endif
