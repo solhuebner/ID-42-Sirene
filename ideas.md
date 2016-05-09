@@ -72,7 +72,27 @@ Swims offscreen from right to left. At a fixed interval shoots a bullet (meant t
 
 Boss behaviors
 
-Still to come...
+Shark:
+This is the first boss and has 2 main phases to his attack. 
+1. Seeking phase:
+When the shark first comes on the screen he will seek the mermaid. He slowly moves horizonatally towards the mermaid and will also slightly move vertically to try and match her position. His speeds have to be enough to give a challenge to the player but not unfair so that it's impossible for the player to avoid his attacks. When the shark has moved passed the mermaid he will continue to swim offscreen, the repeat the patern going the other way 2 more times. After this the shark will move on screen and speed up his animation to give a signal he's going into his second phase, the charge. 
+2. Charge phase. 
+During this phase the shark moves horizontally much faster but cannot alter his vertical movement beyond the mermaid's position when he enters the screen of this phase. The speeds have to be faster but again not impossible for the mermaid to dodge his attacks. Once offscreen he repeats this patern going the other way 2 more times, then reverts back to seeking phase. He continues this patern until he's dead. 
+
+In a chart it would look something like this:
+Seeking 
+<--
+-->
+<--
+
+Animation to signal phase change
+
+Charging
+-->
+<--
+-->
+
+Back to seeking... 
 
 ## ENEMIE WAVES
 | **NUMBER** | **TYPE**  | **AMOUNT** | **SPEED** | **START** | **BEHAVIOR** |
