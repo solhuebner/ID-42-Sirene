@@ -35,7 +35,14 @@
 byte enemiesMaxFrames[] = {MAX_FRAME_FISHY, MAX_FRAME_FISH, MAX_FRAME_EEL, MAX_FRAME_JELLYFISH, MAX_FRAME_OCTOPUS};
 byte enemiesArrayLocation[] = {ARRAY_START_FISHY, ARRAY_START_FISH, ARRAY_START_EEL, ARRAY_START_JELLYFISH, ARRAY_START_OCTOPUS, ARRAY_MAX_AMOUNT};
 byte jellyFrame = 0;
+byte sharkFrame = 0;
+byte mermaidsPosition;
+boolean sharkStageOne;
+boolean sharkSwimsRight;
 
+
+//////// Enemy functions ///////////////////
+////////////////////////////////////////////
 
 struct Enemies
 {
@@ -47,18 +54,10 @@ struct Enemies
     byte frame;
 };
 
-struct EndBoss
-{
-  public:
-    int x = 64;
-    byte y = 12;
-    int HP;
-    boolean isActive = false;
 
-};
 
 Enemies enemy[ARRAY_MAX_AMOUNT];
-EndBoss pirateShip;
+
 
 void setEnemies()
 {
@@ -89,10 +88,58 @@ void checkEnemies()
   }
 }
 
-
-void checkBosses()
+void enemySetInLine(byte firstEnemy, byte lastEnemy, byte x, byte y, int spacingX, int spacingY)
 {
+  for (byte i = firstEnemy; i < lastEnemy; i++)
+  {
+    enemy[i].isActive = true;
+    enemy[i].x = x + (spacingX * (i - firstEnemy));
+    enemy[i].y = y + (spacingY * (i - firstEnemy));
+    enemy[i].HP = 2;
+  }
+}
 
+void enemySwimRightLeft(byte firstEnemy, byte lastEnemy, byte speedEnemy)
+{
+  for (byte i = firstEnemy; i < lastEnemy; i++)
+  {
+    enemy[i].x = enemy[i].x - speedEnemy;
+  }
+}
+
+void enemySwimToMiddle(byte firstEnemy, byte lastEnemy, byte speedEnemy)
+{
+  for (byte i = firstEnemy; i < lastEnemy; i++)
+  {
+    enemy[i].x = enemy[i].x - speedEnemy;
+    if (enemy[i].x < 64)
+    {
+      if (enemy[i].y < 31) enemy[i].y++;
+      if (enemy[i].y > 32) enemy[i].y--;
+    }
+  }
+}
+
+void enemySwimSine(byte firstEnemy, byte lastEnemy, byte speedEnemy)
+{
+  for (byte i = firstEnemy; i < lastEnemy; i++)
+  {
+    enemy[i].x = enemy[i].x - speedEnemy;
+    if ((enemy[i].x < 120 ) && (enemy[i].x > 104) && (enemy[i].y > 16)) enemy[i].y--;
+    if ((enemy[i].x < 105) && (enemy[i].x > 73) && (enemy[i].y < 48)) enemy[i].y++;
+    if ((enemy[i].x < 74 ) && (enemy[i].x > 42) && (enemy[i].y > 16)) enemy[i].y--;
+    if ((enemy[i].x < 43) && (enemy[i].x > 10) && (enemy[i].y < 48)) enemy[i].y++;
+    if ((enemy[i].x < 11) && (enemy[i].y > 16)) enemy[i].y--;
+  }
+}
+
+void enemySwimDownUp(byte firstEnemy, byte lastEnemy, byte speedEnemy)
+{
+  for (byte i = firstEnemy; i < lastEnemy; i++)
+  {
+    if (enemy[i].frame > 4 && enemy[i].frame < 7 )enemy[i].y = enemy[i].y - speedEnemy - 1;
+    if (enemy[i].frame > 6 )enemy[i].y = enemy[i].y - speedEnemy;
+  }
 }
 
 void drawEnemies()
@@ -122,18 +169,128 @@ void drawEnemies()
 }
 
 
-void drawPirateShip()
+
+//////// BOSS functions ////////////////////
+////////////////////////////////////////////
+
+struct EndBoss
 {
-  sprites.drawSelfMasked(pirateShip.x + 16, pirateShip.y + 20, pirateshipShip, 0);
-  sprites.drawSelfMasked(pirateShip.x + 24, pirateShip.y + 5, pirateshipSail, 0);
-  sprites.drawSelfMasked(pirateShip.x, pirateShip.y + 19, pirateshipBowsprit, 0);
-  sprites.drawSelfMasked(pirateShip.x + 36, pirateShip.y + 0, pirateshipCrowsnest, 0);
+  public:
+    int x;
+    int y;
+    int HP;
+    boolean isActive = false;
+    byte attackFase;
+
+};
+
+EndBoss shark;
+EndBoss pirateShip;
+
+
+
+void setBossShark()
+{
+  shark.x = 128;
+  shark.y = 24;
+  shark.HP = 10;
+  shark.isActive = true;
+  shark.attackFase = 0;
+  sharkStageOne = true;
+  sharkSwimsRight = false;
 }
 
-void drawBosses()
+
+void checkBosses()
 {
-  if (pirateShip.isActive) drawPirateShip();
+  if (arduboy.everyXFrames(4 + (6 * sharkStageOne))) sharkFrame++;
+  if (sharkFrame > 5 ) sharkFrame = 0;
 }
+
+
+void sharkSwimsOnscreen()
+{
+  if (shark.x > 96)shark.x--;
+  else shark.attackFase++;
+}
+
+void sharkSwimsLeftFollow()
+{
+  if (shark.y < mermaid.y)shark.y++;
+  if (shark.y > mermaid.y)shark.y--;
+  if (shark.x > -40) shark.x--;
+  else
+  {
+    sharkSwimsRight = !sharkSwimsRight;
+    shark.attackFase++;
+  }
+}
+
+void sharkSwimsRightFollow()
+{
+  if (shark.y < mermaid.y)shark.y++;
+  if (shark.y > mermaid.y)shark.y--;
+  if (shark.x < 136) shark.x++;
+  else
+  {
+    sharkSwimsRight = !sharkSwimsRight;
+    shark.attackFase++;
+  }
+}
+
+void sharkSpeedUpFrame()
+{
+
+}
+
+void sharkFixMermaidsPosition()
+{
+
+}
+
+void sharkSwimsRightFast()
+{
+
+}
+
+void sharkSwimsLeftFast()
+{
+
+}
+
+
+
+
+
+
+
+
+
+void drawShark()
+{
+  if (shark.isActive) sprites.drawSelfMasked(shark.x, shark.y, enemyShark_plus_mask, sharkFrame + 4 * sharkSwimsRight);
+}
+
+
+void drawPirateShip()
+{
+  if (pirateShip.isActive)
+  {
+    sprites.drawSelfMasked(pirateShip.x + 16, pirateShip.y + 20, pirateshipShip, 0);
+    sprites.drawSelfMasked(pirateShip.x + 24, pirateShip.y + 5, pirateshipSail, 0);
+    sprites.drawSelfMasked(pirateShip.x, pirateShip.y + 19, pirateshipBowsprit, 0);
+    sprites.drawSelfMasked(pirateShip.x + 36, pirateShip.y + 0, pirateshipCrowsnest, 0);
+  }
+}
+
+
+typedef void (*FunctionPointer) ();
+
+FunctionPointer drawBosses[] =
+{
+  drawShark,
+  drawPirateShip,
+};
 
 
 

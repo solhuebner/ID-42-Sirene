@@ -38,59 +38,7 @@ boolean checkEndLevel()
   return false;
 }
 
-void enemySetInLine(byte firstEnemy, byte lastEnemy, byte x, byte y, int spacingX, int spacingY)
-{
-  for (byte i = firstEnemy; i < lastEnemy; i++)
-  {
-    enemy[i].isActive = true;
-    enemy[i].x = x + (spacingX * (i - firstEnemy));
-    enemy[i].y = y + (spacingY * (i - firstEnemy));
-    enemy[i].HP = 2;
-  }
-}
 
-void enemySwimRightLeft(byte firstEnemy, byte lastEnemy, byte speedEnemy)
-{
-  for (byte i = firstEnemy; i < lastEnemy; i++)
-  {
-    enemy[i].x = enemy[i].x - speedEnemy;
-  }
-}
-
-void enemySwimToMiddle(byte firstEnemy, byte lastEnemy, byte speedEnemy)
-{
-  for (byte i = firstEnemy; i < lastEnemy; i++)
-  {
-    enemy[i].x = enemy[i].x - speedEnemy;
-    if (enemy[i].x < 64)
-    {
-      if (enemy[i].y < 31) enemy[i].y++;
-      if (enemy[i].y > 32) enemy[i].y--;
-    }
-  }
-}
-
-void enemySwimSine(byte firstEnemy, byte lastEnemy, byte speedEnemy)
-{
-  for (byte i = firstEnemy; i < lastEnemy; i++)
-  {
-    enemy[i].x = enemy[i].x - speedEnemy;
-    if ((enemy[i].x < 120 ) && (enemy[i].x > 104) && (enemy[i].y > 16)) enemy[i].y--;
-    if ((enemy[i].x < 105) && (enemy[i].x > 73) && (enemy[i].y < 48)) enemy[i].y++;
-    if ((enemy[i].x < 74 ) && (enemy[i].x > 42) && (enemy[i].y > 16)) enemy[i].y--;
-    if ((enemy[i].x < 43) && (enemy[i].x > 10) && (enemy[i].y < 48)) enemy[i].y++;
-    if ((enemy[i].x < 11) && (enemy[i].y > 16)) enemy[i].y--;
-  }
-}
-
-void enemySwimDownUp(byte firstEnemy, byte lastEnemy, byte speedEnemy)
-{
-  for (byte i = firstEnemy; i < lastEnemy; i++)
-  {
-    if (enemy[i].frame > 4 && enemy[i].frame < 7 )enemy[i].y = enemy[i].y - speedEnemy - 1;
-    if (enemy[i].frame > 6 )enemy[i].y = enemy[i].y - speedEnemy;
-  }
-}
 
 void wave000()
 {
@@ -234,6 +182,60 @@ void wave020()
   if (checkStartWave())enemySetInLine(ARRAY_START_FISH, ARRAY_START_EEL, 128, 48, 24, 0);
   enemySwimRightLeft(ARRAY_START_FISH, ARRAY_START_EEL, 1);
   checkEndWave();
+}
+
+
+
+
+typedef void (*FunctionPointer) ();
+
+FunctionPointer sharkAttackFases[] =
+{
+  sharkSwimsOnscreen,
+  sharkSwimsLeftFollow,
+  sharkSwimsRightFollow,
+  sharkSwimsLeftFollow,
+  sharkSwimsOnscreen,
+  sharkSpeedUpFrame,
+  sharkFixMermaidsPosition,
+  sharkSwimsRightFast,
+  sharkFixMermaidsPosition,
+  sharkSwimsLeftFast,
+  sharkFixMermaidsPosition,
+  sharkSwimsRightFast,
+};
+
+
+// BOSS ATTACKS
+///////////////
+
+void wave250()
+{
+  //Shark attack
+  if (checkStartWave())setBossShark();
+  sharkAttackFases[shark.attackFase]();
+  // shark swim onscreen
+  // shark swim left follow
+  // shark swim right folow
+  // shark swim left follow
+  // shark swim onscreen
+  // shark speed frame
+  // fix mermaids position
+  // shark swim fast right
+  // fix mermaids position
+  // shark swim fast left
+  // fix mermaids position
+  // shark swim fast right
+  if (!shark.isActive) currentWave++;
+}
+
+void wave251()
+{
+  
+  //pirateShip attack
+  if (checkStartWave());
+  if (!pirateShip.isActive) currentWave++;
+  
 }
 
 
