@@ -34,10 +34,11 @@
 
 byte enemiesMaxFrames[] = {MAX_FRAME_FISHY, MAX_FRAME_FISH, MAX_FRAME_EEL, MAX_FRAME_JELLYFISH, MAX_FRAME_OCTOPUS};
 byte enemiesArrayLocation[] = {ARRAY_START_FISHY, ARRAY_START_FISH, ARRAY_START_EEL, ARRAY_START_JELLYFISH, ARRAY_START_OCTOPUS, ARRAY_MAX_AMOUNT};
-byte jellyFrame = 0;
-byte sharkFrame = 0;
+byte jellyFrame;
+byte sharkFrame;
+byte faseTimer;
 byte mermaidsPosition;
-boolean sharkStageOne;
+boolean sharkSlow;
 boolean sharkSwimsRight;
 
 
@@ -61,6 +62,7 @@ Enemies enemy[ARRAY_MAX_AMOUNT];
 
 void setEnemies()
 {
+  jellyFrame = 0;
   for (byte g = 0; g < sizeof(enemiesMaxFrames); g++)
   {
     for (byte i = enemiesArrayLocation[g]; i < enemiesArrayLocation[g + 1]; i++)
@@ -191,34 +193,48 @@ EndBoss pirateShip;
 
 void setBossShark()
 {
-  shark.x = 128;
-  shark.y = 24;
+  shark.x = 100;
+  shark.y = 28;
   shark.HP = 10;
   shark.isActive = true;
   shark.attackFase = 0;
-  sharkStageOne = true;
+  sharkSlow = true;
   sharkSwimsRight = false;
+  sharkFrame = 0;
+  faseTimer = 0;
+
 }
 
 
 void checkBosses()
 {
-  if (arduboy.everyXFrames(4 + (6 * sharkStageOne))) sharkFrame++;
-  if (sharkFrame > 5 ) sharkFrame = 0;
+  if (arduboy.everyXFrames(4 + (6 * sharkSlow))) sharkFrame++;
+  if (sharkFrame > 3 ) sharkFrame = 0;
 }
 
 
-void sharkSwimsOnscreen()
+void sharkSwimsLeftOnScreen()
 {
+  sharkSlow = true;
   if (shark.x > 96)shark.x--;
+  else shark.attackFase++;
+}
+
+void sharkSwimsRightOnScreen()
+{
+  sharkSlow = true;
+  if (shark.x < 0)shark.x++;
   else shark.attackFase++;
 }
 
 void sharkSwimsLeftFollow()
 {
-  if (shark.y < mermaid.y)shark.y++;
-  if (shark.y > mermaid.y)shark.y--;
-  if (shark.x > -40) shark.x--;
+  if (arduboy.everyXFrames(4) && (shark.x > mermaid.x))
+  {
+    if (shark.y < mermaid.y)shark.y++;
+    if (shark.y > mermaid.y)shark.y--;
+  }
+  if (shark.x > -40) shark.x -= 2;
   else
   {
     sharkSwimsRight = !sharkSwimsRight;
@@ -228,9 +244,12 @@ void sharkSwimsLeftFollow()
 
 void sharkSwimsRightFollow()
 {
-  if (shark.y < mermaid.y)shark.y++;
-  if (shark.y > mermaid.y)shark.y--;
-  if (shark.x < 136) shark.x++;
+  if (arduboy.everyXFrames(4) && (shark.x < mermaid.x))
+  {
+    if (shark.y < mermaid.y)shark.y++;
+    if (shark.y > mermaid.y)shark.y--;
+  }
+  if (shark.x < 136) shark.x += 2;
   else
   {
     sharkSwimsRight = !sharkSwimsRight;
@@ -238,27 +257,97 @@ void sharkSwimsRightFollow()
   }
 }
 
+
+void sharkWait()
+{
+  if (arduboy.everyXFrames(4)) faseTimer++;
+  if (faseTimer > 16)
+  {
+    shark.attackFase++;
+    faseTimer = 0;
+  }
+}
+
 void sharkSpeedUpFrame()
 {
-
+  sharkSlow = false;
+  shark.attackFase++;
 }
 
 void sharkFixMermaidsPosition()
 {
-
+  mermaidsPosition = mermaid.y;
+  shark.attackFase++;
 }
 
 void sharkSwimsRightFast()
 {
-
+  if (arduboy.everyXFrames(1))
+  {
+    if (shark.y < mermaidsPosition)shark.y +=2;
+    if (shark.y > mermaidsPosition)shark.y -=2;
+  }
+  if (shark.x < 136) shark.x += 4;
+  else
+  {
+    sharkSwimsRight = !sharkSwimsRight;
+    shark.attackFase++;
+  }
 }
 
 void sharkSwimsLeftFast()
 {
-
+  if (arduboy.everyXFrames(1))
+  {
+    if (shark.y < mermaidsPosition)shark.y +=2;
+    if (shark.y > mermaidsPosition)shark.y -=2;
+  }
+  if (shark.x > -40) shark.x -= 4;
+  else
+  {
+    sharkSwimsRight = !sharkSwimsRight;
+    shark.attackFase++;
+  }
 }
 
 
+void sharkRestart()
+{
+  shark.attackFase = 0;
+}
+
+typedef void (*FunctionPointer) ();
+
+FunctionPointer sharkAttackFases[] =
+{
+  sharkSwimsLeftOnScreen,
+  sharkWait,
+  sharkSwimsLeftFollow,
+  sharkSwimsRightFollow,
+  sharkSwimsLeftFollow,
+
+  sharkSwimsRightOnScreen,
+  sharkWait,
+  sharkSpeedUpFrame,
+  sharkWait,
+  sharkFixMermaidsPosition,
+  sharkSwimsRightFast,
+
+  sharkSwimsLeftOnScreen,
+  sharkWait,
+  sharkSpeedUpFrame,
+  sharkWait,
+  sharkFixMermaidsPosition,
+  sharkSwimsLeftFast,
+
+  sharkSwimsRightOnScreen,
+  sharkWait,
+  sharkSpeedUpFrame,
+  sharkWait,
+  sharkFixMermaidsPosition,
+  sharkSwimsRightFast,
+  sharkRestart,
+};
 
 
 
@@ -268,7 +357,7 @@ void sharkSwimsLeftFast()
 
 void drawShark()
 {
-  if (shark.isActive) sprites.drawSelfMasked(shark.x, shark.y, enemyShark_plus_mask, sharkFrame + 4 * sharkSwimsRight);
+  if (shark.isActive) sprites.drawSelfMasked(shark.x, shark.y, enemyShark, sharkFrame + (4 * sharkSwimsRight));
 }
 
 

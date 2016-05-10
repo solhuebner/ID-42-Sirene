@@ -27,6 +27,7 @@ void stateGameNextLevel()
   gameState = STATE_GAME_PLAYING;
   currentWave = 0;
   previousWave = 255;
+  waveTimer = 0;
   level++;
 };
 
@@ -42,7 +43,7 @@ void stateGamePlaying()
   if (arduboy.everyXFrames(2))Levels[level-1][currentWave]();
   if (checkEndLevel()) gameState = STATE_GAME_NEXT_LEVEL;
   
-  drawBosses[level-1];
+  drawBosses[level-1]();
   drawEnemies();
   drawPlayer();
   drawWeapons();

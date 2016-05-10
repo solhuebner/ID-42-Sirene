@@ -47,6 +47,7 @@ byte counter = 0;
 byte level;
 byte currentWave;
 byte previousWave;
+byte waveTimer;
 unsigned long scorePlayer; 
 
 #endif

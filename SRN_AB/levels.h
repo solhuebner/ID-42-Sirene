@@ -6,7 +6,7 @@
 #include "enemies.h"
 
 #define TOTAL_AMOUNT_OF_LEVELS  2
-#define TOTAL_AMOUNT_OF_WAVES   20
+#define TOTAL_AMOUNT_OF_WAVES   21
 
 boolean checkStartWave()
 {
@@ -38,10 +38,19 @@ boolean checkEndLevel()
   return false;
 }
 
-
+void waitFor(byte amount)
+{
+  if (arduboy.everyXFrames(4)) waveTimer++;
+  if (waveTimer > amount)
+  {
+    currentWave++;
+    waveTimer = 0;
+  }
+}
 
 void wave000()
 {
+  waitFor(16);
 }
 
 void wave001()
@@ -186,26 +195,6 @@ void wave020()
 
 
 
-
-typedef void (*FunctionPointer) ();
-
-FunctionPointer sharkAttackFases[] =
-{
-  sharkSwimsOnscreen,
-  sharkSwimsLeftFollow,
-  sharkSwimsRightFollow,
-  sharkSwimsLeftFollow,
-  sharkSwimsOnscreen,
-  sharkSpeedUpFrame,
-  sharkFixMermaidsPosition,
-  sharkSwimsRightFast,
-  sharkFixMermaidsPosition,
-  sharkSwimsLeftFast,
-  sharkFixMermaidsPosition,
-  sharkSwimsRightFast,
-};
-
-
 // BOSS ATTACKS
 ///////////////
 
@@ -214,18 +203,6 @@ void wave250()
   //Shark attack
   if (checkStartWave())setBossShark();
   sharkAttackFases[shark.attackFase]();
-  // shark swim onscreen
-  // shark swim left follow
-  // shark swim right folow
-  // shark swim left follow
-  // shark swim onscreen
-  // shark speed frame
-  // fix mermaids position
-  // shark swim fast right
-  // fix mermaids position
-  // shark swim fast left
-  // fix mermaids position
-  // shark swim fast right
   if (!shark.isActive) currentWave++;
 }
 
@@ -245,6 +222,7 @@ typedef void (*FunctionPointer) ();
 FunctionPointer Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAVES] =
 {
   { //LEVEL 01
+    wave250,
     wave020,
     wave019,
     wave018,
@@ -288,6 +266,7 @@ FunctionPointer Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAVES] =
     wave018,
     wave019,
     wave020,
+    wave250,
     //wave000,
   }
 };
