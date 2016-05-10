@@ -52,6 +52,7 @@ struct Enemies
     int y;
     int HP;
     boolean isActive = false;
+    boolean isDieing = false;
     byte frame;
 };
 
@@ -82,7 +83,8 @@ void checkEnemies()
       for (byte i = enemiesArrayLocation[g]; i < enemiesArrayLocation[g + 1]; i++)
       {
         enemy[i].frame++;
-        if (enemy[i].frame > enemiesMaxFrames[g]) enemy[i].frame = 0;
+        if ((enemy[i].frame > enemiesMaxFrames[g]) && !enemy[i].isDieing) enemy[i].frame = 0;
+        if ((enemy[i].frame > 5) && enemy[i].isDieing) enemy[i].frame = 0;
         if (enemy[i].x < -32) enemy[i].isActive = false;
         if (enemy[i].y < -32) enemy[i].isActive = false;
       }
@@ -105,7 +107,7 @@ void enemySwimRightLeft(byte firstEnemy, byte lastEnemy, byte speedEnemy)
 {
   for (byte i = firstEnemy; i < lastEnemy; i++)
   {
-    enemy[i].x = enemy[i].x - speedEnemy;
+    if (!enemy[i].isDieing) enemy[i].x = enemy[i].x - speedEnemy;
   }
 }
 
@@ -113,11 +115,14 @@ void enemySwimToMiddle(byte firstEnemy, byte lastEnemy, byte speedEnemy)
 {
   for (byte i = firstEnemy; i < lastEnemy; i++)
   {
-    enemy[i].x = enemy[i].x - speedEnemy;
-    if (enemy[i].x < 64)
+    if (!enemy[i].isDieing)
     {
-      if (enemy[i].y < 31) enemy[i].y++;
-      if (enemy[i].y > 32) enemy[i].y--;
+      enemy[i].x = enemy[i].x - speedEnemy;
+      if (enemy[i].x < 64)
+      {
+        if (enemy[i].y < 31) enemy[i].y++;
+        if (enemy[i].y > 32) enemy[i].y--;
+      }
     }
   }
 }
@@ -126,12 +131,15 @@ void enemySwimSine(byte firstEnemy, byte lastEnemy, byte speedEnemy)
 {
   for (byte i = firstEnemy; i < lastEnemy; i++)
   {
-    enemy[i].x = enemy[i].x - speedEnemy;
-    if ((enemy[i].x < 120 ) && (enemy[i].x > 104) && (enemy[i].y > 16)) enemy[i].y--;
-    if ((enemy[i].x < 105) && (enemy[i].x > 73) && (enemy[i].y < 48)) enemy[i].y++;
-    if ((enemy[i].x < 74 ) && (enemy[i].x > 42) && (enemy[i].y > 16)) enemy[i].y--;
-    if ((enemy[i].x < 43) && (enemy[i].x > 10) && (enemy[i].y < 48)) enemy[i].y++;
-    if ((enemy[i].x < 11) && (enemy[i].y > 16)) enemy[i].y--;
+    if (!enemy[i].isDieing)
+    {
+      enemy[i].x = enemy[i].x - speedEnemy;
+      if ((enemy[i].x < 120 ) && (enemy[i].x > 104) && (enemy[i].y > 16)) enemy[i].y--;
+      if ((enemy[i].x < 105) && (enemy[i].x > 73) && (enemy[i].y < 48)) enemy[i].y++;
+      if ((enemy[i].x < 74 ) && (enemy[i].x > 42) && (enemy[i].y > 16)) enemy[i].y--;
+      if ((enemy[i].x < 43) && (enemy[i].x > 10) && (enemy[i].y < 48)) enemy[i].y++;
+      if ((enemy[i].x < 11) && (enemy[i].y > 16)) enemy[i].y--;
+    }
   }
 }
 
@@ -139,8 +147,11 @@ void enemySwimDownUp(byte firstEnemy, byte lastEnemy, byte speedEnemy)
 {
   for (byte i = firstEnemy; i < lastEnemy; i++)
   {
-    if (enemy[i].frame > 4 && enemy[i].frame < 7 )enemy[i].y = enemy[i].y - speedEnemy - 1;
-    if (enemy[i].frame > 6 )enemy[i].y = enemy[i].y - speedEnemy;
+    if (!enemy[i].isDieing)
+    {
+      if (enemy[i].frame > 4 && enemy[i].frame < 7 )enemy[i].y = enemy[i].y - speedEnemy - 1;
+      if (enemy[i].frame > 6 )enemy[i].y = enemy[i].y - speedEnemy;
+    }
   }
 }
 
@@ -148,25 +159,45 @@ void drawEnemies()
 {
   for (byte i = ARRAY_START_FISHY; i < ARRAY_START_FISH; i++)
   {
-    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFishy_plus_mask, enemy[i].frame);
+    if (enemy[i].isActive)
+    {
+      if (!enemy[i].isDieing)sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFishy_plus_mask, enemy[i].frame);
+      if (enemy[i].isDieing)sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].frame);
+    }
   }
   for (byte i = ARRAY_START_FISH; i < ARRAY_START_EEL; i++)
   {
-    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFish_plus_mask, enemy[i].frame);
+    if (enemy[i].isActive)
+    {
+      if (!enemy[i].isDieing)sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFish_plus_mask, enemy[i].frame);
+      if (enemy[i].isDieing)sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].frame);
+    }
   }
   for (byte i = ARRAY_START_EEL; i < ARRAY_START_JELLYFISH; i++)
   {
-    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyEel_plus_mask, enemy[i].frame);
+    if (enemy[i].isActive)
+    {
+      if (!enemy[i].isDieing)sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyEel_plus_mask, enemy[i].frame);
+      if (enemy[i].isDieing)sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].frame);
+    }
   }
   for (byte i = ARRAY_START_JELLYFISH; i < ARRAY_START_OCTOPUS; i++)
   {
     jellyFrame = enemy[i].frame;
     if (jellyFrame > 4) jellyFrame = 0;
-    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyJellyfish_plus_mask, jellyFrame);
+    if (enemy[i].isActive)
+    {
+      if (!enemy[i].isDieing)sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyJellyfish_plus_mask, jellyFrame);
+      if (enemy[i].isDieing)sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].frame);
+    }
   }
   for (byte i = ARRAY_START_OCTOPUS; i < ARRAY_MAX_AMOUNT; i++)
   {
-    if (enemy[i].isActive) sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyOctopus_plus_mask, enemy[i].frame);
+    if (enemy[i].isActive)
+    {
+      if (!enemy[i].isDieing)sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyOctopus_plus_mask, enemy[i].frame);
+      if (enemy[i].isDieing)sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].frame);
+    }
   }
 }
 
@@ -193,7 +224,7 @@ EndBoss pirateShip;
 
 void setBossShark()
 {
-  shark.x = 100;
+  shark.x = 128;
   shark.y = 28;
   shark.HP = 10;
   shark.isActive = true;
@@ -213,14 +244,14 @@ void checkBosses()
 }
 
 
-void sharkSwimsLeftOnScreen()
+void sharkSwimsRightOnScreen()
 {
   sharkSlow = true;
   if (shark.x > 96)shark.x--;
   else shark.attackFase++;
 }
 
-void sharkSwimsRightOnScreen()
+void sharkSwimsLeftOnScreen()
 {
   sharkSlow = true;
   if (shark.x < 0)shark.x++;
@@ -284,8 +315,8 @@ void sharkSwimsRightFast()
 {
   if (arduboy.everyXFrames(1))
   {
-    if (shark.y < mermaidsPosition)shark.y +=2;
-    if (shark.y > mermaidsPosition)shark.y -=2;
+    if (shark.y < mermaidsPosition)shark.y += 2;
+    if (shark.y > mermaidsPosition)shark.y -= 2;
   }
   if (shark.x < 136) shark.x += 4;
   else
@@ -299,8 +330,8 @@ void sharkSwimsLeftFast()
 {
   if (arduboy.everyXFrames(1))
   {
-    if (shark.y < mermaidsPosition)shark.y +=2;
-    if (shark.y > mermaidsPosition)shark.y -=2;
+    if (shark.y < mermaidsPosition)shark.y += 2;
+    if (shark.y > mermaidsPosition)shark.y -= 2;
   }
   if (shark.x > -40) shark.x -= 4;
   else
@@ -320,27 +351,27 @@ typedef void (*FunctionPointer) ();
 
 FunctionPointer sharkAttackFases[] =
 {
-  sharkSwimsLeftOnScreen,
+  sharkSwimsRightOnScreen,
   sharkWait,
   sharkSwimsLeftFollow,
   sharkSwimsRightFollow,
   sharkSwimsLeftFollow,
 
-  sharkSwimsRightOnScreen,
+  sharkSwimsLeftOnScreen,
   sharkWait,
   sharkSpeedUpFrame,
   sharkWait,
   sharkFixMermaidsPosition,
   sharkSwimsRightFast,
 
-  sharkSwimsLeftOnScreen,
+  sharkSwimsRightOnScreen,
   sharkWait,
   sharkSpeedUpFrame,
   sharkWait,
   sharkFixMermaidsPosition,
   sharkSwimsLeftFast,
 
-  sharkSwimsRightOnScreen,
+  sharkSwimsLeftOnScreen,
   sharkWait,
   sharkSpeedUpFrame,
   sharkWait,

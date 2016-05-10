@@ -5,8 +5,8 @@
 #include "globals.h"
 #include "enemies.h"
 
-#define TOTAL_AMOUNT_OF_LEVELS  2
-#define TOTAL_AMOUNT_OF_WAVES   21
+#define TOTAL_AMOUNT_OF_LEVELS  3
+#define TOTAL_AMOUNT_OF_WAVES   22
 
 boolean checkStartWave()
 {
@@ -222,7 +222,7 @@ typedef void (*FunctionPointer) ();
 FunctionPointer Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAVES] =
 {
   { //LEVEL 01
-    wave250,
+    wave000,
     wave020,
     wave019,
     wave018,
@@ -243,9 +243,10 @@ FunctionPointer Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAVES] =
     wave003,
     wave002,
     wave001,
-    //wave000,
+    wave250,
   },
   { //LEVEL 02
+    wave000,
     wave001,
     wave002,
     wave003,
@@ -267,7 +268,30 @@ FunctionPointer Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAVES] =
     wave019,
     wave020,
     wave250,
-    //wave000,
+  },
+  { //LEVEL 03
+    wave000,
+    wave001,
+    wave002,
+    wave003,
+    wave004,
+    wave005,
+    wave006,
+    wave007,
+    wave008,
+    wave009,
+    wave010,
+    wave011,
+    wave012,
+    wave013,
+    wave014,
+    wave015,
+    wave016,
+    wave017,
+    wave018,
+    wave019,
+    wave020,
+    wave250,
   }
 };
 
