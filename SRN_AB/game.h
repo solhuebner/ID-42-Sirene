@@ -49,7 +49,8 @@ void stateGamePlaying()
   drawWeapons();
   drawLifeHUD();
   drawScoreHUD();
-  
+
+  checkCollisions();
 };
 
 void stateGamePause()

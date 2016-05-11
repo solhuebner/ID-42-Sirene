@@ -31,7 +31,7 @@ boolean checkEndWave()
 
 boolean checkEndLevel()
 {
-  if (currentWave > TOTAL_AMOUNT_OF_WAVES-1)
+  if (currentWave > TOTAL_AMOUNT_OF_WAVES - 1)
   {
     return true;
   }
@@ -208,11 +208,11 @@ void wave250()
 
 void wave251()
 {
-  
+
   //pirateShip attack
   if (checkStartWave());
   if (!pirateShip.isActive) currentWave++;
-  
+
 }
 
 
@@ -294,5 +294,23 @@ FunctionPointer Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAVES] =
     wave250,
   }
 };
+
+void checkCollisions()
+{
+  /*
+    Rect playerRect = {.x = 20, .y = trollyFish.y, .width = trollyFish.width, .height = trollyFish.height};
+
+    Rect powerupRect = {.x = powerUp.x, .y = powerUp.y, .width = powerUp.width, powerUp.height};
+
+    if (physics.collide(powerupRect, playerRect))
+    {
+      // Trigger powerup effect
+      triggerPowerUp(powerUp.type);
+      // Reset powerup
+      powerUp.active = false;
+      powerUp.x += 128;
+    }
+    */
+}  
 
 #endif
