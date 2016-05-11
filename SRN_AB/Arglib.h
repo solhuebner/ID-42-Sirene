@@ -26,7 +26,7 @@
  *     #define AB_DEVKIT
  */
 #define ARDUBOY_10   //< compile for the production Arduboy v1.0
-// #define AB_DEVKIT    //< compile for the official dev kit
+//#define AB_DEVKIT    //< compile for the official dev kit
 #endif
 
 

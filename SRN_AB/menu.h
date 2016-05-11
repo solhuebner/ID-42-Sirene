@@ -4,6 +4,15 @@
 #include <Arduino.h>
 #include "globals.h"
 
+void drawTitleScreen()
+{
+  arduboy.drawBitmap(36, 1, titleScreen00, 62, 16, WHITE);
+  arduboy.drawBitmap(3, 13, titleScreen01, 55, 32, WHITE);
+  arduboy.drawBitmap(7, 45, titleScreen02, 48, 24, WHITE);
+  arduboy.drawBitmap(55, 22, titleScreen03, 35, 24, WHITE);
+  arduboy.drawBitmap(62, 48, titleScreen04, 25, 16, WHITE);
+}
+
 void stateMenuIntro()
 {
   counter++;
@@ -13,7 +22,8 @@ void stateMenuIntro()
 
 void stateMenuMain()
 {
-  arduboy.drawBitmap(0, 0, titleScreen, 128, 64, WHITE);
+  drawTitleScreen();
+  /*
   for (byte i = 0; i < 4; i++)
   {
     {
@@ -24,6 +34,7 @@ void stateMenuMain()
       if (((2 + i) - menuSelection) == 0) sprites.drawSelfMasked(21 + (22 * i), 56, menuText, i);
     }
   }
+  */
   if (buttons.justPressed(RIGHT_BUTTON) && (menuSelection < 5)) menuSelection++;
   if (buttons.justPressed(LEFT_BUTTON) && (menuSelection > 2)) menuSelection--;
   if (buttons.justPressed(B_BUTTON)) gameState = menuSelection;
