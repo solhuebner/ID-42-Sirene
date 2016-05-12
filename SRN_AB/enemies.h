@@ -52,7 +52,7 @@ struct Enemies
     int y;
     int HP;
     boolean isActive = false;
-    boolean isDieing = false;
+    boolean isDying = false;
     byte frame;
 };
 
@@ -83,8 +83,8 @@ void checkEnemies()
       for (byte i = enemiesArrayLocation[g]; i < enemiesArrayLocation[g + 1]; i++)
       {
         enemy[i].frame++;
-        if ((enemy[i].frame > enemiesMaxFrames[g]) && !enemy[i].isDieing) enemy[i].frame = 0;
-        if ((enemy[i].frame > 5) && enemy[i].isDieing) enemy[i].frame = 0;
+        if ((enemy[i].frame > enemiesMaxFrames[g]) && !enemy[i].isDying) enemy[i].frame = 0;
+        if ((enemy[i].frame > 5) && enemy[i].isDying) enemy[i].frame = 0;
         if (enemy[i].x < -32) enemy[i].isActive = false;
         if (enemy[i].y < -32) enemy[i].isActive = false;
       }
@@ -107,7 +107,7 @@ void enemySwimRightLeft(byte firstEnemy, byte lastEnemy, byte speedEnemy)
 {
   for (byte i = firstEnemy; i < lastEnemy; i++)
   {
-    if (!enemy[i].isDieing) enemy[i].x = enemy[i].x - speedEnemy;
+    if (!enemy[i].isDying) enemy[i].x = enemy[i].x - speedEnemy;
   }
 }
 
@@ -115,7 +115,7 @@ void enemySwimToMiddle(byte firstEnemy, byte lastEnemy, byte speedEnemy)
 {
   for (byte i = firstEnemy; i < lastEnemy; i++)
   {
-    if (!enemy[i].isDieing)
+    if (!enemy[i].isDying)
     {
       enemy[i].x = enemy[i].x - speedEnemy;
       if (enemy[i].x < 64)
@@ -131,7 +131,7 @@ void enemySwimSine(byte firstEnemy, byte lastEnemy, byte speedEnemy)
 {
   for (byte i = firstEnemy; i < lastEnemy; i++)
   {
-    if (!enemy[i].isDieing)
+    if (!enemy[i].isDying)
     {
       enemy[i].x = enemy[i].x - speedEnemy;
       if ((enemy[i].x < 120 ) && (enemy[i].x > 104) && (enemy[i].y > 16)) enemy[i].y--;
@@ -147,7 +147,7 @@ void enemySwimDownUp(byte firstEnemy, byte lastEnemy, byte speedEnemy)
 {
   for (byte i = firstEnemy; i < lastEnemy; i++)
   {
-    if (!enemy[i].isDieing)
+    if (!enemy[i].isDying)
     {
       if (enemy[i].frame > 4 && enemy[i].frame < 7 )enemy[i].y = enemy[i].y - speedEnemy - 1;
       if (enemy[i].frame > 6 )enemy[i].y = enemy[i].y - speedEnemy;
@@ -161,24 +161,24 @@ void drawEnemies()
   {
     if (enemy[i].isActive)
     {
-      if (!enemy[i].isDieing)sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFishy_plus_mask, enemy[i].frame);
-      if (enemy[i].isDieing)sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].frame);
+      if (!enemy[i].isDying)sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFishy_plus_mask, enemy[i].frame);
+      if (enemy[i].isDying)sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].frame);
     }
   }
   for (byte i = ARRAY_START_FISH; i < ARRAY_START_EEL; i++)
   {
     if (enemy[i].isActive)
     {
-      if (!enemy[i].isDieing)sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFish_plus_mask, enemy[i].frame);
-      if (enemy[i].isDieing)sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].frame);
+      if (!enemy[i].isDying)sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFish_plus_mask, enemy[i].frame);
+      if (enemy[i].isDying)sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].frame);
     }
   }
   for (byte i = ARRAY_START_EEL; i < ARRAY_START_JELLYFISH; i++)
   {
     if (enemy[i].isActive)
     {
-      if (!enemy[i].isDieing)sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyEel_plus_mask, enemy[i].frame);
-      if (enemy[i].isDieing)sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].frame);
+      if (!enemy[i].isDying)sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyEel_plus_mask, enemy[i].frame);
+      if (enemy[i].isDying)sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].frame);
     }
   }
   for (byte i = ARRAY_START_JELLYFISH; i < ARRAY_START_OCTOPUS; i++)
@@ -187,16 +187,16 @@ void drawEnemies()
     if (jellyFrame > 4) jellyFrame = 0;
     if (enemy[i].isActive)
     {
-      if (!enemy[i].isDieing)sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyJellyfish_plus_mask, jellyFrame);
-      if (enemy[i].isDieing)sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].frame);
+      if (!enemy[i].isDying)sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyJellyfish_plus_mask, jellyFrame);
+      if (enemy[i].isDying)sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].frame);
     }
   }
   for (byte i = ARRAY_START_OCTOPUS; i < ARRAY_MAX_AMOUNT; i++)
   {
     if (enemy[i].isActive)
     {
-      if (!enemy[i].isDieing)sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyOctopus_plus_mask, enemy[i].frame);
-      if (enemy[i].isDieing)sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].frame);
+      if (!enemy[i].isDying)sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyOctopus_plus_mask, enemy[i].frame);
+      if (enemy[i].isDying)sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].frame);
     }
   }
 }

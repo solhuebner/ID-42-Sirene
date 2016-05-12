@@ -297,6 +297,20 @@ FunctionPointer Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAVES] =
 
 void checkCollisions()
 {
+  Rect mermaidRect = {.x = mermaid.x + 2, .y = mermaid.y +2, .width = 12, .height = 12};
+
+  for (byte g = 0; g < sizeof(enemiesMaxFrames); g++)
+  {
+    for (byte i = enemiesArrayLocation[g]; i < enemiesArrayLocation[g + 1]; i++)
+    {
+      Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = 16, .height = 16};
+      if (!enemy[i].isDying && physics.collide(mermaidRect, enemyRect))
+      {
+        enemy[i].isActive = false;
+      }
+    }
+  }
+
   /*
     Rect playerRect = {.x = 20, .y = trollyFish.y, .width = trollyFish.width, .height = trollyFish.height};
 
@@ -310,7 +324,7 @@ void checkCollisions()
       powerUp.active = false;
       powerUp.x += 128;
     }
-    */
-}  
+  */
+}
 
 #endif

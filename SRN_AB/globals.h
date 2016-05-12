@@ -39,6 +39,7 @@
 Arduboy arduboy;
 Sprites sprites(arduboy);
 SimpleButtons buttons (arduboy);
+Physics physics;
 
 unsigned char gameState;
 boolean soundYesNo;
