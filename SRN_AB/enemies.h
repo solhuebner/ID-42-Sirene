@@ -83,7 +83,8 @@ void checkEnemies()
   {
     for (byte i = enemiesArrayLocation[g]; i < enemiesArrayLocation[g + 1]; i++)
     {
-      if (arduboy.everyXFrames(6)) enemy[i].frame++;
+      if (!enemy[i].isDying && arduboy.everyXFrames(6)) enemy[i].frame++;
+      else if (arduboy.everyXFrames(3)) enemy[i].frame++;
       if ((enemy[i].frame > enemiesMaxFrames[g]) && !enemy[i].isDying) enemy[i].frame = 0;
       if ((enemy[i].frame > 5) && enemy[i].isDying)
       {
