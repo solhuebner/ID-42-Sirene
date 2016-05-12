@@ -297,34 +297,27 @@ FunctionPointer Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAVES] =
 
 void checkCollisions()
 {
-  Rect mermaidRect = {.x = mermaid.x + 2, .y = mermaid.y +2, .width = 12, .height = 12};
 
+  ////// Check collision mermaid enemies /////
+  ////////////////////////////////////////////
+  Rect mermaidRect = {.x = mermaid.x + 2, .y = mermaid.y +2, .width = 12, .height = 12};
   for (byte g = 0; g < sizeof(enemiesMaxFrames); g++)
   {
     for (byte i = enemiesArrayLocation[g]; i < enemiesArrayLocation[g + 1]; i++)
     {
       Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = 16, .height = 16};
-      if (!enemy[i].isDying && physics.collide(mermaidRect, enemyRect))
+      if (enemy[i].isActive && !enemy[i].isDying && physics.collide(mermaidRect, enemyRect))
       {
-        enemy[i].isActive = false;
+        if (!mermaid.isImune)
+        {
+          mermaid.isImune = true;
+          mermaid.HP -= 1;
+        }
+        enemy[i].isDying = true;
+        enemy[i].frame = 0;
       }
     }
   }
-
-  /*
-    Rect playerRect = {.x = 20, .y = trollyFish.y, .width = trollyFish.width, .height = trollyFish.height};
-
-    Rect powerupRect = {.x = powerUp.x, .y = powerUp.y, .width = powerUp.width, powerUp.height};
-
-    if (physics.collide(powerupRect, playerRect))
-    {
-      // Trigger powerup effect
-      triggerPowerUp(powerUp.type);
-      // Reset powerup
-      powerUp.active = false;
-      powerUp.x += 128;
-    }
-  */
 }
 
 #endif

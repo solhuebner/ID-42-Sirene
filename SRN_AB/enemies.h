@@ -69,6 +69,9 @@ void setEnemies()
     for (byte i = enemiesArrayLocation[g]; i < enemiesArrayLocation[g + 1]; i++)
     {
       enemy[i].frame += i;
+      enemy[i].isActive = false;
+      enemy[i].isDying = false;
+      enemy[i].x = 128;
     }
   }
 }
@@ -76,18 +79,19 @@ void setEnemies()
 
 void checkEnemies()
 {
-  if (arduboy.everyXFrames(6))
+  for (byte g = 0; g < sizeof(enemiesMaxFrames); g++)
   {
-    for (byte g = 0; g < sizeof(enemiesMaxFrames); g++)
+    for (byte i = enemiesArrayLocation[g]; i < enemiesArrayLocation[g + 1]; i++)
     {
-      for (byte i = enemiesArrayLocation[g]; i < enemiesArrayLocation[g + 1]; i++)
+      if (arduboy.everyXFrames(6)) enemy[i].frame++;
+      if ((enemy[i].frame > enemiesMaxFrames[g]) && !enemy[i].isDying) enemy[i].frame = 0;
+      if ((enemy[i].frame > 5) && enemy[i].isDying)
       {
-        enemy[i].frame++;
-        if ((enemy[i].frame > enemiesMaxFrames[g]) && !enemy[i].isDying) enemy[i].frame = 0;
-        if ((enemy[i].frame > 5) && enemy[i].isDying) enemy[i].frame = 0;
-        if (enemy[i].x < -32) enemy[i].isActive = false;
-        if (enemy[i].y < -32) enemy[i].isActive = false;
+        enemy[i].isDying = false;
+        enemy[i].isActive = false;
       }
+      if (enemy[i].x < -32) enemy[i].isActive = false;
+      if (enemy[i].y < -32) enemy[i].isActive = false;
     }
   }
 }

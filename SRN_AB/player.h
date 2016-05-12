@@ -12,8 +12,6 @@
 
 int seaShellSpeedY[] = {0, 1, -1, 0, 1, -1,};
 boolean magicCharging = false;
-
-byte mermaidFrame = 0;
 byte magicFrame = 0;
 byte chargeBarFrame = 0;
 boolean bubblesFrame = false;
@@ -31,7 +29,10 @@ struct Players
     byte y;
     byte weaponType;
     boolean isActive;
-    byte life;
+    boolean isImune;
+    byte imuneTimer;
+    byte HP;
+    byte frame;
 };
 
 struct Weapons
@@ -54,7 +55,7 @@ struct Sparkles
     byte frame;
 };
 
-Players mermaid = { .x = 0, .y = 20, .weaponType = WEAPON_TYPE_TRIDENT, .isActive = true, .life = 4};
+Players mermaid;
 Weapons trident[MAX_ONSCREEN_TRIDENT];
 Weapons bubbles[MAX_ONSCREEN_BUBBLES];
 Weapons seaShell[MAX_ONSCREEN_SEASHELL];
@@ -204,13 +205,39 @@ void checkWeapons()
 
 void checkMermaid()
 {
-  if (arduboy.everyXFrames(10)) mermaidFrame++;
-  if (mermaidFrame > 5 ) mermaidFrame = 0;
-  for (byte i = 0; i < 8; i++)
+  if (mermaid.isImune)
   {
-    if (arduboy.everyXFrames(5)) sparkle[i].frame++;
-    if (sparkle[i].frame > 7 ) sparkle[i].frame = 0;
+    if (arduboy.everyXFrames(3)) mermaid.isActive = !mermaid.isActive;
+    mermaid.imuneTimer++;
+    if (mermaid.imuneTimer > 60)
+    {
+      mermaid.imuneTimer = 0;
+      mermaid.isImune = false;
+      mermaid.isActive = true;
+    }
   }
+  if (mermaid.HP < 2) gameState = STATE_GAME_OVER;
+  if (arduboy.everyXFrames(10)) mermaid.frame++;
+  if (mermaid.frame > 5 ) mermaid.frame = 0;
+  if (arduboy.everyXFrames(5))
+  {
+    for (byte i = 0; i < 8; i++)
+    {
+      sparkle[i].frame++;
+      if (sparkle[i].frame > 7 ) sparkle[i].frame = 0;
+    }
+  }
+}
+
+void setMermaid()
+{
+  mermaid.x = 0;
+  mermaid.y = 20;
+  mermaid.weaponType = WEAPON_TYPE_TRIDENT;
+  mermaid.isActive = true;
+  mermaid.HP = 4;
+  mermaid.isImune = true;
+  mermaid.imuneTimer = 0;
 }
 
 void drawWeapons()
@@ -226,9 +253,9 @@ void drawWeapons()
 }
 
 
-void drawPlayer()
+void drawMermaid()
 {
-  if (mermaid.isActive) sprites.drawPlusMask(mermaid.x, mermaid.y, mermaid_plus_mask, mermaidFrame);
+  if (mermaid.isActive) sprites.drawPlusMask(mermaid.x, mermaid.y, mermaid_plus_mask, mermaid.frame);
   if (magicCharging)
   {
     for (byte i = 0; i < 8; i++) sprites.drawSelfMasked(mermaid.x + sparkle[i].x + (sparkle[i].speedX * sparkle[i].frame), mermaid.y + sparkle[i].y + (sparkle[i].speedY * sparkle[i].frame), chargeSparkles, sparkle[i].frame);
@@ -238,7 +265,7 @@ void drawPlayer()
 
 void drawLifeHUD()
 {
-  sprites.drawPlusMask(0, 0, hearts_plus_mask, mermaid.life - 2);
+  sprites.drawPlusMask(0, 0, hearts_plus_mask, mermaid.HP - 2);
 }
 
 void drawScoreHUD()

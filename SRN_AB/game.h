@@ -15,20 +15,20 @@ void stateGamePrepareLevel()
 {
   level = 0;
   scorePlayer = 0;
-  mermaid.life = 3;
   setWeapons();
   setEnemies();
+  setMermaid();
   gameState = STATE_GAME_NEXT_LEVEL;
 };
 
 
 void stateGameNextLevel()
 {
-  gameState = STATE_GAME_PLAYING;
   currentWave = 0;
   previousWave = 255;
   waveTimer = 0;
   level++;
+  gameState = STATE_GAME_PLAYING;
 };
 
 
@@ -39,13 +39,13 @@ void stateGamePlaying()
   checkMermaid();
   checkEnemies();
   checkBosses();
-  
-  if (arduboy.everyXFrames(2))Levels[level-1][currentWave]();
+
+  if (arduboy.everyXFrames(2))Levels[level - 1][currentWave]();
   if (checkEndLevel()) gameState = STATE_GAME_NEXT_LEVEL;
-  
-  drawBosses[level-1]();
+
+  drawBosses[level - 1]();
   drawEnemies();
-  drawPlayer();
+  drawMermaid();
   drawWeapons();
   drawLifeHUD();
   drawScoreHUD();
@@ -60,7 +60,7 @@ void stateGamePause()
 
 void stateGameOver()
 {
-
+  gameState = STATE_MENU_MAIN;
 };
 
 
