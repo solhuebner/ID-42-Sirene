@@ -38,7 +38,7 @@ void stateGamePlaying()
   checkWeapons();
   checkMermaid();
   checkEnemies();
-  checkBosses();
+  checkBossShark();
 
   if (arduboy.everyXFrames(2))Levels[level - 1][currentWave]();
   if (checkEndLevel()) gameState = STATE_GAME_NEXT_LEVEL;

@@ -19,7 +19,7 @@ void checkInputs()
   {
     mermaid.y--;
   }
-  if (buttons.pressed(RIGHT_BUTTON) && (mermaid.x < GAME_RIGHT-16))
+  if (buttons.pressed(RIGHT_BUTTON) && (mermaid.x < GAME_RIGHT - 16))
   {
     mermaid.x++;
   }
@@ -29,20 +29,20 @@ void checkInputs()
     mermaid.weaponType++;
     if (mermaid.weaponType > 3) mermaid.weaponType = 0;
   }
+
   if (buttons.justPressed(B_BUTTON) && (coolDown[mermaid.weaponType] == coolDownMax[mermaid.weaponType]))
   {
 
     if (mermaid.weaponType == WEAPON_TYPE_TRIDENT)
     {
       coolDown[mermaid.weaponType]--;
-      shootWeapon[mermaid.weaponType]();
+      shootWeapon();
     }
     if ((mermaid.weaponType == WEAPON_TYPE_SEASHELL))
     {
-      if (((seaShell[0].isActive == false) && (seaShell[1].isActive == false) && (seaShell[2].isActive == false)) || ((seaShell[3].isActive == false) && (seaShell[4].isActive == false) && (seaShell[5].isActive == false)))
       {
         coolDown[mermaid.weaponType]--;
-        shootWeapon[mermaid.weaponType]();
+        for (byte i =0; i<3; i++) shootWeapon();
       }
     }
   }
@@ -51,7 +51,7 @@ void checkInputs()
     if ((mermaid.weaponType == WEAPON_TYPE_BUBBLES) && (coolDown[WEAPON_TYPE_BUBBLES] == coolDownMax[WEAPON_TYPE_BUBBLES]))
     {
       coolDown[mermaid.weaponType]--;
-      shootWeapon[mermaid.weaponType]();
+      shootWeapon();
     }
     if (mermaid.weaponType == WEAPON_TYPE_MAGIC)
     {
@@ -65,7 +65,7 @@ void checkInputs()
     magicCharging = false;
     chargeBarFrame = 0;
     coolDown[mermaid.weaponType]--;
-    shootWeapon[mermaid.weaponType]();
+    shootWeapon();
   }
 }
 

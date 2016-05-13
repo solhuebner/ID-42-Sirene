@@ -52,7 +52,6 @@ struct Enemies
 };
 
 
-
 Enemies enemy[MAX_ONSCREEN_ENEMIES];
 
 
@@ -80,9 +79,13 @@ void checkEnemies()
     {
       enemy[i].isDying = false;
       enemy[i].isActive = false;
+      enemy[i].frame = 0;
     }
-    if (enemy[i].x < -32) enemy[i].isActive = false;
-    if (enemy[i].y < -32) enemy[i].isActive = false;
+    if ((enemy[i].x < -32) || (enemy[i].y < -32))
+    {
+      enemy[i].isActive = false;
+      enemy[i].frame = 0;
+    }
   }
 }
 
@@ -90,6 +93,7 @@ void enemySetInLine(byte enemyType, byte firstEnemy, byte lastEnemy, byte x, byt
 {
   for (byte i = firstEnemy; i < lastEnemy; i++)
   {
+    enemy[i].frame = i;
     enemy[i].isActive = true;
     enemy[i].isDying = false;
     enemy[i].type = enemyType;
@@ -224,7 +228,7 @@ void setBossShark()
 }
 
 
-void checkBosses()
+void checkBossShark()
 {
   if (arduboy.everyXFrames(4 + (6 * sharkSlow))) sharkFrame++;
   if (sharkFrame > 3 ) sharkFrame = 0;
