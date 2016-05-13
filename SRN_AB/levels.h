@@ -317,4 +317,44 @@ void checkCollisions()
   }
 }
 
+void drawLifeHUD()
+{
+  sprites.drawPlusMask(0, 0, hearts_plus_mask, mermaid.HP - 2);
+}
+
+void drawScoreHUD()
+{
+  char buf[10];
+  scorePlayer = arduboy.cpuLoad();
+  ltoa(scorePlayer, buf, 10);
+  char charLen = strlen(buf);
+  char pad = 7 - charLen;
+
+  //draw 0 padding
+  for (byte i = 0; i < pad; i++)
+  {
+    sprites.drawPlusMask(93 + (5 * i), 0, numbers_plus_mask, 0);
+  }
+
+  for (byte i = 0; i < charLen; i++)
+  {
+    char digit = buf[i];
+    byte j;
+    if (digit <= 48)
+    {
+      digit = 0;
+    }
+    else {
+      digit -= 48;
+      if (digit > 9) digit = 0;
+    }
+
+    for (byte z = 0; z < 10; z++)
+    {
+      if (digit == z) j = z;
+    }
+    sprites.drawPlusMask(93 + (pad * 5) + (5 * i), 0, numbers_plus_mask, digit);
+  }
+}
+
 #endif

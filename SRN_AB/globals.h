@@ -25,16 +25,6 @@
 #define GAME_LEFT                    0
 #define GAME_RIGHT                   128
 
-#define WEAPON_TYPE_TRIDENT          0
-#define WEAPON_TYPE_BUBBLES          1
-#define WEAPON_TYPE_SEASHELL         2
-#define WEAPON_TYPE_MAGIC            3
-
-#define WEAPON_COOLDOWN_TRIDENT      24
-#define WEAPON_COOLDOWN_BUBBLES      16
-#define WEAPON_COOLDOWN_SEASHELL     24
-#define WEAPON_COOLDOWN_MAGIC        24
-
 
 Arduboy arduboy;
 Sprites sprites(arduboy);

@@ -242,6 +242,12 @@ PROGMEM const unsigned char magic_plus_mask[] = {
 0x42, 0x42, 0xEF, 0x08, 0x7F, 0x2C, 0x7F, 0x7E, 0xFF, 0xC3, 0xFF, 0x42, 0xE7, 0x00, 0x5A, 0x18, 0x3C, 
 };
 
+const unsigned char *weapons_plus_mask[] = 
+{
+  trident_plus_mask, bubbles_plus_mask, seaShell_plus_mask, magic_plus_mask,
+};
+
+
 PROGMEM const unsigned char chargeSparkles[] = {
 // width, height
 4, 8,
