@@ -4,17 +4,17 @@
 #include <Arduino.h>
 #include "globals.h"
 
-#define MAX_ONSCREEN_FISHY           3
-#define MAX_ONSCREEN_FISH            3
-#define MAX_ONSCREEN_EEL             2
-#define MAX_ONSCREEN_JELLYFISH       3
-#define MAX_ONSCREEN_OCTOPUS         2
+#define ENEMY_FISHY                  0
+#define ENEMY_FISH                   1
+#define ENEMY_EEL                    2
+#define ENEMY_JELLYFISH              3
+#define ENEMY_OCTOPUS                4
 
-#define HP_TYPE_FISHY                2
-#define HP_TYPE_FISH                 4
-#define HP_TYPE_EEL                  4
-#define HP_TYPE_JELLYFISH            2
-#define HP_TYPE_OCTOPUS              4
+#define MAX_HP_FISHY                2
+#define MAX_HP_FISH                 4
+#define MAX_HP_EEL                  4
+#define MAX_HP_JELLYFISH            2
+#define MAX_HP_OCTOPUS              4
 
 #define MAX_FRAME_FISHY              3
 #define MAX_FRAME_FISH               3
@@ -22,18 +22,12 @@
 #define MAX_FRAME_JELLYFISH          10
 #define MAX_FRAME_OCTOPUS            3
 
-#define ARRAY_START_FISHY            0
-#define ARRAY_START_FISH             MAX_ONSCREEN_FISHY
-#define ARRAY_START_EEL              MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH
-#define ARRAY_START_JELLYFISH        MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL
-#define ARRAY_START_OCTOPUS          MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL + MAX_ONSCREEN_JELLYFISH
-
-#define ARRAY_MAX_AMOUNT             MAX_ONSCREEN_FISHY + MAX_ONSCREEN_FISH + MAX_ONSCREEN_EEL + MAX_ONSCREEN_JELLYFISH +  MAX_ONSCREEN_OCTOPUS
+#define MAX_ONSCREEN_ENEMIES         8
 
 
 
 byte enemiesMaxFrames[] = {MAX_FRAME_FISHY, MAX_FRAME_FISH, MAX_FRAME_EEL, MAX_FRAME_JELLYFISH, MAX_FRAME_OCTOPUS};
-byte enemiesArrayLocation[] = {ARRAY_START_FISHY, ARRAY_START_FISH, ARRAY_START_EEL, ARRAY_START_JELLYFISH, ARRAY_START_OCTOPUS, ARRAY_MAX_AMOUNT};
+byte enemiesMaxHP[] = {MAX_HP_FISHY, MAX_HP_FISH, MAX_HP_EEL, MAX_HP_JELLYFISH, MAX_HP_OCTOPUS};
 byte jellyFrame;
 byte sharkFrame;
 byte faseTimer;
@@ -54,57 +48,54 @@ struct Enemies
     boolean isActive = false;
     boolean isDying = false;
     byte frame;
+    byte type;
 };
 
 
 
-Enemies enemy[ARRAY_MAX_AMOUNT];
+Enemies enemy[MAX_ONSCREEN_ENEMIES];
 
 
 void setEnemies()
 {
   jellyFrame = 0;
-  for (byte g = 0; g < sizeof(enemiesMaxFrames); g++)
+  for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
   {
-    for (byte i = enemiesArrayLocation[g]; i < enemiesArrayLocation[g + 1]; i++)
-    {
-      enemy[i].frame += i;
-      enemy[i].isActive = false;
-      enemy[i].isDying = false;
-      enemy[i].x = 128;
-    }
+    enemy[i].frame = i;
+    enemy[i].isActive = false;
+    enemy[i].isDying = false;
+    enemy[i].x = 128;
   }
 }
 
 
 void checkEnemies()
 {
-  for (byte g = 0; g < sizeof(enemiesMaxFrames); g++)
+  for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
   {
-    for (byte i = enemiesArrayLocation[g]; i < enemiesArrayLocation[g + 1]; i++)
+    if (!enemy[i].isDying && arduboy.everyXFrames(6)) enemy[i].frame++;
+    if (enemy[i].isDying && arduboy.everyXFrames(3)) enemy[i].frame++;
+    if ((enemy[i].frame > enemiesMaxFrames[enemy[i].type]) && !enemy[i].isDying) enemy[i].frame = 0;
+    if ((enemy[i].frame > 5) && enemy[i].isDying)
     {
-      if (!enemy[i].isDying && arduboy.everyXFrames(6)) enemy[i].frame++;
-      else if (arduboy.everyXFrames(3)) enemy[i].frame++;
-      if ((enemy[i].frame > enemiesMaxFrames[g]) && !enemy[i].isDying) enemy[i].frame = 0;
-      if ((enemy[i].frame > 5) && enemy[i].isDying)
-      {
-        enemy[i].isDying = false;
-        enemy[i].isActive = false;
-      }
-      if (enemy[i].x < -32) enemy[i].isActive = false;
-      if (enemy[i].y < -32) enemy[i].isActive = false;
+      enemy[i].isDying = false;
+      enemy[i].isActive = false;
     }
+    if (enemy[i].x < -32) enemy[i].isActive = false;
+    if (enemy[i].y < -32) enemy[i].isActive = false;
   }
 }
 
-void enemySetInLine(byte firstEnemy, byte lastEnemy, byte x, byte y, int spacingX, int spacingY)
+void enemySetInLine(byte enemyType, byte firstEnemy, byte lastEnemy, byte x, byte y, int spacingX, int spacingY)
 {
   for (byte i = firstEnemy; i < lastEnemy; i++)
   {
     enemy[i].isActive = true;
+    enemy[i].isDying = false;
+    enemy[i].type = enemyType;
     enemy[i].x = x + (spacingX * (i - firstEnemy));
     enemy[i].y = y + (spacingY * (i - firstEnemy));
-    enemy[i].HP = 2;
+    enemy[i].HP = enemiesMaxHP[enemyType];
   }
 }
 
@@ -160,51 +151,42 @@ void enemySwimDownUp(byte firstEnemy, byte lastEnemy, byte speedEnemy)
   }
 }
 
+
+
 void drawEnemies()
 {
-  for (byte i = ARRAY_START_FISHY; i < ARRAY_START_FISH; i++)
+  for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
   {
     if (enemy[i].isActive)
     {
-      if (!enemy[i].isDying)sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFishy_plus_mask, enemy[i].frame);
-      if (enemy[i].isDying)sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].frame);
-    }
-  }
-  for (byte i = ARRAY_START_FISH; i < ARRAY_START_EEL; i++)
-  {
-    if (enemy[i].isActive)
-    {
-      if (!enemy[i].isDying)sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFish_plus_mask, enemy[i].frame);
-      if (enemy[i].isDying)sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].frame);
-    }
-  }
-  for (byte i = ARRAY_START_EEL; i < ARRAY_START_JELLYFISH; i++)
-  {
-    if (enemy[i].isActive)
-    {
-      if (!enemy[i].isDying)sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyEel_plus_mask, enemy[i].frame);
-      if (enemy[i].isDying)sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].frame);
-    }
-  }
-  for (byte i = ARRAY_START_JELLYFISH; i < ARRAY_START_OCTOPUS; i++)
-  {
-    jellyFrame = enemy[i].frame;
-    if (jellyFrame > 4) jellyFrame = 0;
-    if (enemy[i].isActive)
-    {
-      if (!enemy[i].isDying)sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyJellyfish_plus_mask, jellyFrame);
-      if (enemy[i].isDying)sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].frame);
-    }
-  }
-  for (byte i = ARRAY_START_OCTOPUS; i < ARRAY_MAX_AMOUNT; i++)
-  {
-    if (enemy[i].isActive)
-    {
-      if (!enemy[i].isDying)sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyOctopus_plus_mask, enemy[i].frame);
-      if (enemy[i].isDying)sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].frame);
+      if (enemy[i].isDying) sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].frame);
+      else
+      {
+        switch (enemy[i].type)
+        {
+          case ENEMY_FISHY:
+            sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFishy_plus_mask, enemy[i].frame);
+            break;
+          case ENEMY_FISH:
+            sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFish_plus_mask, enemy[i].frame);
+            break;
+          case ENEMY_EEL:
+            sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyEel_plus_mask, enemy[i].frame);
+            break;
+          case ENEMY_JELLYFISH:
+            jellyFrame = enemy[i].frame;
+            if (jellyFrame > 4) jellyFrame = 0;
+            sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyJellyfish_plus_mask, jellyFrame);
+            break;
+          case ENEMY_OCTOPUS:
+            sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyOctopus_plus_mask, enemy[i].frame);
+            break;
+        }
+      }
     }
   }
 }
+
 
 
 
@@ -256,12 +238,14 @@ void sharkSwimsRightOnScreen()
   else shark.attackFase++;
 }
 
+
 void sharkSwimsLeftOnScreen()
 {
   sharkSlow = true;
   if (shark.x < 0)shark.x++;
   else shark.attackFase++;
 }
+
 
 void sharkSwimsLeftFollow()
 {
@@ -277,6 +261,7 @@ void sharkSwimsLeftFollow()
     shark.attackFase++;
   }
 }
+
 
 void sharkSwimsRightFollow()
 {
@@ -304,17 +289,20 @@ void sharkWait()
   }
 }
 
+
 void sharkSpeedUpFrame()
 {
   sharkSlow = false;
   shark.attackFase++;
 }
 
+
 void sharkFixMermaidsPosition()
 {
   mermaidsPosition = mermaid.y;
   shark.attackFase++;
 }
+
 
 void sharkSwimsRightFast()
 {
@@ -330,6 +318,7 @@ void sharkSwimsRightFast()
     shark.attackFase++;
   }
 }
+
 
 void sharkSwimsLeftFast()
 {
@@ -384,11 +373,6 @@ FunctionPointer sharkAttackFases[] =
   sharkSwimsRightFast,
   sharkRestart,
 };
-
-
-
-
-
 
 
 void drawShark()
