@@ -3,14 +3,25 @@
 
 #include <Arduino.h>
 #include "globals.h"
+byte hairFrame = 0;
+byte eyesFrame = 0;
+byte eyesSequence[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 3, 3, 2, 1};
 
 void drawTitleScreen()
 {
-  arduboy.drawBitmap(36, 1, titleScreen00, 62, 16, WHITE);
-  arduboy.drawBitmap(3, 13, titleScreen01, 55, 32, WHITE);
-  arduboy.drawBitmap(7, 45, titleScreen02, 48, 24, WHITE);
-  arduboy.drawBitmap(55, 22, titleScreen03, 35, 24, WHITE);
-  arduboy.drawBitmap(62, 48, titleScreen04, 25, 16, WHITE);
+  if (arduboy.everyXFrames(10))
+  {
+    hairFrame++;
+    eyesFrame++;
+  }
+  if (eyesFrame > 15)eyesFrame = 0;
+  if (hairFrame > 3) hairFrame = 0;
+  sprites.drawSelfMasked(36, 1, mermaidTitle, 0);
+  sprites.drawSelfMasked(59, 21, mermaidTrident, 0);
+  sprites.drawSelfMasked(62, 48, mermaidFin, 0);
+  sprites.drawSelfMasked(4, 46, mermaidBody, 0);
+  sprites.drawSelfMasked(3, 14, mermaidHair, hairFrame);
+  sprites.drawSelfMasked(10, 24, mermaidBlink, eyesSequence[eyesFrame]);
 }
 
 void stateMenuIntro()
@@ -24,8 +35,8 @@ void stateMenuMain()
 {
   drawTitleScreen();
   /*
-  for (byte i = 0; i < 4; i++)
-  {
+    for (byte i = 0; i < 4; i++)
+    {
     {
       if (((2 + i) - menuSelection) != 0)
       {
@@ -33,7 +44,7 @@ void stateMenuMain()
       }
       if (((2 + i) - menuSelection) == 0) sprites.drawSelfMasked(21 + (22 * i), 56, menuText, i);
     }
-  }
+    }
   */
   if (buttons.justPressed(RIGHT_BUTTON) && (menuSelection < 5)) menuSelection++;
   if (buttons.justPressed(LEFT_BUTTON) && (menuSelection > 2)) menuSelection--;
