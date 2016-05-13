@@ -42,7 +42,10 @@ void checkInputs()
     {
       {
         coolDown[mermaid.weaponType]--;
-        for (byte i =0; i<3; i++) shootWeapon();
+        for (byte i = 0; i < 3; i++)
+        {
+          shootWeapon();
+        }
       }
     }
   }
@@ -55,17 +58,17 @@ void checkInputs()
     }
     if (mermaid.weaponType == WEAPON_TYPE_MAGIC)
     {
-      magicCharging = true;
-      if (arduboy.everyXFrames(30)) chargeBarFrame ++;
-      if (chargeBarFrame > 4) chargeBarFrame = 4;
+      mermaid.magicCharging = true;
+      if (arduboy.everyXFrames(30)) mermaid.chargeBarFrame ++;
+      if (mermaid.chargeBarFrame > 4) mermaid.chargeBarFrame = 4;
     }
   }
-  if (buttons.notPressed(B_BUTTON) && (mermaid.weaponType == WEAPON_TYPE_MAGIC) && (magicCharging == true))
+  if (buttons.notPressed(B_BUTTON) && (mermaid.weaponType == WEAPON_TYPE_MAGIC) && (mermaid.magicCharging == true))
   {
-    magicCharging = false;
-    chargeBarFrame = 0;
+    mermaid.magicCharging = false;
     coolDown[mermaid.weaponType]--;
     shootWeapon();
+    mermaid.chargeBarFrame = 0;
   }
 }
 

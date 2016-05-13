@@ -27,11 +27,9 @@
 #define MAX_ONSCREEN_BULLETS         8
 #define MAX_ONSCREEN_SPARKLES        8
 
-int seaShellSpeedY[] = {0, 1, -1, 0, 1, -1,};
-boolean magicCharging = false;
-byte chargeBarFrame = 0;
-
-byte currentBullet = 0;
+int seaShellSpeedY[] = {0, 1, -1};
+byte currentBullet;
+byte currentSeaShell;
 byte coolDown[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COOLDOWN_SEASHELL, WEAPON_COOLDOWN_MAGIC};
 byte coolDownMax[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COOLDOWN_SEASHELL, WEAPON_COOLDOWN_MAGIC};
 byte bulletSpeed[] = {BULLET_SPEED_TRIDENT, BULLET_SPEED_BUBBLES, BULLET_SPEED_SEASHELL, BULLET_SPEED_MAGIC};
@@ -52,6 +50,8 @@ struct Players
     byte imuneTimer;
     byte HP;
     byte frame;
+    boolean magicCharging;
+    byte chargeBarFrame;
 };
 
 Players mermaid;
@@ -65,6 +65,7 @@ struct Bullets
     boolean isActive = false;
     byte type;
     byte frame;
+    int speedY;
 };
 
 struct Sparkles
@@ -128,13 +129,13 @@ void checkMermaid()
 void drawMermaid()
 {
   if (mermaid.isActive) sprites.drawPlusMask(mermaid.x, mermaid.y, mermaid_plus_mask, mermaid.frame);
-  if (magicCharging)
+  if (mermaid.magicCharging)
   {
     for (byte i = 0; i < MAX_ONSCREEN_SPARKLES; i++)
     {
       sprites.drawSelfMasked(mermaid.x + sparkle[i].x + (sparkle[i].speedX * sparkle[i].frame), mermaid.y + sparkle[i].y + (sparkle[i].speedY * sparkle[i].frame), chargeSparkles, sparkle[i].frame);
     }
-    sprites.drawPlusMask(mermaid.x, mermaid.y, chargeBar_plus_mask, chargeBarFrame);
+    sprites.drawPlusMask(mermaid.x, mermaid.y, chargeBar_plus_mask, mermaid.chargeBarFrame);
   }
 }
 
@@ -144,9 +145,14 @@ void drawMermaid()
 
 void setWeapons()
 {
+  mermaid.magicCharging = false;
+  mermaid.chargeBarFrame = 0;
+  currentBullet = 0;
+  currentSeaShell = 0;
   for (byte i = 0; i < MAX_ONSCREEN_BULLETS; i++)
   {
     bullet[i].isActive = false;
+    bullet[i].frame = 0;
   }
   sparkle[0] = { .x = 18, .y = -6, .speedX = -2, .speedY = 3, .frame = 0};
   sparkle[1] = { .x = -6, .y = 6, .speedX = 2, .speedY = 0, .frame = 7};
@@ -170,9 +176,9 @@ void checkWeapons()
     if (bullet[i].type == WEAPON_TYPE_BUBBLES && arduboy.everyXFrames(3)) bullet[i].frame = !bullet[i].frame;
     if (bullet[i].type == WEAPON_TYPE_MAGIC && arduboy.everyXFrames(2)) bullet[i].frame++;
     if (bullet[i].type == WEAPON_TYPE_MAGIC && bullet[i].frame > 3) bullet[i].frame = 0;
-    
+
     bullet[i].x += bulletSpeed[bullet[i].type];
-    if (bullet[i].type == WEAPON_TYPE_SEASHELL) bullet[i].y += seaShellSpeedY[bullet[i].frame];
+    if (bullet[i].type == WEAPON_TYPE_SEASHELL) bullet[i].y += bullet[i].speedY;
     if (bullet[i].x > 128 || bullet[i].y < -7 || bullet[i].y > 64)
     {
       bullet[i].isActive = false;
@@ -186,19 +192,22 @@ void shootWeapon()
 {
   if (!bullet[currentBullet].isActive)
   {
-    bullet[currentBullet].frame = 0;
+    if (bullet[currentBullet].type != WEAPON_TYPE_SEASHELL)bullet[currentBullet].frame = 0;
     bullet[currentBullet].type = mermaid.weaponType;
     bullet[currentBullet].isActive = true;
     bullet[currentBullet].x = mermaid.x + 8;
     bullet[currentBullet].y = mermaid.y + 6;
     bullet[currentBullet].damage = bulletDamage[bullet[currentBullet].type];
-    if (bullet[currentBullet].type == WEAPON_TYPE_MAGIC) bullet[currentBullet].damage += chargeBarFrame;
-    if (bullet[currentBullet].type == WEAPON_TYPE_SEASHELL) 
+    if (bullet[currentBullet].type == WEAPON_TYPE_MAGIC) bullet[currentBullet].damage += mermaid.chargeBarFrame;
+    if (bullet[currentBullet].type == WEAPON_TYPE_SEASHELL)
     {
-      bullet[currentBullet].frame++;
-      if (bullet[currentBullet].frame > 2) bullet[currentBullet].frame = 0;
+      bullet[currentBullet].speedY = seaShellSpeedY[currentSeaShell];
+      bullet[currentBullet].frame = currentSeaShell;
+      currentSeaShell++;
+      if (currentSeaShell > 2) currentSeaShell = 0;
+      
     }
-    chargeBarFrame = 0;
+    mermaid.chargeBarFrame = 0;
   }
   currentBullet++;
   if (currentBullet > MAX_ONSCREEN_BULLETS - 1) currentBullet = 0;
