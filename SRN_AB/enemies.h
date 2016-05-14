@@ -212,8 +212,10 @@ EndBoss shark;
 EndBoss pirateShip;
 
 
+//////// SHARK functions ///////////////////
+////////////////////////////////////////////
 
-void setBossShark()
+void setShark()
 {
   shark.x = 128;
   shark.y = 28;
@@ -224,11 +226,10 @@ void setBossShark()
   sharkSwimsRight = false;
   sharkFrame = 0;
   faseTimer = 0;
-
 }
 
 
-void checkBossShark()
+void checkShark()
 {
   if (arduboy.everyXFrames(4 + (6 * sharkSlow))) sharkFrame++;
   if (sharkFrame > 3 ) sharkFrame = 0;
@@ -345,8 +346,8 @@ void sharkRestart()
   shark.attackFase = 0;
 }
 
-typedef void (*FunctionPointer) ();
 
+typedef void (*FunctionPointer) ();
 FunctionPointer sharkAttackFases[] =
 {
   sharkSwimsRightOnScreen,
@@ -368,7 +369,7 @@ FunctionPointer sharkAttackFases[] =
   sharkWait,
   sharkFixMermaidsPosition,
   sharkSwimsLeftFast,
-
+  
   sharkSwimsLeftOnScreen,
   sharkWait,
   sharkSpeedUpFrame,
@@ -385,6 +386,56 @@ void drawShark()
 }
 
 
+//////// PIRATESHIP functions //////////////
+////////////////////////////////////////////
+
+void setPirateShip()
+{
+  pirateShip.x = 128;
+  pirateShip.y = 28;
+  pirateShip.HP = 10;
+  pirateShip.isActive = true;
+  pirateShip.attackFase = 0;
+  faseTimer = 0;
+}
+
+
+
+void checkPirateShip()
+{
+  if (arduboy.everyXFrames(4 + (6 * sharkSlow))) sharkFrame++;
+  if (sharkFrame > 3 ) sharkFrame = 0;
+}
+
+
+void pirateShipSailsRightOnScreen()
+{
+  if (pirateShip.x > 80)pirateShip.x--;
+  else pirateShip.attackFase++;
+}
+
+
+
+
+
+
+void pirateShipRestart()
+{
+  pirateShip.attackFase = 0;
+}
+
+
+typedef void (*FunctionPointer) ();
+FunctionPointer pirateShipAttackFases[] =
+{
+  pirateShipSailsRightOnScreen,
+  //pirateShipGoesUp,
+  //pirateShipGoesDown,
+  //pirateShipGoesToMiddle,
+  pirateShipRestart,
+};
+
+
 void drawPirateShip()
 {
   if (pirateShip.isActive)
@@ -397,8 +448,17 @@ void drawPirateShip()
 }
 
 
-typedef void (*FunctionPointer) ();
 
+
+typedef void (*FunctionPointer) ();
+FunctionPointer checkBosses[] =
+{
+  checkShark,
+  checkPirateShip,
+};
+
+
+typedef void (*FunctionPointer) ();
 FunctionPointer drawBosses[] =
 {
   drawShark,

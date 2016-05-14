@@ -201,18 +201,17 @@ void wave020()
 void wave250()
 {
   //Shark attack
-  if (checkStartWave())setBossShark();
+  if (checkStartWave())setShark();
   sharkAttackFases[shark.attackFase]();
   if (!shark.isActive) currentWave++;
 }
 
 void wave251()
 {
-
   //pirateShip attack
-  if (checkStartWave());
+  if (checkStartWave())setPirateShip();
+  pirateShipAttackFases[pirateShip.attackFase]();
   if (!pirateShip.isActive) currentWave++;
-
 }
 
 
@@ -267,7 +266,7 @@ FunctionPointer Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAVES] =
     wave018,
     wave019,
     wave020,
-    wave250,
+    wave251,
   },
   { //LEVEL 03
     wave000,
