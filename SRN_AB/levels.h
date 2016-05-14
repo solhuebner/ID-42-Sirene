@@ -304,6 +304,19 @@ void checkCollisions()
   for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
   {
     Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = 16, .height = 16};
+
+    for (byte k = 0; k < MAX_ONSCREEN_BULLETS; k++)
+    {
+      Rect bulletsRect {.x = bullet[k].x, .y = bullet[k].y, .width = 8, .height = 8};
+      if (enemy[i].isActive && !enemy[i].isDying && bullet[k].isActive && physics.collide(bulletsRect, enemyRect))
+      {
+        bullet[k].isActive = false;
+        enemy[i].isDying = true;
+        enemy[i].frame = 0;
+      }
+    }
+
+    
     if (enemy[i].isActive && !enemy[i].isDying && physics.collide(mermaidRect, enemyRect))
     {
       if (!mermaid.isImune)
