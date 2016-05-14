@@ -11,8 +11,8 @@ byte eyesSequence[] = {0, 1, 2, 3, 3, 3, 1};
 void drawTitleScreen()
 {
   if (arduboy.everyXFrames(10)) hairFrame++;
-  if (arduboy.everyXFrames(4)) eyesFrame++;
-  if (eyesFrame > 45)eyesFrame = 0;
+  if (arduboy.everyXFrames(2)) eyesFrame++;
+  if (eyesFrame > 60)eyesFrame = 0;
   eyesFrame2 = eyesFrame;
   if (eyesFrame2 > 6) eyesFrame2 = 0;
   if (hairFrame > 3) hairFrame = 0;
@@ -34,20 +34,13 @@ void stateMenuIntro()
 void stateMenuMain()
 {
   drawTitleScreen();
-  /*
-    for (byte i = 0; i < 4; i++)
-    {
-    {
-      if (((2 + i) - menuSelection) != 0)
-      {
-        sprites.drawSelfMasked(21 + (22 * i), 60, menuText, i);
-      }
-      if (((2 + i) - menuSelection) == 0) sprites.drawSelfMasked(21 + (22 * i), 56, menuText, i);
-    }
-    }
-  */
-  if (buttons.justPressed(RIGHT_BUTTON) && (menuSelection < 5)) menuSelection++;
-  if (buttons.justPressed(LEFT_BUTTON) && (menuSelection > 2)) menuSelection--;
+  for (byte i = 0; i < 4; i++)
+  {
+    sprites.drawSelfMasked(108, 32 +(i*8), menuText, i);
+  }
+  sprites.drawPlusMask(92, 32 + 8*(menuSelection-2), trident_plus_mask, 0);
+  if (buttons.justPressed(DOWN_BUTTON) && (menuSelection < 5)) menuSelection++;
+  if (buttons.justPressed(UP_BUTTON) && (menuSelection > 2)) menuSelection--;
   if (buttons.justPressed(B_BUTTON)) gameState = menuSelection;
 }
 
