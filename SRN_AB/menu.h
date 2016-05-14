@@ -5,23 +5,23 @@
 #include "globals.h"
 byte hairFrame = 0;
 byte eyesFrame = 0;
-byte eyesSequence[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 3, 3, 2, 1};
+byte eyesFrame2 = 0;
+byte eyesSequence[] = {0, 1, 2, 3, 3, 3, 1};
 
 void drawTitleScreen()
 {
-  if (arduboy.everyXFrames(10))
-  {
-    hairFrame++;
-    eyesFrame++;
-  }
-  if (eyesFrame > 15)eyesFrame = 0;
+  if (arduboy.everyXFrames(10)) hairFrame++;
+  if (arduboy.everyXFrames(4)) eyesFrame++;
+  if (eyesFrame > 45)eyesFrame = 0;
+  eyesFrame2 = eyesFrame;
+  if (eyesFrame2 > 6) eyesFrame2 = 0;
   if (hairFrame > 3) hairFrame = 0;
   sprites.drawSelfMasked(36, 1, mermaidTitle, 0);
   sprites.drawSelfMasked(59, 21, mermaidTrident, 0);
   sprites.drawSelfMasked(62, 48, mermaidFin, 0);
   sprites.drawSelfMasked(4, 46, mermaidBody, 0);
   sprites.drawSelfMasked(3, 14, mermaidHair, hairFrame);
-  sprites.drawSelfMasked(10, 24, mermaidBlink, eyesSequence[eyesFrame]);
+  sprites.drawSelfMasked(10, 24, mermaidBlink, eyesSequence[eyesFrame2]);
 }
 
 void stateMenuIntro()

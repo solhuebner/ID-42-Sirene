@@ -1,7 +1,7 @@
 /*
-  SIRÈNE: http://www.team-arg.org/dummy-manual.html
+  SIRÈNE: http://www.team-arg.org/srn-manual.html
 
-  Arduboy version 0.1:  http://www.team-arg.org/dummy-downloads.html
+  Arduboy version 0.1:  http://www.team-arg.org/srn-downloads.html
 
   MADE by TEAM a.r.g. : http://www.team-arg.org/more-about.html
 
