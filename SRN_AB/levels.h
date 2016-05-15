@@ -202,7 +202,7 @@ void wave250()
 {
   //Shark attack
   if (checkStartWave())setShark();
-  sharkAttackFases[shark.attackFase]();
+  ((FunctionPointer) pgm_read_word (&sharkAttackFases[shark.attackFase]))();
   if (!shark.isActive) currentWave++;
 }
 
@@ -210,18 +210,17 @@ void wave251()
 {
   //pirateShip attack
   if (checkStartWave())setPirateShip();
-  pirateShipAttackFases[pirateShip.attackFase]();
+  ((FunctionPointer) pgm_read_word (&pirateShipAttackFases[pirateShip.attackFase]))();
   if (!pirateShip.isActive) currentWave++;
 }
 
 
 
 typedef void (*FunctionPointer) ();
-
-FunctionPointer Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAVES] =
+const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAVES] =
 {
   { //LEVEL 01
-    wave000,
+    wave251,
     wave020,
     wave019,
     wave018,
@@ -242,7 +241,7 @@ FunctionPointer Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAVES] =
     wave003,
     wave002,
     wave001,
-    wave250,
+    wave251,
   },
   { //LEVEL 02
     wave000,
@@ -266,7 +265,7 @@ FunctionPointer Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAVES] =
     wave018,
     wave019,
     wave020,
-    wave251,
+    wave250,
   },
   { //LEVEL 03
     wave000,

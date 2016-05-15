@@ -32,7 +32,7 @@ byte jellyFrame;
 byte sharkFrame;
 byte faseTimer;
 byte mermaidsPosition;
-boolean sharkSlow;
+boolean bossSlow;
 boolean sharkSwimsRight;
 
 
@@ -222,7 +222,7 @@ void setShark()
   shark.HP = 10;
   shark.isActive = true;
   shark.attackFase = 0;
-  sharkSlow = true;
+  bossSlow = true;
   sharkSwimsRight = false;
   sharkFrame = 0;
   faseTimer = 0;
@@ -231,14 +231,14 @@ void setShark()
 
 void checkShark()
 {
-  if (arduboy.everyXFrames(4 + (6 * sharkSlow))) sharkFrame++;
+  if (arduboy.everyXFrames(4 + (6 * bossSlow))) sharkFrame++;
   if (sharkFrame > 3 ) sharkFrame = 0;
 }
 
 
 void sharkSwimsRightOnScreen()
 {
-  sharkSlow = true;
+  bossSlow = true;
   if (shark.x > 96)shark.x--;
   else shark.attackFase++;
 }
@@ -246,7 +246,7 @@ void sharkSwimsRightOnScreen()
 
 void sharkSwimsLeftOnScreen()
 {
-  sharkSlow = true;
+  bossSlow = true;
   if (shark.x < 0)shark.x++;
   else shark.attackFase++;
 }
@@ -297,7 +297,7 @@ void sharkWait()
 
 void sharkSpeedUpFrame()
 {
-  sharkSlow = false;
+  bossSlow = false;
   shark.attackFase++;
 }
 
@@ -348,7 +348,7 @@ void sharkRestart()
 
 
 typedef void (*FunctionPointer) ();
-FunctionPointer sharkAttackFases[] =
+const FunctionPointer PROGMEM sharkAttackFases[] =
 {
   sharkSwimsRightOnScreen,
   sharkWait,
@@ -369,7 +369,7 @@ FunctionPointer sharkAttackFases[] =
   sharkWait,
   sharkFixMermaidsPosition,
   sharkSwimsLeftFast,
-  
+
   sharkSwimsLeftOnScreen,
   sharkWait,
   sharkSpeedUpFrame,
@@ -392,31 +392,55 @@ void drawShark()
 void setPirateShip()
 {
   pirateShip.x = 128;
-  pirateShip.y = 28;
+  pirateShip.y = 10;
   pirateShip.HP = 10;
   pirateShip.isActive = true;
   pirateShip.attackFase = 0;
   faseTimer = 0;
+  bossSlow = 0;
 }
 
 
 
 void checkPirateShip()
 {
-  if (arduboy.everyXFrames(4 + (6 * sharkSlow))) sharkFrame++;
-  if (sharkFrame > 3 ) sharkFrame = 0;
+
 }
 
 
 void pirateShipSailsRightOnScreen()
 {
-  if (pirateShip.x > 80)pirateShip.x--;
+  if (pirateShip.x > 64)pirateShip.x--;
   else pirateShip.attackFase++;
 }
 
+void pirateShipWait()
+{
+  if (arduboy.everyXFrames(4)) faseTimer++;
+  if (faseTimer > 16)
+  {
+    pirateShip.attackFase++;
+    faseTimer = 0;
+  }
+}
 
+void pirateShipGoesUp()
+{
+  if (pirateShip.y > -20)pirateShip.y -= 2;
+  else pirateShip.attackFase++;
+}
 
+void pirateShipGoesDown()
+{
+  if (pirateShip.y < 40)pirateShip.y += 2;
+  else pirateShip.attackFase++;
+}
 
+void pirateShipGoesToMiddle()
+{
+  if (pirateShip.y > 11)pirateShip.y -= 2;
+  else pirateShip.attackFase++;
+}
 
 
 void pirateShipRestart()
@@ -424,14 +448,55 @@ void pirateShipRestart()
   pirateShip.attackFase = 0;
 }
 
+void pirateShipGoesUpForAttack()
+{
+  if (pirateShip.y > -11)pirateShip.y -= 2;
+  else pirateShip.attackFase++;
+}
+
+void pirateShipBacksUp()
+{
+  if (pirateShip.x < 71)pirateShip.x++;
+  else pirateShip.attackFase++;
+}
+
+void pirateShipLaunches()
+{
+  if (pirateShip.x > -21)pirateShip.x -= 10;
+  else pirateShip.attackFase++;
+}
+
+void pirateShipTrembles()
+{
+  pirateShip.x =  pirateShip.x + (2 * (1 - (2 * bossSlow)));
+  bossSlow = !bossSlow;
+  pirateShip.attackFase++;
+}
+
 
 typedef void (*FunctionPointer) ();
-FunctionPointer pirateShipAttackFases[] =
+const FunctionPointer PROGMEM pirateShipAttackFases[] =
 {
   pirateShipSailsRightOnScreen,
-  //pirateShipGoesUp,
-  //pirateShipGoesDown,
-  //pirateShipGoesToMiddle,
+  pirateShipWait,
+  pirateShipGoesUp,
+  pirateShipGoesDown,
+  pirateShipGoesUp,
+  pirateShipGoesDown,
+  pirateShipGoesUp,
+  pirateShipGoesDown,
+  pirateShipGoesToMiddle,
+  pirateShipWait,
+  pirateShipGoesUpForAttack,
+  pirateShipBacksUp,
+  pirateShipLaunches,
+  pirateShipTrembles,
+  pirateShipTrembles,
+  pirateShipTrembles,
+  pirateShipTrembles,
+  pirateShipTrembles,
+  pirateShipTrembles,
+  pirateShipBacksUp,
   pirateShipRestart,
 };
 
@@ -443,27 +508,10 @@ void drawPirateShip()
     sprites.drawSelfMasked(pirateShip.x + 16, pirateShip.y + 20, pirateshipShip, 0);
     sprites.drawSelfMasked(pirateShip.x + 24, pirateShip.y + 5, pirateshipSail, 0);
     sprites.drawSelfMasked(pirateShip.x, pirateShip.y + 19, pirateshipBowsprit, 0);
-    sprites.drawSelfMasked(pirateShip.x + 36, pirateShip.y + 0, pirateshipCrowsnest, 0);
+    sprites.drawSelfMasked(pirateShip.x + 36, pirateShip.y, pirateshipCrowsnest, 0);
   }
 }
 
-
-
-
-typedef void (*FunctionPointer) ();
-FunctionPointer checkBosses[] =
-{
-  checkShark,
-  checkPirateShip,
-};
-
-
-typedef void (*FunctionPointer) ();
-FunctionPointer drawBosses[] =
-{
-  drawShark,
-  drawPirateShip,
-};
 
 
 
