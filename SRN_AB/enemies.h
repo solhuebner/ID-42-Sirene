@@ -26,17 +26,17 @@
 #define FRAMES_JELLYFISH             10
 #define FRAMES_DYING                 5
 
-
 #define MAX_ONSCREEN_ENEMIES         8
 #define MAX_ENEMY_BULLETS            3
 #define MAX_BOSS_BULLETS             3
+
+#define SHARK_IMUNE_TIME             15
 
 
 
 byte enemiesMaxHP[] = {MAX_HP_FISHY, MAX_HP_FISH, MAX_HP_EEL, MAX_HP_JELLYFISH, MAX_HP_OCTOPUS, MAX_HP_SKULL};
 
 byte jellyFrame;
-byte sharkFrame;
 byte faseTimer;
 byte mermaidsPosition;
 boolean bossSlow;
@@ -221,9 +221,13 @@ struct EndBoss
     int y;
     int HP;
     boolean isActive = false;
+    boolean isImune = false;
+    boolean isDying = false;
+    boolean isDead = false;
     byte attackFase;
     byte currentBullet;
-
+    byte imuneTimer;
+    byte frame;
 };
 
 EndBoss shark;
@@ -233,10 +237,9 @@ EndBoss pirateShip;
 
 void drawEnemyHud(byte currentLife, byte maxLife)
 {
-  byte shownLife = currentLife / 3;
-  for (byte i = 0; i < shownLife; i++)
+  for (byte i = 0; i < (currentLife / 3)  + 1; i++)
   {
-    sprites.drawPlusMask(64 - 2*(maxLife / 3) + 4 * i, 60, bossLife_plus_mask, 0);
+    sprites.drawPlusMask(64 - 2 * (maxLife / 3) + 4 * i, 60, bossLife_plus_mask, 0);
   }
 }
 
@@ -252,17 +255,46 @@ void setShark()
   shark.attackFase = 0;
   bossSlow = true;
   sharkSwimsRight = false;
-  sharkFrame = 0;
+  shark.isImune = false;
+  shark.isDying = false;
+  shark.isDead = false;
+  shark.imuneTimer = 0;
+  shark.frame = 0;
   faseTimer = 0;
 }
 
 
 void checkShark()
 {
+  if (shark.isImune)
+  {
+    if (arduboy.everyXFrames(3)) shark.isActive = !shark.isActive;
+    shark.imuneTimer++;
+    if (shark.imuneTimer > SHARK_IMUNE_TIME)
+    {
+      shark.imuneTimer = 0;
+      shark.isImune = false;
+      shark.isActive = true;
+    }
+  }
   if (shark.isActive)
   {
-    if (arduboy.everyXFrames(4 + (6 * bossSlow))) sharkFrame++;
-    if (sharkFrame > 3 ) sharkFrame = 0;
+    if (!shark.isDying)
+    {
+      if (arduboy.everyXFrames(4 + (6 * bossSlow))) shark.frame++;
+      if (shark.frame > 3 ) shark.frame = 0;
+    }
+    else
+    {
+      if (arduboy.everyXFrames(3)) shark.frame++;
+      if (shark.frame > FRAMES_DYING)
+      {
+        shark.isDying = false;
+        shark.isActive = false;
+        shark.isDead = true;
+        shark.frame = 0;
+      }
+    }
   }
 }
 
@@ -415,8 +447,12 @@ void drawShark()
 {
   if (shark.isActive)
   {
-    sprites.drawSelfMasked(shark.x, shark.y, enemyShark, sharkFrame + (4 * sharkSwimsRight));
-    drawEnemyHud(shark.HP, MAX_HP_SHARK);
+    if (shark.isDying) sprites.drawSelfMasked(shark.x, shark.y, puff, shark.frame);
+    else
+    {
+      sprites.drawSelfMasked(shark.x, shark.y, enemyShark, shark.frame + (4 * sharkSwimsRight));
+      drawEnemyHud(shark.HP, MAX_HP_SHARK);
+    }
   }
 }
 
@@ -431,14 +467,30 @@ void setSeahorse()
   seahorse.isActive = true;
   seahorse.attackFase = 0;
   seahorse.currentBullet = 0;
+  seahorse.isImune = false;
+  seahorse.isDying = false;
+  seahorse.isDead = false;
+  seahorse.imuneTimer = 0;
   bossSlow = true;
   faseTimer = 0;
 }
 
 
+void checkSeahorse()
+{
+  if (seahorse.isActive)
+  {
+
+  }
+}
+
+
 void drawSeahorse()
 {
+  if (seahorse.isActive)
+  {
 
+  }
 }
 
 //////// PIRATESHIP functions //////////////
@@ -452,6 +504,10 @@ void setPirateShip()
   pirateShip.isActive = true;
   pirateShip.attackFase = 0;
   pirateShip.currentBullet = 0;
+  pirateShip.isImune = false;
+  pirateShip.isDying = false;
+  pirateShip.isDead = false;
+  pirateShip.imuneTimer = 0;
   bossSlow = false;
   faseTimer = 0;
 }

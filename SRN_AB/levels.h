@@ -203,7 +203,7 @@ void wave250()
   //Shark attack
   if (checkStartWave())setShark();
   ((FunctionPointer) pgm_read_word (&sharkAttackFases[shark.attackFase]))();
-  if (!shark.isActive) currentWave++;
+  if (shark.isDead) currentWave++;
 }
 
 void wave251()
@@ -211,7 +211,7 @@ void wave251()
   //pirateShip attack
   if (checkStartWave())setPirateShip();
   ((FunctionPointer) pgm_read_word (&pirateShipAttackFases[pirateShip.attackFase]))();
-  if (!pirateShip.isActive) currentWave++;
+  if (pirateShip.isDead) currentWave++;
 }
 
 
@@ -295,26 +295,55 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
 
 void checkCollisions()
 {
-
-  ////// Check collision mermaid enemies /////
-  ////////////////////////////////////////////
   Rect mermaidRect = {.x = mermaid.x + 2, .y = mermaid.y + 2, .width = 12, .height = 12};
+  Rect sharkRect = {.x = shark.x, .y = shark.y + 2, .width = 32, .height = 12};
+  Rect seahorseRect = {.x = seahorse.x, .y = seahorse.y + 2, .width = 32, .height = 12};
+  Rect pirateShipRect = {.x = pirateShip.x, .y = pirateShip.y + 2, .width = 32, .height = 12};
+
+  ////// Check collision bullets with enemies and bosses /////
+  ////////////////////////////////////////////////////////////
+  for (byte k = 0; k < MAX_ONSCREEN_BULLETS; k++)
+  {
+    if (bullet[k].isActive)
+    {
+      Rect bulletsRect {.x = bullet[k].x, .y = bullet[k].y, .width = 8, .height = 8};
+      if (seahorse.isActive) {}
+      if (pirateShip.isActive) {}
+      for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
+      {
+        Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = 16, .height = 16};
+        if (enemy[i].isActive && !enemy[i].isDying && physics.collide(bulletsRect, enemyRect))
+        {
+          bullet[k].isActive = false;
+          enemy[i].isDying = true;
+          enemy[i].frame = 0;
+        }
+      }
+
+      if (shark.isActive && !shark.isDying && physics.collide(bulletsRect, sharkRect))
+      {
+        if (!shark.isImune)
+        {
+          shark.isImune = true;
+          bullet[k].isActive = false;
+          shark.HP -= bullet[k].damage;
+        }
+        if (shark.HP < 1)
+        {
+          shark.isDying = true;
+          shark.frame = 0;
+        }
+      }
+    }
+  }
+
+
+  ////// Check collision mermaid with enemies and bosses /////
+  ////////////////////////////////////////////////////////////
+
   for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
   {
     Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = 16, .height = 16};
-
-    for (byte k = 0; k < MAX_ONSCREEN_BULLETS; k++)
-    {
-      Rect bulletsRect {.x = bullet[k].x, .y = bullet[k].y, .width = 8, .height = 8};
-      if (enemy[i].isActive && !enemy[i].isDying && bullet[k].isActive && physics.collide(bulletsRect, enemyRect))
-      {
-        bullet[k].isActive = false;
-        enemy[i].isDying = true;
-        enemy[i].frame = 0;
-      }
-    }
-
-
     if (enemy[i].isActive && !enemy[i].isDying && physics.collide(mermaidRect, enemyRect))
     {
       if (!mermaid.isImune)
@@ -326,6 +355,25 @@ void checkCollisions()
       enemy[i].frame = 0;
     }
   }
+  if (shark.isActive)
+  {
+    if (shark.isActive && !shark.isDying && physics.collide(mermaidRect, sharkRect))
+    {
+      if (!shark.isImune)
+      {
+        shark.isImune = true;
+        shark.HP--;
+      }
+      if (!mermaid.isImune)
+      {
+        mermaid.isImune = true;
+        mermaid.HP -= 1;
+      }
+    }
+  }
+  if (seahorse.isActive) {}
+  if (pirateShip.isActive) {}
+
 }
 
 void drawLifeHUD()

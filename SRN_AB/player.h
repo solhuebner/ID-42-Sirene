@@ -27,6 +27,8 @@
 #define MAX_ONSCREEN_BULLETS         8
 #define MAX_ONSCREEN_SPARKLES        8
 
+#define MERMAID_IMUNE_TIME           30
+
 int seaShellSpeedY[] = {0, 1, -1};
 byte coolDown[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COOLDOWN_SEASHELL, WEAPON_COOLDOWN_MAGIC};
 byte coolDownMax[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COOLDOWN_SEASHELL, WEAPON_COOLDOWN_MAGIC};
@@ -105,7 +107,7 @@ void checkMermaid()
   {
     if (arduboy.everyXFrames(3)) mermaid.isActive = !mermaid.isActive;
     mermaid.imuneTimer++;
-    if (mermaid.imuneTimer > 60)
+    if (mermaid.imuneTimer > MERMAID_IMUNE_TIME)
     {
       mermaid.imuneTimer = 0;
       mermaid.isImune = false;
