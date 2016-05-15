@@ -28,6 +28,9 @@ void stateGameNextLevel()
   previousWave = 255;
   waveTimer = 0;
   level++;
+  shark.isActive = false;
+  seahorse.isActive = false;
+  pirateShip.isActive = false;
   gameState = STATE_GAME_PLAYING;
 };
 

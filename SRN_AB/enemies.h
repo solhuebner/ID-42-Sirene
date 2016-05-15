@@ -249,8 +249,11 @@ void setShark()
 
 void checkShark()
 {
-  if (arduboy.everyXFrames(4 + (6 * bossSlow))) sharkFrame++;
-  if (sharkFrame > 3 ) sharkFrame = 0;
+  if (shark.isActive)
+  {
+    if (arduboy.everyXFrames(4 + (6 * bossSlow))) sharkFrame++;
+    if (sharkFrame > 3 ) sharkFrame = 0;
+  }
 }
 
 
@@ -445,7 +448,7 @@ void shootingSkull()
   enemy[pirateShip.currentBullet].isActive = true;
   enemy[pirateShip.currentBullet].isDying = false;
   enemy[pirateShip.currentBullet].type = ENEMY_SKULL;
-  enemy[pirateShip.currentBullet].x = pirateShip.x;
+  enemy[pirateShip.currentBullet].x = pirateShip.x + 16;
   enemy[pirateShip.currentBullet].y = pirateShip.y + 20;
   enemy[pirateShip.currentBullet].HP = MAX_HP_SKULL;
   pirateShip.currentBullet++;
@@ -454,7 +457,14 @@ void shootingSkull()
 
 void checkPirateShip()
 {
-  if (pirateShip.currentBullet > MAX_BOSS_BULLETS) pirateShip.currentBullet = 0;
+  if (pirateShip.isActive)
+  {
+    if (pirateShip.currentBullet > MAX_BOSS_BULLETS) pirateShip.currentBullet = 0;
+    for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
+    {
+      if (!enemy[i].isDying) enemy[i].x -= 2;
+    }
+  }
 }
 
 
@@ -478,28 +488,21 @@ void pirateShipGoesUpAndShoots()
 {
   if (pirateShip.y > -20)
   {
-    if (arduboy.everyXFrames(20)) shootingSkull();
+    if (arduboy.everyXFrames(22)) shootingSkull();
     pirateShip.y -= 2;
   }
   else pirateShip.attackFase++;
-  for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
-  {
-    enemy[i].x -= 3;
-  }
+
 }
 
 void pirateShipGoesDownAndShoots()
 {
   if (pirateShip.y < 40)
   {
-    if (arduboy.everyXFrames(20)) shootingSkull();
+    if (arduboy.everyXFrames(22)) shootingSkull();
     pirateShip.y += 2;
   }
   else pirateShip.attackFase++;
-    for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
-  {
-    enemy[i].x -= 3;
-  }
 }
 
 void pirateShipGoesToMiddle()
