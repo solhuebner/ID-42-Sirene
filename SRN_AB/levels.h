@@ -241,7 +241,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave003,
     wave002,
     wave001,
-    wave251,
+    wave250,
   },
   { //LEVEL 02
     wave000,
@@ -265,7 +265,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave018,
     wave019,
     wave020,
-    wave250,
+    wave251,
   },
   { //LEVEL 03
     wave000,
@@ -314,7 +314,7 @@ void checkCollisions()
       }
     }
 
-    
+
     if (enemy[i].isActive && !enemy[i].isDying && physics.collide(mermaidRect, enemyRect))
     {
       if (!mermaid.isImune)

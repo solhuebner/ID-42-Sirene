@@ -18,9 +18,9 @@
 #define MAX_HP_OCTOPUS               4
 #define MAX_HP_SKULL                 1
 
-#define MAX_HP_SHARK                 10
-#define MAX_HP_SEAHORSE              15
-#define MAX_HP_PIRATESHIP            20
+#define MAX_HP_SHARK                 18
+#define MAX_HP_SEAHORSE              27
+#define MAX_HP_PIRATESHIP            36
 
 #define FRAMES_ENEMY                 3
 #define FRAMES_JELLYFISH             10
@@ -34,6 +34,7 @@
 
 
 byte enemiesMaxHP[] = {MAX_HP_FISHY, MAX_HP_FISH, MAX_HP_EEL, MAX_HP_JELLYFISH, MAX_HP_OCTOPUS, MAX_HP_SKULL};
+
 byte jellyFrame;
 byte sharkFrame;
 byte faseTimer;
@@ -230,6 +231,15 @@ EndBoss seahorse;
 EndBoss pirateShip;
 
 
+void drawEnemyHud(byte currentLife, byte maxLife)
+{
+  byte shownLife = currentLife / 3;
+  for (byte i = 0; i < shownLife; i++)
+  {
+    sprites.drawPlusMask(64 - 2*(maxLife / 3) + 4 * i, 60, bossLife_plus_mask, 0);
+  }
+}
+
 //////// SHARK functions ///////////////////
 ////////////////////////////////////////////
 
@@ -403,7 +413,11 @@ const FunctionPointer PROGMEM sharkAttackFases[] =
 
 void drawShark()
 {
-  if (shark.isActive) sprites.drawSelfMasked(shark.x, shark.y, enemyShark, sharkFrame + (4 * sharkSwimsRight));
+  if (shark.isActive)
+  {
+    sprites.drawSelfMasked(shark.x, shark.y, enemyShark, sharkFrame + (4 * sharkSwimsRight));
+    drawEnemyHud(shark.HP, MAX_HP_SHARK);
+  }
 }
 
 //////// SEAHORSE functions ////////////////
@@ -578,6 +592,7 @@ void drawPirateShip()
     sprites.drawSelfMasked(pirateShip.x + 24, pirateShip.y + 5, pirateshipSail, 0);
     sprites.drawSelfMasked(pirateShip.x, pirateShip.y + 19, pirateshipBowsprit, 0);
     sprites.drawSelfMasked(pirateShip.x + 36, pirateShip.y, pirateshipCrowsnest, 0);
+    drawEnemyHud(pirateShip.HP, MAX_HP_PIRATESHIP);
   }
 }
 

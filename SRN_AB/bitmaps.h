@@ -535,6 +535,18 @@ PROGMEM const unsigned char puff[] = {
 
 
 
+//////////// BOSSES bitmaps ////////////////
+////////////////////////////////////////////
+
+PROGMEM const unsigned char bossLife_plus_mask[] = {
+// width, height
+3, 8,
+0x00, 0xFF, 0x0E, 
+0xFF, 0x00, 0xFF, 
+};
+
+
+
 //////// PIRATESHIP bitmaps ////////////////
 ////////////////////////////////////////////
 
