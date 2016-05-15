@@ -28,8 +28,6 @@
 #define MAX_ONSCREEN_SPARKLES        8
 
 int seaShellSpeedY[] = {0, 1, -1};
-byte currentBullet;
-byte currentSeaShell;
 byte coolDown[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COOLDOWN_SEASHELL, WEAPON_COOLDOWN_MAGIC};
 byte coolDownMax[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COOLDOWN_SEASHELL, WEAPON_COOLDOWN_MAGIC};
 byte bulletSpeed[] = {BULLET_SPEED_TRIDENT, BULLET_SPEED_BUBBLES, BULLET_SPEED_SEASHELL, BULLET_SPEED_MAGIC};
@@ -52,6 +50,8 @@ struct Players
     byte frame;
     boolean magicCharging;
     byte chargeBarFrame;
+    byte currentBullet;
+    byte currentSeaShell;
 };
 
 Players mermaid;
@@ -147,8 +147,8 @@ void setWeapons()
 {
   mermaid.magicCharging = false;
   mermaid.chargeBarFrame = 0;
-  currentBullet = 0;
-  currentSeaShell = 0;
+  mermaid.currentBullet = 0;
+  mermaid.currentSeaShell = 0;
   for (byte i = 0; i < MAX_ONSCREEN_BULLETS; i++)
   {
     bullet[i].isActive = false;
@@ -190,27 +190,27 @@ void checkWeapons()
 
 void shootWeapon()
 {
-  if (!bullet[currentBullet].isActive)
+  if (!bullet[mermaid.currentBullet].isActive)
   {
-    if (bullet[currentBullet].type != WEAPON_TYPE_SEASHELL)bullet[currentBullet].frame = 0;
-    bullet[currentBullet].type = mermaid.weaponType;
-    bullet[currentBullet].isActive = true;
-    bullet[currentBullet].x = mermaid.x + 8;
-    bullet[currentBullet].y = mermaid.y + 6;
-    bullet[currentBullet].damage = bulletDamage[bullet[currentBullet].type];
-    if (bullet[currentBullet].type == WEAPON_TYPE_MAGIC) bullet[currentBullet].damage += mermaid.chargeBarFrame;
-    if (bullet[currentBullet].type == WEAPON_TYPE_SEASHELL)
+    if (bullet[mermaid.currentBullet].type != WEAPON_TYPE_SEASHELL)bullet[mermaid.currentBullet].frame = 0;
+    bullet[mermaid.currentBullet].type = mermaid.weaponType;
+    bullet[mermaid.currentBullet].isActive = true;
+    bullet[mermaid.currentBullet].x = mermaid.x + 8;
+    bullet[mermaid.currentBullet].y = mermaid.y + 6;
+    bullet[mermaid.currentBullet].damage = bulletDamage[bullet[mermaid.currentBullet].type];
+    if (bullet[mermaid.currentBullet].type == WEAPON_TYPE_MAGIC) bullet[mermaid.currentBullet].damage += mermaid.chargeBarFrame;
+    if (bullet[mermaid.currentBullet].type == WEAPON_TYPE_SEASHELL)
     {
-      bullet[currentBullet].speedY = seaShellSpeedY[currentSeaShell];
-      bullet[currentBullet].frame = currentSeaShell;
-      currentSeaShell++;
-      if (currentSeaShell > 2) currentSeaShell = 0;
+      bullet[mermaid.currentBullet].speedY = seaShellSpeedY[mermaid.currentSeaShell];
+      bullet[mermaid.currentBullet].frame = mermaid.currentSeaShell;
+      mermaid.currentSeaShell++;
+      if (mermaid.currentSeaShell > 2) mermaid.currentSeaShell = 0;
       
     }
     mermaid.chargeBarFrame = 0;
   }
-  currentBullet++;
-  if (currentBullet > MAX_ONSCREEN_BULLETS - 1) currentBullet = 0;
+  mermaid.currentBullet++;
+  if (mermaid.currentBullet > MAX_ONSCREEN_BULLETS - 1) mermaid.currentBullet = 0;
 }
 
 

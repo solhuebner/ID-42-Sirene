@@ -44,9 +44,10 @@ void stateGamePlaying()
   if (arduboy.everyXFrames(2)) ((FunctionPointer) pgm_read_word (&Levels[level - 1][currentWave]))();
   if (checkEndLevel()) gameState = STATE_GAME_NEXT_LEVEL;
 
-  drawShark();
-  drawPirateShip();
   drawEnemies();
+  drawShark();
+  drawSeahorse();
+  drawPirateShip();
   drawMermaid();
   drawWeapons();
   drawLifeHUD();

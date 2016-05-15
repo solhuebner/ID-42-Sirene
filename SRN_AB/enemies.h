@@ -9,25 +9,31 @@
 #define ENEMY_EEL                    2
 #define ENEMY_JELLYFISH              3
 #define ENEMY_OCTOPUS                4
+#define ENEMY_SKULL                  5
 
-#define MAX_HP_FISHY                2
-#define MAX_HP_FISH                 4
-#define MAX_HP_EEL                  4
-#define MAX_HP_JELLYFISH            2
-#define MAX_HP_OCTOPUS              4
+#define MAX_HP_FISHY                 2
+#define MAX_HP_FISH                  4
+#define MAX_HP_EEL                   4
+#define MAX_HP_JELLYFISH             2
+#define MAX_HP_OCTOPUS               4
+#define MAX_HP_SKULL                 1
 
-#define MAX_FRAME_FISHY              3
-#define MAX_FRAME_FISH               3
-#define MAX_FRAME_EEL                3
-#define MAX_FRAME_JELLYFISH          10
-#define MAX_FRAME_OCTOPUS            3
+#define MAX_HP_SHARK                 10
+#define MAX_HP_SEAHORSE              15
+#define MAX_HP_PIRATESHIP            20
+
+#define FRAMES_ENEMY                 3
+#define FRAMES_JELLYFISH             10
+#define FRAMES_DYING                 5
+
 
 #define MAX_ONSCREEN_ENEMIES         8
+#define MAX_ENEMY_BULLETS            3
+#define MAX_BOSS_BULLETS             3
 
 
 
-byte enemiesMaxFrames[] = {MAX_FRAME_FISHY, MAX_FRAME_FISH, MAX_FRAME_EEL, MAX_FRAME_JELLYFISH, MAX_FRAME_OCTOPUS};
-byte enemiesMaxHP[] = {MAX_HP_FISHY, MAX_HP_FISH, MAX_HP_EEL, MAX_HP_JELLYFISH, MAX_HP_OCTOPUS};
+byte enemiesMaxHP[] = {MAX_HP_FISHY, MAX_HP_FISH, MAX_HP_EEL, MAX_HP_JELLYFISH, MAX_HP_OCTOPUS, MAX_HP_SKULL};
 byte jellyFrame;
 byte sharkFrame;
 byte faseTimer;
@@ -72,14 +78,22 @@ void checkEnemies()
 {
   for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
   {
-    if (!enemy[i].isDying && arduboy.everyXFrames(6)) enemy[i].frame++;
-    if (enemy[i].isDying && arduboy.everyXFrames(3)) enemy[i].frame++;
-    if ((enemy[i].frame > enemiesMaxFrames[enemy[i].type]) && !enemy[i].isDying) enemy[i].frame = 0;
-    if ((enemy[i].frame > 5) && enemy[i].isDying)
+    if (!enemy[i].isDying)
     {
-      enemy[i].isDying = false;
-      enemy[i].isActive = false;
-      enemy[i].frame = 0;
+      if (arduboy.everyXFrames(6)) enemy[i].frame++;
+      if (enemy[i].type != ENEMY_JELLYFISH && (enemy[i].frame > FRAMES_ENEMY)) enemy[i].frame = 0;
+      if (enemy[i].type == ENEMY_JELLYFISH && (enemy[i].frame > FRAMES_JELLYFISH)) enemy[i].frame = 0;
+    }
+
+    if (enemy[i].isDying)
+    {
+      if (arduboy.everyXFrames(3)) enemy[i].frame++;
+      if (enemy[i].frame > FRAMES_DYING)
+      {
+        enemy[i].isDying = false;
+        enemy[i].isActive = false;
+        enemy[i].frame = 0;
+      }
     }
     if ((enemy[i].x < -32) || (enemy[i].y < -32))
     {
@@ -156,7 +170,6 @@ void enemySwimDownUp(byte firstEnemy, byte lastEnemy, byte speedEnemy)
 }
 
 
-
 void drawEnemies()
 {
   for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
@@ -185,6 +198,9 @@ void drawEnemies()
           case ENEMY_OCTOPUS:
             sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyOctopus_plus_mask, enemy[i].frame);
             break;
+          case ENEMY_SKULL:
+            sprites.drawPlusMask(enemy[i].x, enemy[i].y, pirateSkull_plus_mask, enemy[i].frame);
+            break;
         }
       }
     }
@@ -205,10 +221,12 @@ struct EndBoss
     int HP;
     boolean isActive = false;
     byte attackFase;
+    byte currentBullet;
 
 };
 
 EndBoss shark;
+EndBoss seahorse;
 EndBoss pirateShip;
 
 
@@ -219,7 +237,7 @@ void setShark()
 {
   shark.x = 128;
   shark.y = 28;
-  shark.HP = 10;
+  shark.HP = MAX_HP_SHARK;
   shark.isActive = true;
   shark.attackFase = 0;
   bossSlow = true;
@@ -385,6 +403,26 @@ void drawShark()
   if (shark.isActive) sprites.drawSelfMasked(shark.x, shark.y, enemyShark, sharkFrame + (4 * sharkSwimsRight));
 }
 
+//////// SEAHORSE functions ////////////////
+////////////////////////////////////////////
+
+void setSeahorse()
+{
+  seahorse.x = 128;
+  seahorse.y = 28;
+  seahorse.HP = MAX_HP_SEAHORSE;
+  seahorse.isActive = true;
+  seahorse.attackFase = 0;
+  seahorse.currentBullet = 0;
+  bossSlow = true;
+  faseTimer = 0;
+}
+
+
+void drawSeahorse()
+{
+
+}
 
 //////// PIRATESHIP functions //////////////
 ////////////////////////////////////////////
@@ -393,18 +431,30 @@ void setPirateShip()
 {
   pirateShip.x = 128;
   pirateShip.y = 10;
-  pirateShip.HP = 10;
+  pirateShip.HP = MAX_HP_PIRATESHIP;
   pirateShip.isActive = true;
   pirateShip.attackFase = 0;
+  pirateShip.currentBullet = 0;
+  bossSlow = false;
   faseTimer = 0;
-  bossSlow = 0;
 }
 
+void shootingSkull()
+{
+  enemy[pirateShip.currentBullet].frame = 0;
+  enemy[pirateShip.currentBullet].isActive = true;
+  enemy[pirateShip.currentBullet].isDying = false;
+  enemy[pirateShip.currentBullet].type = ENEMY_SKULL;
+  enemy[pirateShip.currentBullet].x = pirateShip.x;
+  enemy[pirateShip.currentBullet].y = pirateShip.y + 20;
+  enemy[pirateShip.currentBullet].HP = MAX_HP_SKULL;
+  pirateShip.currentBullet++;
+}
 
 
 void checkPirateShip()
 {
-
+  if (pirateShip.currentBullet > MAX_BOSS_BULLETS) pirateShip.currentBullet = 0;
 }
 
 
@@ -424,16 +474,32 @@ void pirateShipWait()
   }
 }
 
-void pirateShipGoesUp()
+void pirateShipGoesUpAndShoots()
 {
-  if (pirateShip.y > -20)pirateShip.y -= 2;
+  if (pirateShip.y > -20)
+  {
+    if (arduboy.everyXFrames(20)) shootingSkull();
+    pirateShip.y -= 2;
+  }
   else pirateShip.attackFase++;
+  for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
+  {
+    enemy[i].x -= 3;
+  }
 }
 
-void pirateShipGoesDown()
+void pirateShipGoesDownAndShoots()
 {
-  if (pirateShip.y < 40)pirateShip.y += 2;
+  if (pirateShip.y < 40)
+  {
+    if (arduboy.everyXFrames(20)) shootingSkull();
+    pirateShip.y += 2;
+  }
   else pirateShip.attackFase++;
+    for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
+  {
+    enemy[i].x -= 3;
+  }
 }
 
 void pirateShipGoesToMiddle()
@@ -479,12 +545,12 @@ const FunctionPointer PROGMEM pirateShipAttackFases[] =
 {
   pirateShipSailsRightOnScreen,
   pirateShipWait,
-  pirateShipGoesUp,
-  pirateShipGoesDown,
-  pirateShipGoesUp,
-  pirateShipGoesDown,
-  pirateShipGoesUp,
-  pirateShipGoesDown,
+  pirateShipGoesUpAndShoots,
+  pirateShipGoesDownAndShoots,
+  pirateShipGoesUpAndShoots,
+  pirateShipGoesDownAndShoots,
+  pirateShipGoesUpAndShoots,
+  pirateShipGoesDownAndShoots,
   pirateShipGoesToMiddle,
   pirateShipWait,
   pirateShipGoesUpForAttack,
