@@ -53,7 +53,8 @@ void stateMenuHelp()
 
 void stateMenuInfo()
 {
-  arduboy.drawBitmap(16, 20, info, 96, 24, WHITE);
+  sprites.drawSelfMasked(36, 10, mermaidTitle, 0);
+  sprites.drawSelfMasked(16, 36, info, 0);
   if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
 }
 

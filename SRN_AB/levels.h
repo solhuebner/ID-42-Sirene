@@ -6,7 +6,7 @@
 #include "enemies.h"
 
 #define TOTAL_AMOUNT_OF_LEVELS  4
-#define TOTAL_AMOUNT_OF_WAVES   22
+#define TOTAL_AMOUNT_OF_WAVES   23
 
 boolean checkStartWave()
 {
@@ -224,7 +224,6 @@ void wave252()
 }
 
 
-
 typedef void (*FunctionPointer) ();
 const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAVES] =
 {
@@ -251,6 +250,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave002,
     wave001,
     wave250,
+    wave000,
   },
   { //LEVEL 02
     wave000,
@@ -275,6 +275,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave019,
     wave020,
     wave252,
+    wave000,
   },
   { //LEVEL 03
     wave000,
@@ -299,6 +300,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave019,
     wave020,
     wave250,
+    wave000,
   },
     { //LEVEL 04
     wave000,
@@ -323,6 +325,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave019,
     wave020,
     wave250,
+    wave000,
   }
 };
 

@@ -96,7 +96,6 @@ void setMermaid()
   mermaid.weaponType = WEAPON_TYPE_TRIDENT;
   mermaid.isVisible = true;
   mermaid.HP = 4;
-  mermaid.isImune = true;
   mermaid.imuneTimer = 0;
 }
 
