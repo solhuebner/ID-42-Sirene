@@ -79,6 +79,11 @@ void checkEnemies()
 {
   for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
   {
+    if ((enemy[i].HP < 1) && !enemy[i].isDying)
+    {
+      enemy[i].isDying = true;
+      enemy[i].frame = 0;
+    }
     if (!enemy[i].isDying)
     {
       if (arduboy.everyXFrames(6)) enemy[i].frame++;
@@ -223,7 +228,7 @@ struct EndBoss
     boolean isActive = false;
     boolean isImune = false;
     boolean isDying = false;
-    boolean isDead = false;
+    boolean isDead = true;
     byte attackFase;
     byte currentBullet;
     byte imuneTimer;
@@ -233,6 +238,13 @@ struct EndBoss
 EndBoss shark;
 EndBoss seahorse;
 EndBoss pirateShip;
+
+void setBosses()
+{
+  shark.isDead = true;
+  seahorse.isDead = true;
+  pirateShip.isDead = true;
+}
 
 
 void drawEnemyHud(byte currentLife, byte maxLife)
@@ -266,6 +278,11 @@ void setShark()
 
 void checkShark()
 {
+  if ((shark.HP < 1) && !shark.isDying)
+  {
+    shark.isDying = true;
+    shark.frame = 0;
+  }
   if (shark.isImune)
   {
     if (arduboy.everyXFrames(3)) shark.isActive = !shark.isActive;
@@ -451,9 +468,9 @@ void drawShark()
     else
     {
       sprites.drawSelfMasked(shark.x, shark.y, enemyShark, shark.frame + (4 * sharkSwimsRight));
-      drawEnemyHud(shark.HP, MAX_HP_SHARK);
     }
   }
+  if (!shark.isDead)drawEnemyHud(shark.HP, MAX_HP_SHARK);
 }
 
 //////// SEAHORSE functions ////////////////
@@ -484,6 +501,13 @@ void checkSeahorse()
   }
 }
 
+
+
+typedef void (*FunctionPointer) ();
+const FunctionPointer PROGMEM seahorseAttackFases[] =
+{
+  
+};
 
 void drawSeahorse()
 {

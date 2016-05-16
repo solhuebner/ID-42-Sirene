@@ -208,6 +208,15 @@ void wave250()
 
 void wave251()
 {
+  //seahorse attack
+  if (checkStartWave())setSeahorse();
+  ((FunctionPointer) pgm_read_word (&seahorseAttackFases[seahorse.attackFase]))();
+  if (seahorse.isDead) currentWave++;
+}
+
+
+void wave252()
+{
   //pirateShip attack
   if (checkStartWave())setPirateShip();
   ((FunctionPointer) pgm_read_word (&pirateShipAttackFases[pirateShip.attackFase]))();
@@ -265,7 +274,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave018,
     wave019,
     wave020,
-    wave251,
+    wave252,
   },
   { //LEVEL 03
     wave000,
@@ -315,8 +324,7 @@ void checkCollisions()
         if (enemy[i].isActive && !enemy[i].isDying && physics.collide(bulletsRect, enemyRect))
         {
           bullet[k].isActive = false;
-          enemy[i].isDying = true;
-          enemy[i].frame = 0;
+          enemy[i].HP -= bullet[k].damage;
         }
       }
 
@@ -327,11 +335,6 @@ void checkCollisions()
           shark.isImune = true;
           bullet[k].isActive = false;
           shark.HP -= bullet[k].damage;
-        }
-        if (shark.HP < 1)
-        {
-          shark.isDying = true;
-          shark.frame = 0;
         }
       }
     }

@@ -18,9 +18,7 @@ void stateGamePrepareLevel()
   setWeapons();
   setEnemies();
   setMermaid();
-  setShark();
-  setSeahorse();
-  setPirateShip();
+  setBosses();
   gameState = STATE_GAME_NEXT_LEVEL;
 };
 
