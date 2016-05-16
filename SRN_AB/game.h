@@ -9,7 +9,11 @@
 #include "elements.h"
 #include "levels.h"
 
-
+byte gameOverFase;
+int gameX;
+byte overX;
+boolean highScoreVisible;
+boolean scoreVisible;
 
 void stateGamePrepareLevel()
 {
@@ -20,6 +24,11 @@ void stateGamePrepareLevel()
   setMermaid();
   setBosses();
   gameState = STATE_GAME_NEXT_LEVEL;
+  gameOverFase = 0;
+  gameX = -32;
+  overX = 132;
+  highScoreVisible = false;
+  scoreVisible = false;
 };
 
 
@@ -56,9 +65,7 @@ void stateGamePlaying()
   drawMermaid();
   drawWeapons();
   drawLifeHUD();
-  drawScoreHUD();
-
-  
+  drawScoreHUD(93, 0);
 };
 
 void stateGamePause()
@@ -66,9 +73,80 @@ void stateGamePause()
   if (buttons.justPressed(A_BUTTON)) gameState = STATE_GAME_PLAYING;
 };
 
+
+void gameOverWait()
+{
+  if (arduboy.everyXFrames(4)) waveTimer++;
+  if (waveTimer > 8)
+  {
+    gameOverFase++;
+    waveTimer = 0;
+  }
+}
+
+void gameOverSlideToMiddle()
+{
+  if (gameX < 33)
+  {
+    gameX += 2;
+    overX -= 2;
+  }
+  else gameOverFase++;
+}
+
+void gameOverSlideOpen()
+{
+  if (gameX > 33)
+  {
+    gameX -= 2;
+    overX += 2;
+  }
+  else gameOverFase++;
+}
+
+void gameOverShowHighScore()
+{
+  highScoreVisible = true;
+  gameOverFase++;
+}
+
+void gameOverShowScore()
+{
+  scoreVisible = true;
+  gameOverFase++;
+}
+
+void gameOverEnd()
+{
+  if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
+}
+
+typedef void (*FunctionPointer) ();
+const FunctionPointer PROGMEM gameOverFases[] =
+{
+  gameOverSlideToMiddle,
+  //gameOverSlideOpen,
+  //gameOverSlideToMiddle,
+  //gameOverSlideOpen,
+  //gameOverSlideToMiddle,
+  gameOverWait,
+  gameOverShowHighScore,
+  gameOverWait,
+  gameOverShowScore,
+  gameOverWait,
+  gameOverEnd,
+};
+
+
+
+
 void stateGameOver()
 {
-  gameState = STATE_MENU_MAIN;
+  ((FunctionPointer) pgm_read_word (&gameOverFases[gameOverFase]))();
+  sprites.drawSelfMasked(gameX, 20, game, 0);
+  sprites.drawSelfMasked(overX, 20, over, 0);
+  if (highScoreVisible)sprites.drawSelfMasked(35, 32, highscore, 0);
+  if (scoreVisible) drawScoreHUD(51, 44);
 };
 
 

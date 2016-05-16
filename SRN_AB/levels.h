@@ -5,7 +5,7 @@
 #include "globals.h"
 #include "enemies.h"
 
-#define TOTAL_AMOUNT_OF_LEVELS  3
+#define TOTAL_AMOUNT_OF_LEVELS  4
 #define TOTAL_AMOUNT_OF_WAVES   22
 
 boolean checkStartWave()
@@ -299,6 +299,30 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave019,
     wave020,
     wave250,
+  },
+    { //LEVEL 04
+    wave000,
+    wave001,
+    wave002,
+    wave003,
+    wave004,
+    wave005,
+    wave006,
+    wave007,
+    wave008,
+    wave009,
+    wave010,
+    wave011,
+    wave012,
+    wave013,
+    wave014,
+    wave015,
+    wave016,
+    wave017,
+    wave018,
+    wave019,
+    wave020,
+    wave250,
   }
 };
 
@@ -390,10 +414,10 @@ void drawLifeHUD()
   sprites.drawPlusMask(0, 0, hearts_plus_mask, mermaid.HP - 2);
 }
 
-void drawScoreHUD()
+void drawScoreHUD(byte x, byte y)
 {
   char buf[10];
-  scorePlayer = arduboy.cpuLoad();
+  //scorePlayer = arduboy.cpuLoad();
   ltoa(scorePlayer, buf, 10);
   char charLen = strlen(buf);
   char pad = 7 - charLen;
@@ -401,7 +425,7 @@ void drawScoreHUD()
   //draw 0 padding
   for (byte i = 0; i < pad; i++)
   {
-    sprites.drawPlusMask(93 + (5 * i), 0, numbers_plus_mask, 0);
+    sprites.drawPlusMask(x + (5 * i), y, numbers_plus_mask, 0);
   }
 
   for (byte i = 0; i < charLen; i++)
@@ -421,7 +445,7 @@ void drawScoreHUD()
     {
       if (digit == z) j = z;
     }
-    sprites.drawPlusMask(93 + (pad * 5) + (5 * i), 0, numbers_plus_mask, digit);
+    sprites.drawPlusMask(x + (pad * 5) + (5 * i), y, numbers_plus_mask, digit);
   }
 }
 

@@ -11,6 +11,13 @@
 #define ENEMY_OCTOPUS                4
 #define ENEMY_SKULL                  5
 
+#define POINTS_FISHY                 5
+#define POINTS_FISH                  8
+#define POINTS_EEL                   15
+#define POINTS_JELLYFISH             20
+#define POINTS_OCTOPUS               25
+#define POINTS_SKULL                 4
+
 #define MAX_HP_FISHY                 2
 #define MAX_HP_FISH                  4
 #define MAX_HP_EEL                   4
@@ -22,6 +29,10 @@
 #define MAX_HP_SEAHORSE              27
 #define MAX_HP_PIRATESHIP            36
 
+#define POINTS_SHARK                 100
+#define POINTS_SEAHORSE              150
+#define POINTS_PIRATESHIP            250
+
 #define FRAMES_ENEMY                 3
 #define FRAMES_JELLYFISH             10
 #define FRAMES_DYING                 5
@@ -30,14 +41,15 @@
 #define MAX_ENEMY_BULLETS            3
 #define MAX_BOSS_BULLETS             3
 
-#define SHARK_IMUNE_TIME             15
-#define SEAHORSE_IMUNE_TIME          15
-#define PIRATESHIP_IMUNE_TIME        15
+#define SHARK_IMUNE_TIME             25
+#define SEAHORSE_IMUNE_TIME          25
+#define PIRATESHIP_IMUNE_TIME        25
+
 #define ENEMY_IMUNE_TIME             20
 
 
-
 byte enemiesMaxHP[] = {MAX_HP_FISHY, MAX_HP_FISH, MAX_HP_EEL, MAX_HP_JELLYFISH, MAX_HP_OCTOPUS, MAX_HP_SKULL};
+byte enemiesPoints[] = {POINTS_FISHY, POINTS_FISH, POINTS_EEL, POINTS_JELLYFISH, POINTS_OCTOPUS, POINTS_SKULL};
 
 byte jellyFrame;
 byte faseTimer;
@@ -114,7 +126,11 @@ void checkEnemies()
 
     if (enemy[i].isDying)
     {
-      if (arduboy.everyXFrames(3)) enemy[i].frame++;
+      if (arduboy.everyXFrames(3))
+      {
+        if(enemy[i].isVisible) scorePlayer += enemiesPoints[enemy[i].type];
+        enemy[i].frame++;
+      }
       if (enemy[i].frame > FRAMES_DYING)
       {
         enemy[i].isDying = false;
