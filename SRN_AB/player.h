@@ -45,7 +45,7 @@ struct Players
     byte x;
     byte y;
     byte weaponType;
-    boolean isActive;
+    boolean isVisible;
     boolean isImune;
     byte imuneTimer;
     byte HP;
@@ -64,7 +64,7 @@ struct Bullets
     byte x;
     int y;
     byte damage;
-    boolean isActive = false;
+    boolean isVisible = false;
     byte type;
     byte frame;
     int speedY;
@@ -94,7 +94,7 @@ void setMermaid()
   mermaid.x = 0;
   mermaid.y = 20;
   mermaid.weaponType = WEAPON_TYPE_TRIDENT;
-  mermaid.isActive = true;
+  mermaid.isVisible = true;
   mermaid.HP = 4;
   mermaid.isImune = true;
   mermaid.imuneTimer = 0;
@@ -105,13 +105,13 @@ void checkMermaid()
 {
   if (mermaid.isImune)
   {
-    if (arduboy.everyXFrames(3)) mermaid.isActive = !mermaid.isActive;
+    if (arduboy.everyXFrames(3)) mermaid.isVisible = !mermaid.isVisible;
     mermaid.imuneTimer++;
     if (mermaid.imuneTimer > MERMAID_IMUNE_TIME)
     {
       mermaid.imuneTimer = 0;
       mermaid.isImune = false;
-      mermaid.isActive = true;
+      mermaid.isVisible = true;
     }
   }
   if (mermaid.HP < 2) gameState = STATE_GAME_OVER;
@@ -130,7 +130,7 @@ void checkMermaid()
 
 void drawMermaid()
 {
-  if (mermaid.isActive) sprites.drawPlusMask(mermaid.x, mermaid.y, mermaid_plus_mask, mermaid.frame);
+  if (mermaid.isVisible) sprites.drawPlusMask(mermaid.x, mermaid.y, mermaid_plus_mask, mermaid.frame);
   if (mermaid.magicCharging)
   {
     for (byte i = 0; i < MAX_ONSCREEN_SPARKLES; i++)
@@ -153,7 +153,7 @@ void setWeapons()
   mermaid.currentSeaShell = 0;
   for (byte i = 0; i < MAX_ONSCREEN_BULLETS; i++)
   {
-    bullet[i].isActive = false;
+    bullet[i].isVisible = false;
     bullet[i].frame = 0;
   }
   sparkle[0] = { .x = 18, .y = -6, .speedX = -2, .speedY = 3, .frame = 0};
@@ -183,7 +183,7 @@ void checkWeapons()
     if (bullet[i].type == WEAPON_TYPE_SEASHELL) bullet[i].y += bullet[i].speedY;
     if (bullet[i].x > 128 || bullet[i].y < -7 || bullet[i].y > 64)
     {
-      bullet[i].isActive = false;
+      bullet[i].isVisible = false;
     }
   }
 }
@@ -192,11 +192,11 @@ void checkWeapons()
 
 void shootWeapon()
 {
-  if (!bullet[mermaid.currentBullet].isActive)
+  if (!bullet[mermaid.currentBullet].isVisible)
   {
     if (bullet[mermaid.currentBullet].type != WEAPON_TYPE_SEASHELL)bullet[mermaid.currentBullet].frame = 0;
     bullet[mermaid.currentBullet].type = mermaid.weaponType;
-    bullet[mermaid.currentBullet].isActive = true;
+    bullet[mermaid.currentBullet].isVisible = true;
     bullet[mermaid.currentBullet].x = mermaid.x + 8;
     bullet[mermaid.currentBullet].y = mermaid.y + 6;
     bullet[mermaid.currentBullet].damage = bulletDamage[bullet[mermaid.currentBullet].type];
@@ -220,7 +220,7 @@ void drawWeapons()
 {
   for (byte i = 0; i < MAX_ONSCREEN_BULLETS; i++)
   {
-    if (bullet[i].isActive) sprites.drawPlusMask(bullet[i].x, bullet[i].y, weapons_plus_mask[bullet[i].type], bullet[i].frame);
+    if (bullet[i].isVisible) sprites.drawPlusMask(bullet[i].x, bullet[i].y, weapons_plus_mask[bullet[i].type], bullet[i].frame);
   }
 }
 

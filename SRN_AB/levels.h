@@ -24,7 +24,7 @@ boolean checkEndWave()
   byte test = 0;
   for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
   {
-    test = test + enemy[i].isActive;
+    test = test + enemy[i].isAlive;
   }
   if (test < 1) currentWave++;
 }
@@ -203,7 +203,7 @@ void wave250()
   //Shark attack
   if (checkStartWave())setShark();
   ((FunctionPointer) pgm_read_word (&sharkAttackFases[shark.attackFase]))();
-  if (shark.isDead) currentWave++;
+  if (!shark.isAlive) currentWave++;
 }
 
 void wave251()
@@ -211,7 +211,7 @@ void wave251()
   //seahorse attack
   if (checkStartWave())setSeahorse();
   ((FunctionPointer) pgm_read_word (&seahorseAttackFases[seahorse.attackFase]))();
-  if (seahorse.isDead) currentWave++;
+  if (!seahorse.isAlive) currentWave++;
 }
 
 
@@ -220,7 +220,7 @@ void wave252()
   //pirateShip attack
   if (checkStartWave())setPirateShip();
   ((FunctionPointer) pgm_read_word (&pirateShipAttackFases[pirateShip.attackFase]))();
-  if (pirateShip.isDead) currentWave++;
+  if (!pirateShip.isAlive) currentWave++;
 }
 
 
@@ -313,27 +313,31 @@ void checkCollisions()
   ////////////////////////////////////////////////////////////
   for (byte k = 0; k < MAX_ONSCREEN_BULLETS; k++)
   {
-    if (bullet[k].isActive)
+    if (bullet[k].isVisible)
     {
       Rect bulletsRect {.x = bullet[k].x, .y = bullet[k].y, .width = 8, .height = 8};
-      if (seahorse.isActive) {}
-      if (pirateShip.isActive) {}
       for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
       {
         Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = 16, .height = 16};
-        if (enemy[i].isActive && !enemy[i].isDying && physics.collide(bulletsRect, enemyRect))
+        if (enemy[i].isVisible && !enemy[i].isDying && physics.collide(bulletsRect, enemyRect))
         {
-          bullet[k].isActive = false;
-          enemy[i].HP -= bullet[k].damage;
+          if (!enemy[i].isImune)
+          {
+            enemy[i].HP -= bullet[k].damage;
+            enemy[i].isImune = true;
+          }
+          if (bullet[k].type != WEAPON_TYPE_MAGIC)
+          {
+            bullet[k].isVisible = false;
+          }
         }
       }
-
-      if (shark.isActive && !shark.isDying && physics.collide(bulletsRect, sharkRect))
+      if (shark.isVisible && !shark.isDying && physics.collide(bulletsRect, sharkRect))
       {
         if (!shark.isImune)
         {
           shark.isImune = true;
-          bullet[k].isActive = false;
+          bullet[k].isVisible = false;
           shark.HP -= bullet[k].damage;
         }
       }
@@ -347,20 +351,22 @@ void checkCollisions()
   for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
   {
     Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = 16, .height = 16};
-    if (enemy[i].isActive && !enemy[i].isDying && physics.collide(mermaidRect, enemyRect))
+    if (enemy[i].isVisible && !enemy[i].isDying && physics.collide(mermaidRect, enemyRect))
     {
       if (!mermaid.isImune)
       {
         mermaid.isImune = true;
         mermaid.HP -= 1;
       }
-      enemy[i].isDying = true;
-      enemy[i].frame = 0;
+      if (!enemy[i].isImune)
+      {
+        enemy[i].isDying = true;
+      }
     }
   }
-  if (shark.isActive)
+  if (shark.isVisible)
   {
-    if (shark.isActive && !shark.isDying && physics.collide(mermaidRect, sharkRect))
+    if (shark.isVisible && !shark.isDying && physics.collide(mermaidRect, sharkRect))
     {
       if (!shark.isImune)
       {
@@ -374,8 +380,8 @@ void checkCollisions()
       }
     }
   }
-  if (seahorse.isActive) {}
-  if (pirateShip.isActive) {}
+  if (seahorse.isVisible) {}
+  if (pirateShip.isVisible) {}
 
 }
 

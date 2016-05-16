@@ -29,15 +29,16 @@ void stateGameNextLevel()
   previousWave = 255;
   waveTimer = 0;
   level++;
-  shark.isActive = false;
-  seahorse.isActive = false;
-  pirateShip.isActive = false;
+  shark.isVisible = false;
+  seahorse.isVisible = false;
+  pirateShip.isVisible = false;
   gameState = STATE_GAME_PLAYING;
 };
 
 
 void stateGamePlaying()
 {
+  checkCollisions();
   checkInputs();
   checkWeapons();
   checkMermaid();
@@ -57,7 +58,7 @@ void stateGamePlaying()
   drawLifeHUD();
   drawScoreHUD();
 
-  checkCollisions();
+  
 };
 
 void stateGamePause()
