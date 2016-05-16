@@ -414,7 +414,8 @@ void drawLifeHUD()
   sprites.drawPlusMask(0, 0, hearts_plus_mask, mermaid.HP - 2);
 }
 
-void drawScoreHUD(byte x, byte y)
+
+void drawScore(byte scoreX, byte scoreY, byte fontType)
 {
   char buf[10];
   //scorePlayer = arduboy.cpuLoad();
@@ -425,7 +426,15 @@ void drawScoreHUD(byte x, byte y)
   //draw 0 padding
   for (byte i = 0; i < pad; i++)
   {
-    sprites.drawPlusMask(x + (5 * i), y, numbers_plus_mask, 0);
+    switch (fontType)
+    {
+      case SCORE_SMALL_FONT:
+        sprites.drawPlusMask(scoreX + (5 * i), scoreY, numbers_plus_mask, 0);
+        break;
+      case SCORE_BIG_FONT:
+        sprites.drawSelfMasked(scoreX + (7 * i), scoreY, numbersBig, 0);
+        break;
+    }
   }
 
   for (byte i = 0; i < charLen; i++)
@@ -445,8 +454,17 @@ void drawScoreHUD(byte x, byte y)
     {
       if (digit == z) j = z;
     }
-    sprites.drawPlusMask(x + (pad * 5) + (5 * i), y, numbers_plus_mask, digit);
+    switch (fontType)
+    {
+      case SCORE_SMALL_FONT:
+        sprites.drawPlusMask(scoreX + (pad * 5) + (5 * i), scoreY, numbers_plus_mask, digit);
+        break;
+      case SCORE_BIG_FONT:
+        sprites.drawSelfMasked(scoreX + (pad * 7) + (7 * i), scoreY, numbersBig, digit);
+        break;
+    }
   }
 }
+
 
 #endif

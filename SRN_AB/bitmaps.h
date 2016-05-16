@@ -406,7 +406,7 @@ PROGMEM const unsigned char numbers_plus_mask[] = {
 0x7F, 0x1E, 0x3F, 0x00, 0x1E, 
 };
 
-PROGMEM const unsigned char numbersbig[] = {
+PROGMEM const unsigned char numbersBig[] = {
 // width, height
 6, 8,
 // NUMBER 0
@@ -430,9 +430,6 @@ PROGMEM const unsigned char numbersbig[] = {
 // NUMBER 9
 0x46, 0xCF, 0x89, 0x89, 0xFF, 0x7E, 
 };
-
-
-
 
 
 ///////////// Enemy bitmaps //////////////////

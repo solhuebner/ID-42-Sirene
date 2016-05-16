@@ -25,6 +25,9 @@
 #define GAME_LEFT                    0
 #define GAME_RIGHT                   128
 
+#define SCORE_SMALL_FONT           0
+#define SCORE_BIG_FONT             1
+
 
 Arduboy arduboy;
 Sprites sprites(arduboy);

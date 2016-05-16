@@ -65,7 +65,7 @@ void stateGamePlaying()
   drawMermaid();
   drawWeapons();
   drawLifeHUD();
-  drawScoreHUD(93, 0);
+  drawScore(93, 0, SCORE_SMALL_FONT);
 };
 
 void stateGamePause()
@@ -125,10 +125,8 @@ typedef void (*FunctionPointer) ();
 const FunctionPointer PROGMEM gameOverFases[] =
 {
   gameOverSlideToMiddle,
-  //gameOverSlideOpen,
-  //gameOverSlideToMiddle,
-  //gameOverSlideOpen,
-  //gameOverSlideToMiddle,
+  gameOverSlideOpen,
+  gameOverSlideToMiddle,
   gameOverWait,
   gameOverShowHighScore,
   gameOverWait,
@@ -143,10 +141,10 @@ const FunctionPointer PROGMEM gameOverFases[] =
 void stateGameOver()
 {
   ((FunctionPointer) pgm_read_word (&gameOverFases[gameOverFase]))();
-  sprites.drawSelfMasked(gameX, 20, game, 0);
-  sprites.drawSelfMasked(overX, 20, over, 0);
-  if (highScoreVisible)sprites.drawSelfMasked(35, 32, highscore, 0);
-  if (scoreVisible) drawScoreHUD(51, 44);
+  sprites.drawSelfMasked(gameX, 16, game, 0);
+  sprites.drawSelfMasked(overX, 16, over, 0);
+  if (highScoreVisible)sprites.drawSelfMasked(35, 28, highscore, 0);
+  if (scoreVisible) drawScore(40, 40, SCORE_BIG_FONT);
 };
 
 
