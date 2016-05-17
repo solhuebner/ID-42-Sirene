@@ -10,6 +10,7 @@
 #define ENEMY_JELLYFISH              3
 #define ENEMY_OCTOPUS                4
 #define ENEMY_SKULL                  5
+#define ENEMY_SEAHORSETINY           6
 
 #define ENDBOSS_SHARK                0
 #define ENDBOSS_SEAHORSE             1
@@ -25,6 +26,7 @@
 #define POINTS_JELLYFISH             20
 #define POINTS_OCTOPUS               25
 #define POINTS_SKULL                 4
+#define POINTS_SEAHORSETINY          3
 
 #define MAX_HP_FISHY                 2
 #define MAX_HP_FISH                  4
@@ -32,6 +34,7 @@
 #define MAX_HP_JELLYFISH             2
 #define MAX_HP_OCTOPUS               4
 #define MAX_HP_SKULL                 1
+#define MAX_HP_SEAHORSETINY          1
 
 #define MAX_HP_SHARK                 18
 #define MAX_HP_SEAHORSE              27
@@ -56,8 +59,8 @@
 #define ENEMY_IMUNE_TIME             20
 
 byte endBossMaxHP[] = {MAX_HP_SHARK, MAX_HP_SEAHORSE, MAX_HP_PIRATESHIP};
-byte enemiesMaxHP[] = {MAX_HP_FISHY, MAX_HP_FISH, MAX_HP_EEL, MAX_HP_JELLYFISH, MAX_HP_OCTOPUS, MAX_HP_SKULL};
-byte enemiesPoints[] = {POINTS_FISHY, POINTS_FISH, POINTS_EEL, POINTS_JELLYFISH, POINTS_OCTOPUS, POINTS_SKULL};
+byte enemiesMaxHP[] = {MAX_HP_FISHY, MAX_HP_FISH, MAX_HP_EEL, MAX_HP_JELLYFISH, MAX_HP_OCTOPUS, MAX_HP_SKULL, MAX_HP_SEAHORSETINY};
+byte enemiesPoints[] = {POINTS_FISHY, POINTS_FISH, POINTS_EEL, POINTS_JELLYFISH, POINTS_OCTOPUS, POINTS_SKULL, POINTS_SEAHORSETINY};
 
 byte jellyFrame;
 byte faseTimer;
@@ -342,42 +345,40 @@ void checkEndBoss()
       if (!enemy[i].isDying) enemy[i].x -= 2;
     }
   }
-  if (endBoss.type == ENDBOSS_SHARK)
+
+  if ((endBoss.HP < 1) && !endBoss.isDying)
   {
-    if ((endBoss.HP < 1) && !endBoss.isDying)
+    endBoss.isImune = false;
+    endBoss.isDying = true;
+    endBoss.frame = 0;
+  }
+  if (endBoss.isImune)
+  {
+    if (arduboy.everyXFrames(3)) endBoss.isVisible = !endBoss.isVisible;
+    endBoss.imuneTimer++;
+    if (endBoss.imuneTimer > SHARK_IMUNE_TIME)
     {
+      endBoss.imuneTimer = 0;
       endBoss.isImune = false;
-      endBoss.isDying = true;
-      endBoss.frame = 0;
+      endBoss.isVisible = true;
     }
-    if (endBoss.isImune)
+  }
+  if (endBoss.isVisible)
+  {
+    if (!endBoss.isDying)
     {
-      if (arduboy.everyXFrames(3)) endBoss.isVisible = !endBoss.isVisible;
-      endBoss.imuneTimer++;
-      if (endBoss.imuneTimer > SHARK_IMUNE_TIME)
-      {
-        endBoss.imuneTimer = 0;
-        endBoss.isImune = false;
-        endBoss.isVisible = true;
-      }
+      if (arduboy.everyXFrames(4 + (6 * endBossSlow))) endBoss.frame++;
+      if (endBoss.frame > 3 ) endBoss.frame = 0;
     }
-    if (endBoss.isVisible)
+    else
     {
-      if (!endBoss.isDying)
+      if (arduboy.everyXFrames(3)) endBoss.frame++;
+      if (endBoss.frame > FRAMES_DYING)
       {
-        if (arduboy.everyXFrames(4 + (6 * endBossSlow))) endBoss.frame++;
-        if (endBoss.frame > 3 ) endBoss.frame = 0;
-      }
-      else
-      {
-        if (arduboy.everyXFrames(3)) endBoss.frame++;
-        if (endBoss.frame > FRAMES_DYING)
-        {
-          endBoss.isDying = false;
-          endBoss.isVisible = false;
-          endBoss.isAlive = false;
-          endBoss.frame = 0;
-        }
+        endBoss.isDying = false;
+        endBoss.isVisible = false;
+        endBoss.isAlive = false;
+        endBoss.frame = 0;
       }
     }
   }
@@ -395,7 +396,7 @@ void drawEnemyHud(byte currentLife, byte maxLife)
 
 void drawBosses()
 {
-  if (endBoss.isAlive)drawEnemyHud(endBoss.HP, endBossMaxHP[endBoss.type]);
+  if (endBoss.isAlive) drawEnemyHud(endBoss.HP, endBossMaxHP[endBoss.type]);
   if (endBoss.isVisible)
   {
     if (endBoss.isDying) sprites.drawSelfMasked(endBoss.x, endBoss.y, puff, endBoss.frame);
@@ -404,9 +405,11 @@ void drawBosses()
       switch (endBoss.type)
       {
         case ENDBOSS_SHARK:
-          sprites.drawSelfMasked(endBoss.x, endBoss.y, enemyShark, endBoss.frame + (4 * endBossSwimsRight));
+          sprites.drawSelfMasked(endBoss.x, endBoss.y, Shark, endBoss.frame + (4 * endBossSwimsRight));
           break;
         case ENDBOSS_SEAHORSE:
+          sprites.drawSelfMasked(endBoss.x, endBoss.y, seahorse, 0);
+          sprites.drawSelfMasked(endBoss.x + 12, endBoss.y + 15, seahorseFin, endBoss.frame);
           break;
         case ENDBOSS_PIRATESHIP:
           sprites.drawSelfMasked(endBoss.x + 16, endBoss.y + 20, pirateshipShip, 0);
@@ -573,13 +576,26 @@ const FunctionPointer PROGMEM sharkAttackFases[] =
 //////// SEAHORSE functions ////////////////
 ////////////////////////////////////////////
 
+void seahorseSwimsRightOnScreen()
+{
+  endBossSlow = true;
+  endBoss.isImune = true;
+  if (endBoss.x > 96)endBoss.x--;
+  else endBoss.attackFase++;
+}
 
+
+void seahorseRestart()
+{
+  endBoss.attackFase = 0;
+}
 
 
 typedef void (*FunctionPointer) ();
 const FunctionPointer PROGMEM seahorseAttackFases[] =
 {
-
+  seahorseSwimsRightOnScreen,
+  seahorseRestart,
 };
 
 
@@ -644,11 +660,6 @@ void pirateShipGoesToMiddle()
 }
 
 
-void pirateShipRestart()
-{
-  endBoss.attackFase = 0;
-}
-
 void pirateShipGoesUpForAttack()
 {
   if (endBoss.y > -11)endBoss.y -= 2;
@@ -672,6 +683,11 @@ void pirateShipTrembles()
   endBoss.x =  endBoss.x + (2 * (1 - (2 * endBossSlow)));
   endBossSlow = !endBossSlow;
   endBoss.attackFase++;
+}
+
+void pirateShipRestart()
+{
+  endBoss.attackFase = 0;
 }
 
 
