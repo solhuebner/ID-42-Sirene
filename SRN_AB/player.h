@@ -113,12 +113,7 @@ void checkMermaid()
       mermaid.isVisible = true;
     }
   }
-  if (mermaid.HP < 2)
-  {
-    leftX = -32;
-    rightX = 132;
-    gameState = STATE_GAME_OVER;
-  }
+  if (mermaid.HP < 2) gameState = STATE_GAME_OVER;
   if (arduboy.everyXFrames(10)) mermaid.frame++;
   if (mermaid.frame > 5 ) mermaid.frame = 0;
   if (arduboy.everyXFrames(5))

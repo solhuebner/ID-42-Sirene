@@ -24,12 +24,17 @@ void stateMenuPlay()
   setBosses();
   gameOverAndStageFase = 0;
   globalCounter = 0;
-  leftX = -32;
-  rightX = 148;
   upY = 64;
   objectVisible = true;
   gameState = STATE_GAME_NEXT_LEVEL;
 };
+
+void nextLevelStart()
+{
+  leftX = -32;
+  rightX = 148;
+  gameOverAndStageFase++;
+}
 
 void nextLevelWait()
 {
@@ -82,6 +87,7 @@ void nextLevelEnd()
 typedef void (*FunctionPointer) ();
 const FunctionPointer PROGMEM nextLevelFases[] =
 {
+  nextLevelStart,
   nextLevelWait,
   nextLevelSlideToMiddle,
   nextLevelSlideOpen,
@@ -134,6 +140,12 @@ void stateGamePause()
   if (buttons.justPressed(A_BUTTON)) gameState = STATE_GAME_PLAYING;
 };
 
+void gameOverStart()
+{
+  leftX = -32;
+  rightX = 132;
+  gameOverAndStageFase++;
+}
 
 void gameOverWait()
 {
@@ -201,6 +213,7 @@ void gameOverEnd()
 typedef void (*FunctionPointer) ();
 const FunctionPointer PROGMEM gameOverFases[] =
 {
+  gameOverStart,
   gameOverSlideToMiddle,
   gameOverSlideOpen,
   gameOverSlideToMiddle,
