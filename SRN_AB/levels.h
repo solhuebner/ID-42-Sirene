@@ -205,26 +205,26 @@ void wave020()
 void wave250()
 {
   //Shark attack
-  if (checkStartWave())setShark();
-  ((FunctionPointer) pgm_read_word (&sharkAttackFases[shark.attackFase]))();
-  if (!shark.isAlive) currentWave++;
+  if (checkStartWave())setEndBoss();
+  ((FunctionPointer) pgm_read_word (&sharkAttackFases[endBoss.attackFase]))();
+  if (!endBoss.isAlive) currentWave++;
 }
 
 void wave251()
 {
   //seahorse attack
-  if (checkStartWave())setSeahorse();
-  ((FunctionPointer) pgm_read_word (&seahorseAttackFases[seahorse.attackFase]))();
-  if (!seahorse.isAlive) currentWave++;
+  if (checkStartWave())setEndBoss();
+  ((FunctionPointer) pgm_read_word (&seahorseAttackFases[endBoss.attackFase]))();
+  if (!endBoss.isAlive) currentWave++;
 }
 
 
 void wave252()
 {
   //pirateShip attack
-  if (checkStartWave())setPirateShip();
-  ((FunctionPointer) pgm_read_word (&pirateShipAttackFases[pirateShip.attackFase]))();
-  if (!pirateShip.isAlive) currentWave++;
+  if (checkStartWave())setEndBoss();
+  ((FunctionPointer) pgm_read_word (&pirateShipAttackFases[endBoss.attackFase]))();
+  if (!endBoss.isAlive) currentWave++;
 }
 
 
@@ -336,9 +336,8 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
 void checkCollisions()
 {
   Rect mermaidRect = {.x = mermaid.x + 2, .y = mermaid.y + 2, .width = 12, .height = 12};
-  Rect sharkRect = {.x = shark.x, .y = shark.y + 2, .width = 32, .height = 12};
-  Rect seahorseRect = {.x = seahorse.x, .y = seahorse.y + 2, .width = 32, .height = 12};
-  Rect pirateShipRect = {.x = pirateShip.x, .y = pirateShip.y + 2, .width = 32, .height = 12};
+  Rect endBossRect = {.x = endBoss.x, .y = endBoss.y + 2, .width = 32, .height = 12};
+
 
   ////// Check collision bullets with enemies and bosses /////
   ////////////////////////////////////////////////////////////
@@ -363,13 +362,13 @@ void checkCollisions()
           }
         }
       }
-      if (shark.isVisible && !shark.isDying && physics.collide(bulletsRect, sharkRect))
+      if (endBoss.isVisible && !endBoss.isDying && physics.collide(bulletsRect, endBossRect))
       {
-        if (!shark.isImune)
+        if (!endBoss.isImune)
         {
-          shark.isImune = true;
+          endBoss.isImune = true;
           bullet[k].isVisible = false;
-          shark.HP -= bullet[k].damage;
+          endBoss.HP -= bullet[k].damage;
         }
       }
     }
@@ -395,14 +394,14 @@ void checkCollisions()
       }
     }
   }
-  if (shark.isVisible)
+  if (endBoss.isVisible)
   {
-    if (shark.isVisible && !shark.isDying && physics.collide(mermaidRect, sharkRect))
+    if (endBoss.isVisible && !endBoss.isDying && physics.collide(mermaidRect, endBossRect))
     {
-      if (!shark.isImune)
+      if (!endBoss.isImune)
       {
-        shark.isImune = true;
-        shark.HP--;
+        endBoss.isImune = true;
+        endBoss.HP--;
       }
       if (!mermaid.isImune)
       {
@@ -411,9 +410,6 @@ void checkCollisions()
       }
     }
   }
-  if (seahorse.isVisible) {}
-  if (pirateShip.isVisible) {}
-
 }
 
 void drawLifeHUD()
