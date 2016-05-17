@@ -15,16 +15,17 @@ byte rightX;
 byte upY;
 boolean objectVisible;
 
-void stateGamePrepareLevel()
+
+void stateMenuPlay()
 {
-  level = 0;
+  level = FIRST_LEVEL;
   scorePlayer = 0;
   setWeapons();
   setEnemies();
   setMermaid();
   setBosses();
   gameOverAndStageFase = 0;
-  waveTimer = 0;
+  globalCounter = 0;
   leftX = -32;
   rightX = 148;
   upY = 64;
@@ -34,11 +35,11 @@ void stateGamePrepareLevel()
 
 void nextLevelWait()
 {
-  if (arduboy.everyXFrames(4)) waveTimer++;
-  if (waveTimer > 8)
+  if (arduboy.everyXFrames(4)) globalCounter++;
+  if (globalCounter > 8)
   {
     gameOverAndStageFase++;
-    waveTimer = 0;
+    globalCounter = 0;
   }
 }
 
@@ -143,11 +144,11 @@ void stateGamePause()
 
 void gameOverWait()
 {
-  if (arduboy.everyXFrames(4)) waveTimer++;
-  if (waveTimer > 8)
+  if (arduboy.everyXFrames(4)) globalCounter++;
+  if (globalCounter > 8)
   {
     gameOverAndStageFase++;
-    waveTimer = 0;
+    globalCounter = 0;
   }
 }
 

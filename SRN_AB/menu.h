@@ -5,11 +5,11 @@
 #include "globals.h"
 byte hairFrame = 0;
 byte eyesFrame = 0;
-byte eyesFrame2 = 0;
 byte eyesSequence[] = {0, 1, 2, 3, 3, 3, 1};
 
 void drawTitleScreen()
 {
+  byte eyesFrame2;
   if (arduboy.everyXFrames(10)) hairFrame++;
   if (arduboy.everyXFrames(2)) eyesFrame++;
   if (eyesFrame > 60)eyesFrame = 0;
@@ -26,9 +26,14 @@ void drawTitleScreen()
 
 void stateMenuIntro()
 {
-  counter++;
-  arduboy.drawBitmap(0, 8, TEAMarg, 128, 48, WHITE);
-  if (counter > 180) gameState = STATE_MENU_MAIN;
+  globalCounter++;
+  for (byte i = 0; i < 4; i++) sprites.drawSelfMasked(32*i, 10, TEAMarg, i);
+  sprites.drawSelfMasked(43, 50, TEAM_argPart5, 0);
+  if (globalCounter > 180)
+  {
+    globalCounter = 0;
+    gameState = STATE_MENU_MAIN;
+  }
 }
 
 void stateMenuMain()
@@ -46,7 +51,7 @@ void stateMenuMain()
 
 void stateMenuHelp()
 {
-  arduboy.drawBitmap(32, 0, qrcode, 64, 64, WHITE);
+  for (byte i = 0; i < 2; i++) sprites.drawSelfMasked(32, 32*i, qrcode, i);
   if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
 }
 
@@ -69,11 +74,6 @@ void stateMenuSoundfx()
   }
   if (soundYesNo == true) arduboy.audio.on();
   else arduboy.audio.off();
-}
-
-void stateMenuPlay()
-{
-  gameState = STATE_GAME_PREPARE_LEVEL;
 }
 
 #endif

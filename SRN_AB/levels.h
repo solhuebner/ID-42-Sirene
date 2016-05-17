@@ -8,6 +8,9 @@
 #define TOTAL_AMOUNT_OF_LEVELS  4
 #define TOTAL_AMOUNT_OF_WAVES   23
 
+byte currentWave;
+byte previousWave;
+
 boolean checkStartWave()
 {
   if (currentWave != previousWave)
@@ -40,13 +43,14 @@ boolean checkEndLevel()
 
 void waitFor(byte amount)
 {
-  if (arduboy.everyXFrames(4)) waveTimer++;
-  if (waveTimer > amount)
+  if (arduboy.everyXFrames(4)) globalCounter++;
+  if (globalCounter > amount)
   {
     currentWave++;
-    waveTimer = 0;
+    globalCounter = 0;
   }
 }
+
 
 void wave000()
 {
