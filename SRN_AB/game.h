@@ -10,10 +10,8 @@
 #include "levels.h"
 
 byte gameOverAndStageFase;
-int leftX;
-byte rightX;
-byte upY;
 boolean objectVisible;
+byte upY;
 
 
 void stateMenuPlay()
@@ -76,7 +74,7 @@ void nextLevelEnd()
   gameOverAndStageFase = 0;
   level++;
   leftX = -32;
-  rightX = 132;
+  rightX = 148;
   mermaid.isImune = true;
   objectVisible = false;
 }

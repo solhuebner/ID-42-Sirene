@@ -42,4 +42,7 @@ byte globalCounter = 0;
 byte level = FIRST_LEVEL;
 unsigned long scorePlayer; 
 
+int leftX;
+byte rightX;
+
 #endif
