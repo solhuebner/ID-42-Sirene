@@ -422,7 +422,6 @@ void drawBosses()
   }
 }
 
-
 //////// SHARK functions ///////////////////
 ////////////////////////////////////////////
 void sharkSwimsRightOnScreen()
@@ -575,13 +574,27 @@ const FunctionPointer PROGMEM sharkAttackFases[] =
 
 //////// SEAHORSE functions ////////////////
 ////////////////////////////////////////////
-
 void seahorseSwimsRightOnScreen()
 {
   endBossSlow = true;
   endBoss.isImune = true;
   if (endBoss.x > 96)endBoss.x--;
   else endBoss.attackFase++;
+}
+
+void seahorseWait()
+{
+  if (arduboy.everyXFrames(4)) faseTimer++;
+  if (faseTimer > 16)
+  {
+    endBoss.attackFase++;
+    faseTimer = 0;
+  }
+}
+
+void seahorseSine()
+{
+
 }
 
 
@@ -595,6 +608,8 @@ typedef void (*FunctionPointer) ();
 const FunctionPointer PROGMEM seahorseAttackFases[] =
 {
   seahorseSwimsRightOnScreen,
+  seahorseWait,
+  seahorseWait,
   seahorseRestart,
 };
 
