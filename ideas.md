@@ -72,7 +72,7 @@ Swims offscreen from right to left. At a fixed interval shoots a bullet (meant t
 
 Boss behaviors
 
-Shark:
+**Shark:**
 This is the first boss and has 2 main phases to his attack. 
 1. Seeking phase:
 When the shark first comes on the screen he will seek the mermaid. He slowly moves horizonatally towards the mermaid and will also slightly move vertically to try and match her position. His speeds have to be enough to give a challenge to the player but not unfair so that it's impossible for the player to avoid his attacks. When the shark has moved passed the mermaid he will continue to swim offscreen, the repeat the patern going the other way 2 more times. After this the shark will move on screen and speed up his animation to give a signal he's going into his second phase, the charge. 
@@ -94,13 +94,24 @@ Charging
 
 Back to seeking... 
 
-Seahorse:
+**Seahorse:**
 
 The seahorse moves on the right side of the screen in a basic figure 8 patern. He fires tiny seahorses that can be destroyed in an up angled, straight, down angled, straight, etc... pattern. There is 3 phases to the seahorse related to how much HP he has left. Each phase affects his rate of fire. 
 
 1. First phase. 100 - 67% HP. In this first phase the seahorse's rate of fire is quite slow. He's only firing one tiny seahorse at a time. 
 2. Second phase. 67 - 33% HP. In this sencond phase the seahorse's rate of fire is increased. There should be on average 2 tiny seahorses on screen at all times. 
 3. Third phase. 33 - 0% HP. In this third and last phase the seahorse's rate of fire in quite rapid. There should be many seahorses on screen at a time. The seahorse_example02 is something of how fast he should be firing tiny seahorses before reaching 0 HP. 
+
+
+**Pirate Ship**
+
+The last boss. Like the seahorse has different phases according to his current HP. 
+1.First phase. 100 - 67%HP. Pirate Ship moves slowly in a basic up and down pattern on the right side of the screen. He fires skull projectiles very infrequently. The skulls cannot be destroyed. Every x seconds (12?) The Pirate Ship makes a charge. The charge is always random either on the top or bottom side of the screen. 
+
+2.Second phase. 67 - 33% HP. During this second phase the pirate ship moves faster up and down and fires skulls more frequently. It must be possible to dodge the skulls at all times. Every x seconds (8?) the Pirate Ship makes a charge. 
+
+3. Third phase. 33 - 0% HP. During the last phase the pirate ship moves even faster and fires even more frequently. Again however, it must be possible to dodge the skulls at all times. Every x seconds (4?) the Pirate Ship makes a charge. 
+
 
 ## ENEMIE WAVES
 | **NUMBER** | **TYPE**  | **AMOUNT** | **SPEED** | **START** | **BEHAVIOR** |
