@@ -94,6 +94,14 @@ Charging
 
 Back to seeking... 
 
+Seahorse:
+
+The seahorse moves on the right side of the screen in a basic figure 8 patern. He fires tiny seahorses that can be destroyed in an up angled, straight, down angled, straight, etc... pattern. There is 3 phases to the seahorse related to how much HP he has left. Each phase affects his rate of fire. 
+
+1. First phase. 100 - 67% HP. In this first phase the seahorse's rate of fire is quite slow. He's only firing one tiny seahorse at a time. 
+2. Second phase. 67 - 33% HP. In this sencond phase the seahorse's rate of fire is increased. There should be on average 2 tiny seahorses on screen at all times. 
+3. Third phase. 33 - 0% HP. In this third and last phase the seahorse's rate of fire in quite rapid. There should be many seahorses on screen at a time. The seahorse_example02 is something of how fast he should be firing tiny seahorses before reaching 0 HP. 
+
 ## ENEMIE WAVES
 | **NUMBER** | **TYPE**  | **AMOUNT** | **SPEED** | **START** | **BEHAVIOR** |
 | ---        | ---       | ---        | ---       | ---       | ---          |
