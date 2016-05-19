@@ -106,9 +106,10 @@ The seahorse moves on the right side of the screen in a basic figure 8 patern. H
 **Pirate Ship**
 
 The last boss. Like the seahorse has different phases according to his current HP. 
-1.First phase. 100 - 67%HP. Pirate Ship moves slowly in a basic up and down pattern on the right side of the screen. He fires skull projectiles very infrequently. The skulls cannot be destroyed. Every x seconds (12?) The Pirate Ship makes a charge. The charge is always random either on the top or bottom side of the screen. 
 
-2.Second phase. 67 - 33% HP. During this second phase the pirate ship moves faster up and down and fires skulls more frequently. It must be possible to dodge the skulls at all times. Every x seconds (8?) the Pirate Ship makes a charge. 
+1. First phase. 100 - 67%HP. Pirate Ship moves slowly in a basic up and down pattern on the right side of the screen. He fires skull projectiles very infrequently. The skulls cannot be destroyed. Every x seconds (12?) The Pirate Ship makes a charge. The charge is always random either on the top or bottom side of the screen. 
+
+2. Second phase. 67 - 33% HP. During this second phase the pirate ship moves faster up and down and fires skulls more frequently. It must be possible to dodge the skulls at all times. Every x seconds (8?) the Pirate Ship makes a charge. 
 
 3. Third phase. 33 - 0% HP. During the last phase the pirate ship moves even faster and fires even more frequently. Again however, it must be possible to dodge the skulls at all times. Every x seconds (4?) the Pirate Ship makes a charge. 
 
