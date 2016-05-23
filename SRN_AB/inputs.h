@@ -7,30 +7,30 @@
 
 void checkInputs()
 {
-  if (buttons.pressed(DOWN_BUTTON) && (mermaid.y < GAME_BOTTOM - 16))
+  if (arduboy.pressed(DOWN_BUTTON) && (mermaid.y < GAME_BOTTOM - 16))
   {
     mermaid.y++;
   }
-  if (buttons.pressed(LEFT_BUTTON) && (mermaid.x > GAME_LEFT))
+  if (arduboy.pressed(LEFT_BUTTON) && (mermaid.x > GAME_LEFT))
   {
     mermaid.x--;
   }
-  if (buttons.pressed(UP_BUTTON) && (mermaid.y > GAME_TOP))
+  if (arduboy.pressed(UP_BUTTON) && (mermaid.y > GAME_TOP))
   {
     mermaid.y--;
   }
-  if (buttons.pressed(RIGHT_BUTTON) && (mermaid.x < GAME_RIGHT - 16))
+  if (arduboy.pressed(RIGHT_BUTTON) && (mermaid.x < GAME_RIGHT - 16))
   {
     mermaid.x++;
   }
 
-  if (buttons.justPressed(A_BUTTON))
+  if (arduboy.justPressed(A_BUTTON))
   {
     mermaid.weaponType++;
     if (mermaid.weaponType > 3) mermaid.weaponType = 0;
   }
 
-  if (buttons.justPressed(B_BUTTON) && (coolDown[mermaid.weaponType] == coolDownMax[mermaid.weaponType]))
+  if (arduboy.justPressed(B_BUTTON) && (coolDown[mermaid.weaponType] == coolDownMax[mermaid.weaponType]))
   {
 
     if (mermaid.weaponType == WEAPON_TYPE_TRIDENT)
@@ -49,7 +49,7 @@ void checkInputs()
       }
     }
   }
-  if (buttons.pressed(B_BUTTON))
+  if (arduboy.pressed(B_BUTTON))
   {
     if ((mermaid.weaponType == WEAPON_TYPE_BUBBLES) && (coolDown[WEAPON_TYPE_BUBBLES] == coolDownMax[WEAPON_TYPE_BUBBLES]))
     {
@@ -63,7 +63,7 @@ void checkInputs()
       if (mermaid.chargeBarFrame > 4) mermaid.chargeBarFrame = 4;
     }
   }
-  if (buttons.notPressed(B_BUTTON) && (mermaid.weaponType == WEAPON_TYPE_MAGIC) && (mermaid.magicCharging == true))
+  if (arduboy.notPressed(B_BUTTON) && (mermaid.weaponType == WEAPON_TYPE_MAGIC) && (mermaid.magicCharging == true))
   {
     mermaid.magicCharging = false;
     coolDown[mermaid.weaponType]--;

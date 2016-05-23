@@ -44,15 +44,15 @@ void stateMenuMain()
     sprites.drawSelfMasked(108, 32 +(i*8), menuText, i);
   }
   sprites.drawPlusMask(92, 32 + 8*(menuSelection-2), trident_plus_mask, 0);
-  if (buttons.justPressed(DOWN_BUTTON) && (menuSelection < 5)) menuSelection++;
-  if (buttons.justPressed(UP_BUTTON) && (menuSelection > 2)) menuSelection--;
-  if (buttons.justPressed(B_BUTTON)) gameState = menuSelection;
+  if (arduboy.justPressed(DOWN_BUTTON) && (menuSelection < 5)) menuSelection++;
+  if (arduboy.justPressed(UP_BUTTON) && (menuSelection > 2)) menuSelection--;
+  if (arduboy.justPressed(B_BUTTON)) gameState = menuSelection;
 }
 
 void stateMenuHelp()
 {
   for (byte i = 0; i < 2; i++) sprites.drawSelfMasked(32, 32*i, qrcode, i);
-  if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
+  if (arduboy.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
 }
 
 
@@ -60,14 +60,14 @@ void stateMenuInfo()
 {
   sprites.drawSelfMasked(36, 10, mermaidTitle, 0);
   sprites.drawSelfMasked(16, 36, info, 0);
-  if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
+  if (arduboy.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
 }
 
 void stateMenuSoundfx()
 {
-  if (buttons.justPressed(DOWN_BUTTON)) soundYesNo = true;
-  if (buttons.justPressed(UP_BUTTON)) soundYesNo = false;
-  if (buttons.justPressed(A_BUTTON | B_BUTTON))
+  if (arduboy.justPressed(DOWN_BUTTON)) soundYesNo = true;
+  if (arduboy.justPressed(UP_BUTTON)) soundYesNo = false;
+  if (arduboy.justPressed(A_BUTTON | B_BUTTON))
   {
     arduboy.audio.saveOnOff();
     gameState = STATE_MENU_MAIN;

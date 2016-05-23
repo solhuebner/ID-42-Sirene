@@ -137,7 +137,7 @@ void stateGamePlaying()
 
 void stateGamePause()
 {
-  if (buttons.justPressed(A_BUTTON)) gameState = STATE_GAME_PLAYING;
+  if (arduboy.justPressed(A_BUTTON)) gameState = STATE_GAME_PLAYING;
 };
 
 void gameOverStart()
@@ -203,7 +203,7 @@ void gameOverScoreSlideDown()
 
 void gameOverEnd()
 {
-  if (buttons.justPressed(A_BUTTON | B_BUTTON))
+  if (arduboy.justPressed(A_BUTTON | B_BUTTON))
   {
     gameState = STATE_MENU_MAIN;
     gameOverAndStageFase = 0;

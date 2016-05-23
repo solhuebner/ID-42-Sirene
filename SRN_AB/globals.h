@@ -32,7 +32,6 @@
 
 Arduboy arduboy;
 Sprites sprites(arduboy);
-SimpleButtons buttons (arduboy);
 Physics physics;
 
 byte gameState = STATE_MENU_INTRO;   // start the game with the TEAM a.r.g. logo
