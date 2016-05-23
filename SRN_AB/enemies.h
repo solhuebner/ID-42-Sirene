@@ -50,7 +50,7 @@
 
 #define MAX_ONSCREEN_ENEMIES         8
 #define MAX_ENEMY_BULLETS            3
-#define MAX_BOSS_BULLETS             3
+#define MAX_BOSS_BULLETS             6
 
 #define SHARK_IMUNE_TIME             25
 #define SEAHORSE_IMUNE_TIME          25
@@ -346,10 +346,28 @@ void checkEndBoss()
 {
   if (endBoss.isVisible)
   {
-    if (endBoss.currentBullet > MAX_BOSS_BULLETS) endBoss.currentBullet = 0;
-    for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
+    if (endBoss.currentBullet > MAX_BOSS_BULLETS - 1) endBoss.currentBullet = 0;
+    for (byte i = 0; i < MAX_BOSS_BULLETS; i++)
     {
-      if (!enemy[i].isDying) enemy[i].x -= 1;
+      if (!enemy[i].isDying)
+      {
+        enemy[i].x -= 1;
+        if (enemy[i].type == ENEMY_SEAHORSETINY)
+        {
+          if (arduboy.everyXFrames(3))
+          {
+            switch (i)
+            {
+              case 1: case 4:
+                enemy[i].y--;
+                break;
+              case 2: case 5:
+                enemy[i].y++;
+                break;
+            }
+          }
+        }
+      }
     }
   }
 
