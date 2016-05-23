@@ -349,7 +349,7 @@ void checkCollisions()
       for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
       {
         Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = 16, .height = 16};
-        if (enemy[i].isVisible && !enemy[i].isDying && physics.collide(bulletsRect, enemyRect))
+        if (enemy[i].isVisible && !enemy[i].isDying && arduboy.collide(bulletsRect, enemyRect))
         {
           if (!enemy[i].isImune)
           {
@@ -362,7 +362,7 @@ void checkCollisions()
           }
         }
       }
-      if (endBoss.isVisible && !endBoss.isDying && physics.collide(bulletsRect, endBossRect))
+      if (endBoss.isVisible && !endBoss.isDying && arduboy.collide(bulletsRect, endBossRect))
       {
         if (!endBoss.isImune)
         {
@@ -381,7 +381,7 @@ void checkCollisions()
   for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
   {
     Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = 16, .height = 16};
-    if (enemy[i].isVisible && !enemy[i].isDying && physics.collide(mermaidRect, enemyRect))
+    if (enemy[i].isVisible && !enemy[i].isDying && arduboy.collide(mermaidRect, enemyRect))
     {
       if (!mermaid.isImune)
       {
@@ -396,7 +396,7 @@ void checkCollisions()
   }
   if (endBoss.isVisible)
   {
-    if (endBoss.isVisible && !endBoss.isDying && physics.collide(mermaidRect, endBossRect))
+    if (endBoss.isVisible && !endBoss.isDying && arduboy.collide(mermaidRect, endBossRect))
     {
       if (!endBoss.isImune)
       {
