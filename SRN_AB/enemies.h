@@ -61,11 +61,13 @@
 byte endBossMaxHP[] = {MAX_HP_SHARK, MAX_HP_SEAHORSE, MAX_HP_PIRATESHIP};
 byte enemiesMaxHP[] = {MAX_HP_FISHY, MAX_HP_FISH, MAX_HP_EEL, MAX_HP_JELLYFISH, MAX_HP_OCTOPUS, MAX_HP_SKULL, MAX_HP_SEAHORSETINY};
 byte enemiesPoints[] = {POINTS_FISHY, POINTS_FISH, POINTS_EEL, POINTS_JELLYFISH, POINTS_OCTOPUS, POINTS_SKULL, POINTS_SEAHORSETINY};
+//byte seahorseSine[7][2] = {{96,16}, {88,8},{96,0},{104,8}, {88,24}, {96,32}, {104, 24}};
+float d = 0.0;
 
 byte jellyFrame;
 byte faseTimer;
 byte mermaidsPosition;
-boolean endBossSlow;
+boolean endBossSwitch;
 boolean endBossSwimsRight;
 
 
@@ -258,6 +260,9 @@ void drawEnemies()
           case ENEMY_SKULL:
             sprites.drawPlusMask(enemy[i].x, enemy[i].y, pirateSkull_plus_mask, enemy[i].frame);
             break;
+          case ENEMY_SEAHORSETINY:
+            sprites.drawPlusMask(enemy[i].x, enemy[i].y, seahorseTiny_plus_mask, 0);
+            break;
         }
       }
     }
@@ -285,6 +290,7 @@ struct EndBosses
     byte imuneTimer;
     byte frame;
     byte type;
+    byte actingFase;
 };
 
 EndBosses endBoss;
@@ -308,8 +314,9 @@ void setEndBoss()
   endBoss.attackFase = 0;
   endBoss.imuneTimer = 0;
   endBoss.frame = 0;
+  endBoss.actingFase = 0;
   faseTimer = 0;
-  endBossSlow = true;
+  endBossSwitch = true;
   endBossSwimsRight = false;
   switch (level)
   {
@@ -321,7 +328,7 @@ void setEndBoss()
       break;
     case LEVEL_WITH_SEAHORSE:
       endBoss.x = 128;
-      endBoss.y = 28;
+      endBoss.y = 16;
       endBoss.type = ENDBOSS_SEAHORSE;
       endBoss.HP = MAX_HP_SEAHORSE;
       break;
@@ -342,7 +349,7 @@ void checkEndBoss()
     if (endBoss.currentBullet > MAX_BOSS_BULLETS) endBoss.currentBullet = 0;
     for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
     {
-      if (!enemy[i].isDying) enemy[i].x -= 2;
+      if (!enemy[i].isDying) enemy[i].x -= 1;
     }
   }
 
@@ -367,7 +374,7 @@ void checkEndBoss()
   {
     if (!endBoss.isDying)
     {
-      if (arduboy.everyXFrames(4 + (6 * endBossSlow))) endBoss.frame++;
+      if (arduboy.everyXFrames(4 + (6 * endBossSwitch))) endBoss.frame++;
       if (endBoss.frame > 3 ) endBoss.frame = 0;
     }
     else
@@ -426,7 +433,7 @@ void drawBosses()
 ////////////////////////////////////////////
 void sharkSwimsRightOnScreen()
 {
-  endBossSlow = true;
+  endBossSwitch = true;
   endBoss.isImune = true;
   if (endBoss.x > 96)endBoss.x--;
   else endBoss.attackFase++;
@@ -435,7 +442,7 @@ void sharkSwimsRightOnScreen()
 
 void sharkSwimsLeftOnScreen()
 {
-  endBossSlow = true;
+  endBossSwitch = true;
   endBoss.isImune = true;
   if (endBoss.x < 0)endBoss.x++;
   else endBoss.attackFase++;
@@ -487,7 +494,7 @@ void sharkWait()
 
 void sharkSpeedUpFrame()
 {
-  endBossSlow = false;
+  endBossSwitch = false;
   endBoss.attackFase++;
 }
 
@@ -566,6 +573,7 @@ const FunctionPointer PROGMEM sharkAttackFases[] =
   sharkWait,
   sharkFixMermaidsPosition,
   sharkSwimsRightFast,
+
   sharkRestart,
 };
 
@@ -574,9 +582,20 @@ const FunctionPointer PROGMEM sharkAttackFases[] =
 
 //////// SEAHORSE functions ////////////////
 ////////////////////////////////////////////
+void shootingSeahorse()
+{
+  enemy[endBoss.currentBullet].isVisible = true;
+  enemy[endBoss.currentBullet].isDying = false;
+  enemy[endBoss.currentBullet].type = ENEMY_SEAHORSETINY;
+  enemy[endBoss.currentBullet].x = endBoss.x + 2;
+  enemy[endBoss.currentBullet].y = endBoss.y + 16;
+  enemy[endBoss.currentBullet].HP = MAX_HP_SEAHORSETINY;
+  endBoss.currentBullet++;
+}
+
 void seahorseSwimsRightOnScreen()
 {
-  endBossSlow = true;
+  endBossSwitch = true;
   endBoss.isImune = true;
   if (endBoss.x > 96)endBoss.x--;
   else endBoss.attackFase++;
@@ -592,16 +611,63 @@ void seahorseWait()
   }
 }
 
-void seahorseSine()
+void seahorseSineAndShoot()
 {
 
+  if (arduboy.everyXFrames(40)) shootingSeahorse();
+  if (arduboy.everyXFrames(6))
+  {
+    endBoss.actingFase++;
+    if (endBoss.actingFase < 9)
+    {
+      endBoss.x -= 1;
+      endBoss.y -= 1;
+      return;
+    }
+    if (endBoss.actingFase < 17)
+    {
+      endBoss.x += 1;
+      endBoss.y -= 1;
+      return;
+    }
+    if (endBoss.actingFase < 25)
+    {
+      endBoss.x += 1;
+      endBoss.y += 1;
+      return;
+    }
+    if (endBoss.actingFase < 41)
+    {
+      endBoss.x -= 1;
+      endBoss.y += 1;
+      return;
+    }
+    if (endBoss.actingFase < 49)
+    {
+      endBoss.x += 1;
+      endBoss.y += 1;
+      return;
+    }
+    if (endBoss.actingFase < 57)
+    {
+      endBoss.x += 1;
+      endBoss.y -= 1;
+      return;
+    }
+    if (endBoss.actingFase < 65)
+    {
+      endBoss.x -= 1;
+      endBoss.y -= 1;
+      return;
+    }
+    if (endBoss.actingFase > 64)
+    {
+      endBoss.actingFase = 0;
+    }
+  }
 }
 
 
-void seahorseRestart()
-{
-  endBoss.attackFase = 0;
-}
 
 
 typedef void (*FunctionPointer) ();
@@ -609,8 +675,7 @@ const FunctionPointer PROGMEM seahorseAttackFases[] =
 {
   seahorseSwimsRightOnScreen,
   seahorseWait,
-  seahorseWait,
-  seahorseRestart,
+  seahorseSineAndShoot,
 };
 
 
@@ -647,25 +712,35 @@ void pirateShipWait()
   }
 }
 
-void pirateShipGoesUpAndShoots()
+void pirateShipGoesUpDownAndShoots()
 {
-  if (endBoss.y > -20)
+  if (endBossSwitch)
   {
-    if (arduboy.everyXFrames(22)) shootingSkull();
-    endBoss.y -= 2;
+    if (endBoss.y > -20)
+    {
+      if (arduboy.everyXFrames(22)) shootingSkull();
+      endBoss.y -= 2;
+    }
+    else endBossSwitch = !endBossSwitch;
   }
-  else endBoss.attackFase++;
-
-}
-
-void pirateShipGoesDownAndShoots()
-{
-  if (endBoss.y < 40)
+  if (!endBossSwitch)
   {
-    if (arduboy.everyXFrames(22)) shootingSkull();
-    endBoss.y += 2;
+    if (endBoss.y < 40)
+    {
+      if (arduboy.everyXFrames(22)) shootingSkull();
+      endBoss.y += 2;
+    }
+    else
+    {
+      endBossSwitch = !endBossSwitch;
+      endBoss.actingFase++;
+    }
   }
-  else endBoss.attackFase++;
+  if (endBoss.actingFase > 4)
+  {
+    endBoss.actingFase = 0;
+    endBoss.attackFase++;
+  }
 }
 
 void pirateShipGoesToMiddle()
@@ -695,9 +770,15 @@ void pirateShipLaunches()
 
 void pirateShipTrembles()
 {
-  endBoss.x =  endBoss.x + (2 * (1 - (2 * endBossSlow)));
-  endBossSlow = !endBossSlow;
-  endBoss.attackFase++;
+  endBoss.x =  endBoss.x + (2 * (1 - (2 * endBossSwitch)));
+  endBossSwitch = !endBossSwitch;
+  endBoss.actingFase++;
+  if (endBoss.actingFase > 5)
+  {
+    endBoss.actingFase = 0;
+    endBoss.attackFase++;
+  }
+
 }
 
 void pirateShipRestart()
@@ -711,22 +792,12 @@ const FunctionPointer PROGMEM pirateShipAttackFases[] =
 {
   pirateShipSailsRightOnScreen,
   pirateShipWait,
-  pirateShipGoesUpAndShoots,
-  pirateShipGoesDownAndShoots,
-  pirateShipGoesUpAndShoots,
-  pirateShipGoesDownAndShoots,
-  pirateShipGoesUpAndShoots,
-  pirateShipGoesDownAndShoots,
+  pirateShipGoesUpDownAndShoots,
   pirateShipGoesToMiddle,
   pirateShipWait,
   pirateShipGoesUpForAttack,
   pirateShipBacksUp,
   pirateShipLaunches,
-  pirateShipTrembles,
-  pirateShipTrembles,
-  pirateShipTrembles,
-  pirateShipTrembles,
-  pirateShipTrembles,
   pirateShipTrembles,
   pirateShipBacksUp,
   pirateShipRestart,
