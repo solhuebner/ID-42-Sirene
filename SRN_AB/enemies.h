@@ -4,65 +4,83 @@
 #include <Arduino.h>
 #include "globals.h"
 
-#define ENEMY_FISHY                  0
-#define ENEMY_FISH                   1
-#define ENEMY_EEL                    2
-#define ENEMY_JELLYFISH              3
-#define ENEMY_OCTOPUS                4
-#define ENEMY_SKULL                  5
-#define ENEMY_SEAHORSETINY           6
+#define ENEMY_FISHY                     0
+#define ENEMY_FISH                      1
+#define ENEMY_EEL                       2
+#define ENEMY_JELLYFISH                 3
+#define ENEMY_OCTOPUS                   4
+#define ENEMY_SKULL                     5
+#define ENEMY_SEAHORSETINY              6
 
-#define ENDBOSS_SHARK                0
-#define ENDBOSS_SEAHORSE             1
-#define ENDBOSS_PIRATESHIP           2
+#define ENDBOSS_SHARK                   0
+#define ENDBOSS_SEAHORSE                1
+#define ENDBOSS_PIRATESHIP              2
 
-#define LEVEL_WITH_SHARK             1
-#define LEVEL_WITH_SEAHORSE          2
-#define LEVEL_WITH_PIRATESHIP        3
+#define LEVEL_WITH_SHARK                1
+#define LEVEL_WITH_SEAHORSE             2
+#define LEVEL_WITH_PIRATESHIP           3
 
-#define POINTS_FISHY                 5
-#define POINTS_FISH                  8
-#define POINTS_EEL                   15
-#define POINTS_JELLYFISH             20
-#define POINTS_OCTOPUS               25
-#define POINTS_SKULL                 4
-#define POINTS_SEAHORSETINY          3
+#define POINTS_FISHY                    5
+#define POINTS_FISH                     8
+#define POINTS_EEL                      15
+#define POINTS_JELLYFISH                20
+#define POINTS_OCTOPUS                  25
+#define POINTS_SKULL                    4
+#define POINTS_SEAHORSETINY             3
 
-#define MAX_HP_FISHY                 2
-#define MAX_HP_FISH                  4
-#define MAX_HP_EEL                   4
-#define MAX_HP_JELLYFISH             2
-#define MAX_HP_OCTOPUS               4
-#define MAX_HP_SKULL                 1
-#define MAX_HP_SEAHORSETINY          1
+#define MAX_HP_FISHY                    2
+#define MAX_HP_FISH                     4
+#define MAX_HP_EEL                      4
+#define MAX_HP_JELLYFISH                2
+#define MAX_HP_OCTOPUS                  4
+#define MAX_HP_SKULL                    1
+#define MAX_HP_SEAHORSETINY             1
 
-#define MAX_HP_SHARK                 18
-#define MAX_HP_SEAHORSE              27
-#define MAX_HP_PIRATESHIP            36
+#define MAX_HP_SHARK                    18
+#define MAX_HP_SEAHORSE                 27
+#define MAX_HP_PIRATESHIP               36
 
-#define POINTS_SHARK                 100
-#define POINTS_SEAHORSE              150
-#define POINTS_PIRATESHIP            250
+#define POINTS_SHARK                    100
+#define POINTS_SEAHORSE                 150
+#define POINTS_PIRATESHIP               250
 
-#define FRAMES_ENEMY                 3
-#define FRAMES_JELLYFISH             10
-#define FRAMES_DYING                 5
+#define FRAMES_ENEMY                    3
+#define FRAMES_JELLYFISH                10
+#define FRAMES_DYING                    5
 
-#define MAX_ONSCREEN_ENEMIES         8
-#define MAX_ENEMY_BULLETS            3
-#define MAX_BOSS_BULLETS             6
+#define MAX_ONSCREEN_ENEMIES            8
+#define MAX_ENEMY_BULLETS               3
+#define MAX_BOSS_BULLETS                6
 
-#define SHARK_IMUNE_TIME             25
-#define SEAHORSE_IMUNE_TIME          25
-#define PIRATESHIP_IMUNE_TIME        25
+#define SHARK_IMUNE_TIME                25
+#define SEAHORSE_IMUNE_TIME             25
+#define PIRATESHIP_IMUNE_TIME           25
 
-#define ENEMY_IMUNE_TIME             20
+#define ENEMY_IMUNE_TIME                20
+
+#define FISHY_COLLISION_WIDTH           14
+#define FISH_COLLISION_WIDTH            14
+#define EEL_COLLISION_WIDTH             30
+#define JELLYFISH_COLLISION_WIDTH       16
+#define OCTOPUS_COLLISION_WIDTH         16
+#define SKULL_COLLISION_WIDTH           8
+#define SEAHORSETINY_COLLISION_WIDTH    8
+
+#define FISHY_COLLISION_HEIGHT          8
+#define FISH_COLLISION_HEIGHT           14
+#define EEL_COLLISION_HEIGHT            7
+#define JELLYFISH_COLLISION_HEIGHT      13
+#define OCTOPUS_COLLISION_HEIGHT        16
+#define SKULL_COLLISION_HEIGHT          8
+#define SEAHORSETINY_COLLISION_HEIGHT   8
+
+
 
 byte endBossMaxHP[] = {MAX_HP_SHARK, MAX_HP_SEAHORSE, MAX_HP_PIRATESHIP};
 byte enemiesMaxHP[] = {MAX_HP_FISHY, MAX_HP_FISH, MAX_HP_EEL, MAX_HP_JELLYFISH, MAX_HP_OCTOPUS, MAX_HP_SKULL, MAX_HP_SEAHORSETINY};
 byte enemiesPoints[] = {POINTS_FISHY, POINTS_FISH, POINTS_EEL, POINTS_JELLYFISH, POINTS_OCTOPUS, POINTS_SKULL, POINTS_SEAHORSETINY};
-//byte seahorseSine[7][2] = {{96,16}, {88,8},{96,0},{104,8}, {88,24}, {96,32}, {104, 24}};
-float d = 0.0;
+byte enemyCollisionWidth[] = {FISHY_COLLISION_WIDTH,FISH_COLLISION_WIDTH,EEL_COLLISION_WIDTH,JELLYFISH_COLLISION_WIDTH,OCTOPUS_COLLISION_WIDTH,SKULL_COLLISION_WIDTH,SEAHORSETINY_COLLISION_WIDTH};
+byte enemyCollisionHeight[] = {FISHY_COLLISION_HEIGHT,FISH_COLLISION_HEIGHT,EEL_COLLISION_HEIGHT,JELLYFISH_COLLISION_HEIGHT,OCTOPUS_COLLISION_HEIGHT,SKULL_COLLISION_HEIGHT,SEAHORSETINY_COLLISION_HEIGHT};
 
 byte jellyFrame;
 byte faseTimer;
@@ -376,6 +394,10 @@ void checkEndBoss()
   {
     endBoss.isImune = false;
     endBoss.isDying = true;
+    for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
+    {
+      enemy[i].isDying = true;
+    }
     endBoss.frame = 0;
   }
   if (endBoss.isImune)
@@ -405,6 +427,7 @@ void checkEndBoss()
         endBoss.isVisible = false;
         endBoss.isAlive = false;
         endBoss.frame = 0;
+        //gameState = STATE_GAME_NEXT_LEVEL;
       }
     }
   }

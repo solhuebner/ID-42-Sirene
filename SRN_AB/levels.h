@@ -306,7 +306,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave252,
     wave000,
   },
-    { //LEVEL 04
+  { //LEVEL 04
     wave000,
     wave001,
     wave002,
@@ -335,7 +335,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
 
 void checkCollisions()
 {
-  Rect mermaidRect = {.x = mermaid.x + 2, .y = mermaid.y + 2, .width = 12, .height = 12};
+  Rect mermaidRect = {.x = mermaid.x + MERMAID_COLLISION_OFFSET, .y = mermaid.y + MERMAID_COLLISION_OFFSET, .width = MERMAID_COLLISION_SIZE, .height = MERMAID_COLLISION_SIZE};
   Rect endBossRect = {.x = endBoss.x, .y = endBoss.y + 2, .width = 32, .height = 12};
 
 
@@ -345,10 +345,10 @@ void checkCollisions()
   {
     if (bullet[k].isVisible)
     {
-      Rect bulletsRect {.x = bullet[k].x, .y = bullet[k].y, .width = 8, .height = 8};
+      Rect bulletsRect {.x = bullet[k].x + bulletCollisionOffset[bullet[k].type], .y = bullet[k].y, .width = 8, .height = 8};
       for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
       {
-        Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = 16, .height = 16};
+        Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = enemyCollisionWidth[enemy[i].type], .height = enemyCollisionHeight[enemy[i].type]};
         if (enemy[i].isVisible && !enemy[i].isDying && arduboy.collide(bulletsRect, enemyRect))
         {
           if (!enemy[i].isImune)
@@ -380,7 +380,7 @@ void checkCollisions()
 
   for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
   {
-    Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = 16, .height = 16};
+    Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = enemyCollisionWidth[enemy[i].type], .height = enemyCollisionHeight[enemy[i].type]};
     if (enemy[i].isVisible && !enemy[i].isDying && arduboy.collide(mermaidRect, enemyRect))
     {
       if (!mermaid.isImune)

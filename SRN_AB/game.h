@@ -25,12 +25,12 @@ void stateMenuPlay()
   gameOverAndStageFase = 0;
   globalCounter = 0;
   upY = 64;
-  objectVisible = true;
   gameState = STATE_GAME_NEXT_LEVEL;
 };
 
 void nextLevelStart()
 {
+  objectVisible = true;
   leftX = -32;
   rightX = 148;
   gameOverAndStageFase++;
