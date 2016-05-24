@@ -307,6 +307,7 @@ void setBosses()
 
 void setEndBoss()
 {
+  backgroundIsVisible = false;
   endBoss.isVisible = true;
   endBoss.isImune = false;
   endBoss.isDying = false;

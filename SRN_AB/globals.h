@@ -39,6 +39,7 @@ boolean soundYesNo = false;
 byte globalCounter = 0;
 byte level = FIRST_LEVEL;
 unsigned long scorePlayer; 
+byte backgroundIsVisible;
 
 int leftX;
 byte rightX;

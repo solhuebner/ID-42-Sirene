@@ -82,6 +82,7 @@ void nextLevelEnd()
   rightX = 148;
   mermaid.isImune = true;
   objectVisible = false;
+  setBackground();
 }
 
 typedef void (*FunctionPointer) ();
@@ -110,7 +111,6 @@ void stateGameNextLevel()
     sprites.drawSelfMasked(leftX, 28, stage, 0);
     sprites.drawSelfMasked(rightX, 28, numbersBig, level + 1);
   }
-
   ((FunctionPointer) pgm_read_word (&nextLevelFases[gameOverAndStageFase]))();
 };
 
@@ -123,9 +123,12 @@ void stateGamePlaying()
   checkMermaid();
   checkEnemies();
   checkEndBoss();
+  checkBackground();
 
   if (arduboy.everyXFrames(2)) ((FunctionPointer) pgm_read_word (&Levels[level - 1][currentWave]))();
   if (checkEndLevel()) gameState = STATE_GAME_NEXT_LEVEL;
+
+  drawBackground();
   
   drawBosses();
   drawEnemies();
