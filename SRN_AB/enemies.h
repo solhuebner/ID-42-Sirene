@@ -79,8 +79,8 @@
 byte endBossMaxHP[] = {MAX_HP_SHARK, MAX_HP_SEAHORSE, MAX_HP_PIRATESHIP};
 byte enemiesMaxHP[] = {MAX_HP_FISHY, MAX_HP_FISH, MAX_HP_EEL, MAX_HP_JELLYFISH, MAX_HP_OCTOPUS, MAX_HP_SKULL, MAX_HP_SEAHORSETINY};
 byte enemiesPoints[] = {POINTS_FISHY, POINTS_FISH, POINTS_EEL, POINTS_JELLYFISH, POINTS_OCTOPUS, POINTS_SKULL, POINTS_SEAHORSETINY};
-byte enemyCollisionWidth[] = {FISHY_COLLISION_WIDTH,FISH_COLLISION_WIDTH,EEL_COLLISION_WIDTH,JELLYFISH_COLLISION_WIDTH,OCTOPUS_COLLISION_WIDTH,SKULL_COLLISION_WIDTH,SEAHORSETINY_COLLISION_WIDTH};
-byte enemyCollisionHeight[] = {FISHY_COLLISION_HEIGHT,FISH_COLLISION_HEIGHT,EEL_COLLISION_HEIGHT,JELLYFISH_COLLISION_HEIGHT,OCTOPUS_COLLISION_HEIGHT,SKULL_COLLISION_HEIGHT,SEAHORSETINY_COLLISION_HEIGHT};
+byte enemyCollisionWidth[] = {FISHY_COLLISION_WIDTH, FISH_COLLISION_WIDTH, EEL_COLLISION_WIDTH, JELLYFISH_COLLISION_WIDTH, OCTOPUS_COLLISION_WIDTH, SKULL_COLLISION_WIDTH, SEAHORSETINY_COLLISION_WIDTH};
+byte enemyCollisionHeight[] = {FISHY_COLLISION_HEIGHT, FISH_COLLISION_HEIGHT, EEL_COLLISION_HEIGHT, JELLYFISH_COLLISION_HEIGHT, OCTOPUS_COLLISION_HEIGHT, SKULL_COLLISION_HEIGHT, SEAHORSETINY_COLLISION_HEIGHT};
 
 byte jellyFrame;
 byte faseTimer;
@@ -415,7 +415,11 @@ void checkEndBoss()
   {
     if (!endBoss.isDying)
     {
-      if (arduboy.everyXFrames(4 + (6 * endBossSwitch))) endBoss.frame++;
+      if (endBoss.type == ENDBOSS_SHARK)
+      {
+        if (arduboy.everyXFrames(4 + (6 * endBossSwitch))) endBoss.frame++;
+      }
+      else if (arduboy.everyXFrames(10)) endBoss.frame++;
       if (endBoss.frame > 3 ) endBoss.frame = 0;
     }
     else
@@ -427,7 +431,6 @@ void checkEndBoss()
         endBoss.isVisible = false;
         endBoss.isAlive = false;
         endBoss.frame = 0;
-        //gameState = STATE_GAME_NEXT_LEVEL;
       }
     }
   }
@@ -461,9 +464,10 @@ void drawBosses()
           sprites.drawSelfMasked(endBoss.x + 12, endBoss.y + 15, seahorseFin, endBoss.frame);
           break;
         case ENDBOSS_PIRATESHIP:
-          sprites.drawSelfMasked(endBoss.x + 16, endBoss.y + 20, pirateshipShip, 0);
-          sprites.drawSelfMasked(endBoss.x + 24, endBoss.y + 5, pirateshipSail, 0);
-          sprites.drawSelfMasked(endBoss.x, endBoss.y + 19, pirateshipBowsprit, 0);
+          sprites.drawSelfMasked(endBoss.x, endBoss.y + 23, pirateshipBowsprit, 0);
+          sprites.drawSelfMasked(endBoss.x + 16, endBoss.y + 24, pirateshipHull, 0);
+          sprites.drawSelfMasked(endBoss.x + 24, endBoss.y + 16, pirateshipSail, endBoss.frame);
+          sprites.drawSelfMasked(endBoss.x + 24, endBoss.y + 8, pirateshipYardarm, 0);
           sprites.drawSelfMasked(endBoss.x + 36, endBoss.y, pirateshipCrowsnest, 0);
           break;
       }
