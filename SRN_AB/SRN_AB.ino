@@ -43,7 +43,6 @@ const FunctionPointer PROGMEM  mainGameLoop[] = {
 void setup() {
   arduboy.start();
   arduboy.setFrameRate(60);                                 // set the frame rate of the game at 60 fps
-  if (EEPROM.read(EEPROM_AUDIO_ON_OFF)) soundYesNo = true;  // check EEPROM if sound is OFF or ON
 }
 
 

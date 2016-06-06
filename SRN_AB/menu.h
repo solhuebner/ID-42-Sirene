@@ -67,15 +67,19 @@ void stateMenuInfo()
 
 void stateMenuSoundfx()
 {
-  if (arduboy.justPressed(DOWN_BUTTON)) soundYesNo = true;
-  if (arduboy.justPressed(UP_BUTTON)) soundYesNo = false;
+  drawTitleScreen();
+  for (byte i = 0; i < 3; i++)
+  {
+    sprites.drawSelfMasked(108, 40 +(i*8), menuText, i+4);
+  }
+  sprites.drawPlusMask(92, 48 + 8*arduboy.audio.enabled(), trident_plus_mask, 0);
+  if (arduboy.justPressed(DOWN_BUTTON)) arduboy.audio.on();
+  if (arduboy.justPressed(UP_BUTTON)) arduboy.audio.off();
   if (arduboy.justPressed(A_BUTTON | B_BUTTON))
   {
     arduboy.audio.saveOnOff();
     gameState = STATE_MENU_MAIN;
   }
-  if (soundYesNo == true) arduboy.audio.on();
-  else arduboy.audio.off();
 }
 
 #endif
