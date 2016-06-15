@@ -130,7 +130,7 @@ EnemyBullets enemyBullet[MAX_ONSCREEN_ENEMY_BULLETS];
 
 void enemyShoot()
 {
-  
+
 }
 
 void checkEnemyBullet()
@@ -139,7 +139,7 @@ void checkEnemyBullet()
   {
     if (enemyBullet[i].type == EEL_SPARKLE_BULLET && arduboy.everyXFrames(3)) enemyBullet[i].frame++;
     if (enemyBullet[i].type == OCTOPUS_INK_BULLET && arduboy.everyXFrames(6)) enemyBullet[i].frame++;
-    if ((enemyBullet[i].frame) > 4) enemyBullet[i].frame = 0;
+    if ((enemyBullet[i].frame) > 3) enemyBullet[i].frame = 0;
   }
 }
 
@@ -302,24 +302,30 @@ void drawEnemies()
         switch (enemy[i].type)
         {
           case ENEMY_FISHY:
-            sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFishy_plus_mask, enemy[i].frame);
+            //sprites.drawErase(enemy[i].x, enemy[i].y, enemyFishy, 4);
+            sprites.drawSelfMasked(enemy[i].x, enemy[i].y, enemyFishy, enemy[i].frame);
             break;
           case ENEMY_FISH:
-            sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFish_plus_mask, enemy[i].frame);
+            //sprites.drawErase(enemy[i].x, enemy[i].y, enemyFish, 4);
+            sprites.drawSelfMasked(enemy[i].x, enemy[i].y, enemyFish, enemy[i].frame);
             break;
           case ENEMY_EEL:
-            sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyEel_plus_mask, enemy[i].frame);
+            //sprites.drawErase(enemy[i].x, enemy[i].y, enemyEel, 4);
+            sprites.drawSelfMasked(enemy[i].x, enemy[i].y, enemyEel, enemy[i].frame);
             break;
           case ENEMY_JELLYFISH:
             jellyFrame = enemy[i].frame;
             if (jellyFrame > 4) jellyFrame = 0;
-            sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyJellyfish_plus_mask, jellyFrame);
+            //sprites.drawErase(enemy[i].x, enemy[i].y, enemyJellyfish, 5);
+            sprites.drawSelfMasked(enemy[i].x, enemy[i].y, enemyJellyfish, jellyFrame);
             break;
           case ENEMY_OCTOPUS:
-            sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyOctopus_plus_mask, enemy[i].frame);
+            //sprites.drawErase(enemy[i].x, enemy[i].y, enemyOctopus, 4);
+            sprites.drawSelfMasked(enemy[i].x, enemy[i].y, enemyOctopus, enemy[i].frame);
             break;
           case ENEMY_SKULL:
-            sprites.drawPlusMask(enemy[i].x, enemy[i].y, pirateSkull_plus_mask, enemy[i].frame);
+            //sprites.drawErase(enemy[i].x, enemy[i].y, pirateSkull, 4);
+            sprites.drawSelfMasked(enemy[i].x, enemy[i].y, pirateSkull, enemy[i].frame);
             break;
           case ENEMY_SEAHORSETINY:
             sprites.drawPlusMask(enemy[i].x, enemy[i].y, seahorseTiny_plus_mask, 0);
