@@ -94,10 +94,9 @@ struct Sparkles
     byte frame;
 };
 
+
 Bullets bullet[MAX_ONSCREEN_BULLETS];
 Sparkles sparkle[MAX_ONSCREEN_SPARKLES];
-
-
 
 
 //////// Player functions //////////////////

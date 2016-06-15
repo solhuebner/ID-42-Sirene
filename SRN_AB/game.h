@@ -16,7 +16,7 @@ byte upY;
 
 void stateMenuPlay()
 {
-  level = FIRST_LEVEL;
+  level = LEVEL_TO_START_WITH;
   scorePlayer = 0;
   setWeapons();
   setEnemies();
@@ -121,6 +121,7 @@ void stateGamePlaying()
   checkInputs();
   checkWeapons();
   checkMermaid();
+  checkEnemyBullet();
   checkEnemies();
   checkEndBoss();
   checkBackground();
@@ -132,6 +133,7 @@ void stateGamePlaying()
   
   drawBosses();
   drawEnemies();
+  drawEnemyBullet();
   drawMermaid();
   drawWeapons();
   drawLifeHUD();

@@ -74,6 +74,10 @@
 #define SKULL_COLLISION_HEIGHT          8
 #define SEAHORSETINY_COLLISION_HEIGHT   8
 
+#define MAX_ONSCREEN_ENEMY_BULLETS      4
+#define EEL_SPARKLE_BULLET              0
+#define OCTOPUS_INK_BULLET              1
+
 
 
 byte endBossMaxHP[] = {MAX_HP_SHARK, MAX_HP_SEAHORSE, MAX_HP_PIRATESHIP};
@@ -85,8 +89,10 @@ byte enemyCollisionHeight[] = {FISHY_COLLISION_HEIGHT, FISH_COLLISION_HEIGHT, EE
 byte jellyFrame;
 byte faseTimer;
 byte mermaidsPosition;
+byte currentEnemyBullet;
 boolean endBossSwitch;
 boolean endBossSwimsRight;
+
 
 
 //////// Enemy functions ///////////////////
@@ -107,13 +113,49 @@ struct Enemies
     byte type;
 };
 
+struct EnemyBullets
+{
+  public:
+    int x;
+    int y;
+    byte damage;
+    byte type;
+    byte frame;
+    boolean isVisible = false;
+};
 
 Enemies enemy[MAX_ONSCREEN_ENEMIES];
+EnemyBullets enemyBullet[MAX_ONSCREEN_ENEMY_BULLETS];
+
+
+void enemyShoot()
+{
+  
+}
+
+void checkEnemyBullet()
+{
+  for (byte i = 0; i < MAX_ONSCREEN_ENEMY_BULLETS; i++)
+  {
+    if (enemyBullet[i].type == EEL_SPARKLE_BULLET && arduboy.everyXFrames(3)) enemyBullet[i].frame++;
+    if (enemyBullet[i].type == OCTOPUS_INK_BULLET && arduboy.everyXFrames(6)) enemyBullet[i].frame++;
+    if ((enemyBullet[i].frame) > 4) enemyBullet[i].frame = 0;
+  }
+}
+
+void drawEnemyBullet()
+{
+  for (byte i = 0; i < MAX_ONSCREEN_ENEMY_BULLETS; i++)
+  {
+    if (enemyBullet[i].isVisible) sprites.drawSelfMasked(enemyBullet[i].x, enemyBullet[i].y, enemyBullets, enemyBullet[i].frame + enemyBullet[i].type);
+  }
+}
 
 
 void setEnemies()
 {
   jellyFrame = 0;
+  currentEnemyBullet = 0;
   for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
   {
     enemy[i].frame = i;
@@ -123,6 +165,7 @@ void setEnemies()
     enemy[i].isAlive = false;
     enemy[i].imuneTimer = 0;
     enemy[i].x = 128;
+
   }
 }
 
