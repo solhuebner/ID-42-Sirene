@@ -6,7 +6,7 @@
 #include "enemies.h"
 
 #define TOTAL_AMOUNT_OF_LEVELS  4
-#define TOTAL_AMOUNT_OF_WAVES   23
+#define TOTAL_AMOUNT_OF_WAVES   25
 
 byte currentWave;
 byte previousWave;
@@ -173,6 +173,7 @@ void wave017()
 {
   if (checkStartWave())enemySetInLine(ENEMY_EEL, 0, 1, 128, 12, 0, 0);
   enemySwimRightLeft(0, 1, 2);
+  enemyShoot(0, 1, 2);
   checkEndWave();
 }
 
@@ -180,6 +181,7 @@ void wave018()
 {
   if (checkStartWave())enemySetInLine(ENEMY_OCTOPUS, 0, 1, 128, 12, 0, 0);
   enemySwimRightLeft(0, 1, 2);
+  enemyShoot(0, 1, 2);
   checkEndWave();
 }
 
@@ -255,6 +257,8 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave001,
     wave250,
     wave000,
+    wave000,
+    wave000,
   },
   { //LEVEL 02
     wave000,
@@ -279,6 +283,8 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave019,
     wave020,
     wave251,
+    wave000,
+    wave000,
     wave000,
   },
   { //LEVEL 03
@@ -305,6 +311,8 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave020,
     wave252,
     wave000,
+    wave000,
+    wave000,
   },
   { //LEVEL 04
     wave000,
@@ -329,6 +337,8 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave019,
     wave020,
     wave250,
+    wave000,
+    wave000,
     wave000,
   }
 };
@@ -394,6 +404,20 @@ void checkCollisions()
       }
     }
   }
+  for (byte i = 0; i < MAX_ONSCREEN_ENEMY_BULLETS; i++)
+  {
+    Rect enemyBulletRect = {.x = enemyBullet[i].x + 1, .y = enemyBullet[i].y + 1, .width = 6, .height = 6};
+    if (enemyBullet[i].isVisible && arduboy.collide(mermaidRect, enemyBulletRect))
+    {
+      if (!mermaid.isImune)
+      {
+        mermaid.isImune = true;
+        mermaid.HP -= BULLET_DAMAGE;
+        enemyBullet[i].isVisible = false;
+      }
+    }
+  }
+
   if (endBoss.isVisible)
   {
     if (endBoss.isVisible && !endBoss.isDying && arduboy.collide(mermaidRect, endBossRect))

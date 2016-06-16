@@ -16,7 +16,7 @@ byte upY;
 
 void stateMenuPlay()
 {
-  level = LEVEL_TO_START_WITH;
+  level = LEVEL_TO_START_WITH -1;
   scorePlayer = 0;
   setWeapons();
   setEnemies();
@@ -124,12 +124,12 @@ void stateGamePlaying()
   checkEnemyBullet();
   checkEnemies();
   checkEndBoss();
-  checkBackground();
+  //checkBackground();
 
   if (arduboy.everyXFrames(2)) ((FunctionPointer) pgm_read_word (&Levels[level - 1][currentWave]))();
   if (checkEndLevel()) gameState = STATE_GAME_NEXT_LEVEL;
 
-  drawBackground();
+  //drawBackground();
   
   drawBosses();
   drawEnemies();
