@@ -21,7 +21,6 @@ boolean checkStartWave()
   return false;
 }
 
-
 boolean checkEndWave()
 {
   byte test = 0;
@@ -32,29 +31,19 @@ boolean checkEndWave()
   if (test < 1) currentWave++;
 }
 
-boolean checkEndLevel()
-{
-  if (currentWave > TOTAL_AMOUNT_OF_WAVES - 1)
-  {
-    return true;
-  }
-  return false;
-}
-
-void waitFor(byte amount)
+void wait()
 {
   if (arduboy.everyXFrames(4)) globalCounter++;
-  if (globalCounter > amount)
+  if (globalCounter > 16)
   {
     currentWave++;
     globalCounter = 0;
   }
 }
 
-
 void wave000()
 {
-  waitFor(16);
+  wait;
 }
 
 void wave001()
@@ -212,7 +201,6 @@ void wave020()
 
 // BOSS ATTACKS
 ///////////////
-
 void wave250()
 {
   //Shark attack
@@ -229,13 +217,25 @@ void wave251()
   if (!endBoss.isAlive) currentWave++;
 }
 
-
 void wave252()
 {
   //pirateShip attack
   if (checkStartWave())setEndBoss();
   ((FunctionPointer) pgm_read_word (&pirateShipAttackFases[endBoss.attackFase]))();
   if (!endBoss.isAlive) currentWave++;
+}
+
+
+// END WAVES
+///////////////
+void wave254()
+{
+  gameState = STATE_GAME_NEXT_LEVEL;
+}
+
+void wave255()
+{
+  gameState = STATE_GAME_NEXT_LEVEL;
 }
 
 
@@ -261,8 +261,8 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave004,
     wave003,
     wave002,
-    wave001,
     wave000,
+    wave254,
   },
   { //LEVEL 01-02
     wave000,
@@ -283,8 +283,8 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave015,
     wave016,
     wave017,
-    wave018,
     wave000,
+    wave254,
   },
   { //LEVEL 01-03
     wave002,
@@ -304,9 +304,9 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave016,
     wave017,
     wave018,
-    wave019,
     wave250,
     wave000,
+    wave254,
   },
   { //LEVEL 02-01
     wave000,
@@ -327,8 +327,8 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave004,
     wave003,
     wave002,
-    wave001,
     wave000,
+    wave254,
   },
   { //LEVEL 02-02
     wave000,
@@ -349,8 +349,8 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave015,
     wave016,
     wave017,
-    wave018,
     wave000,
+    wave254,
   },
   { //LEVEL 02-03
     wave002,
@@ -370,9 +370,9 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave016,
     wave017,
     wave018,
-    wave019,
     wave251,
     wave000,
+    wave254,
   },
   { //LEVEL 03-01
     wave000,
@@ -393,8 +393,8 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave004,
     wave003,
     wave002,
-    wave001,
     wave000,
+    wave254,
   },
   { //LEVEL 03-02
     wave000,
@@ -415,8 +415,8 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave015,
     wave016,
     wave017,
-    wave018,
     wave000,
+    wave254,
   },
   { //LEVEL 03-03
     wave002,
@@ -436,9 +436,9 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave016,
     wave017,
     wave018,
-    wave019,
     wave252,
     wave000,
+    wave255,
   }
 };
 
@@ -462,6 +462,7 @@ void checkCollisions()
         {
           if (!enemy[i].isImune)
           {
+            arduboy.audio.tone(523, 10);
             enemy[i].HP -= bullet[k].damage;
             enemy[i].isImune = true;
           }
@@ -475,6 +476,7 @@ void checkCollisions()
       {
         if (!endBoss.isImune)
         {
+          arduboy.audio.tone(523, 10);
           endBoss.isImune = true;
           bullet[k].isVisible = false;
           endBoss.HP -= bullet[k].damage;
@@ -494,6 +496,7 @@ void checkCollisions()
     {
       if (!mermaid.isImune)
       {
+        arduboy.audio.tone(2349, 15);
         mermaid.isImune = true;
         mermaid.HP -= 1;
       }
@@ -510,6 +513,7 @@ void checkCollisions()
     {
       if (!mermaid.isImune)
       {
+        arduboy.audio.tone(2349, 15);
         mermaid.isImune = true;
         mermaid.HP -= BULLET_DAMAGE;
         enemyBullet[i].isVisible = false;
@@ -523,6 +527,7 @@ void checkCollisions()
     {
       if (!endBoss.isImune)
       {
+        arduboy.audio.tone(2349, 15);
         endBoss.isImune = true;
         endBoss.HP--;
       }
@@ -537,11 +542,12 @@ void checkCollisions()
 
 void drawLifeHUD()
 {
-  sprites.drawPlusMask(0, 0, hearts_plus_mask, mermaid.HP - 2);
+  for (byte i = 0; i < 3; i++) sprites.drawSelfMasked(8*i, 0, hearts, 0);
+  for (byte i = 0; i < mermaid.HP - 1; i++)sprites.drawSelfMasked(8*i, 0, hearts, 1);
 }
 
 
-void drawScore(byte scoreX, byte scoreY, byte fontType)
+void drawScore(byte scoreX, byte fontType)
 {
   char buf[10];
   //scorePlayer = arduboy.cpuLoad();
@@ -555,10 +561,10 @@ void drawScore(byte scoreX, byte scoreY, byte fontType)
     switch (fontType)
     {
       case SCORE_SMALL_FONT:
-        sprites.drawPlusMask(scoreX + (5 * i), scoreY, numbers_plus_mask, 0);
+        sprites.drawSelfMasked(95 + (5 * i), 0, numbersSmall, 0);
         break;
       case SCORE_BIG_FONT:
-        sprites.drawSelfMasked(scoreX + (7 * i), scoreY, numbersBig, 0);
+        sprites.drawSelfMasked(40 + (7 * i), 40, numbersBig, 0);
         break;
     }
   }
@@ -583,10 +589,10 @@ void drawScore(byte scoreX, byte scoreY, byte fontType)
     switch (fontType)
     {
       case SCORE_SMALL_FONT:
-        sprites.drawPlusMask(scoreX + (pad * 5) + (5 * i), scoreY, numbers_plus_mask, digit);
+        sprites.drawSelfMasked(95 + (pad * 5) + (5 * i), 0, numbersSmall, digit);
         break;
       case SCORE_BIG_FONT:
-        sprites.drawSelfMasked(scoreX + (pad * 7) + (7 * i), scoreY, numbersBig, digit);
+        sprites.drawSelfMasked(40 + (pad * 7) + (7 * i), 40, numbersBig, digit);
         break;
     }
   }

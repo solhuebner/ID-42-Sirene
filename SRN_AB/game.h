@@ -11,12 +11,10 @@
 
 byte gameOverAndStageFase;
 boolean objectVisible;
-byte upY;
-
 
 void stateMenuPlay()
 {
-  level = LEVEL_TO_START_WITH -1;
+  level = LEVEL_TO_START_WITH - 1;
   scorePlayer = 0;
   setWeapons();
   setEnemies();
@@ -24,31 +22,24 @@ void stateMenuPlay()
   setBosses();
   gameOverAndStageFase = 0;
   globalCounter = 0;
-  upY = 64;
+  leftX = -32;
+  rightX = 148;
   gameState = STATE_GAME_NEXT_LEVEL;
 };
 
-void nextLevelStart()
+void start()
 {
-  objectVisible = true;
-  leftX = -32;
-  rightX = 148;
+  if (gameState == STATE_GAME_NEXT_LEVEL) objectVisible = true;
+  else objectVisible = false;
   gameOverAndStageFase++;
 }
 
-void nextLevelWait()
+void slideToMiddle()
 {
-  if (arduboy.everyXFrames(4)) globalCounter++;
-  if (globalCounter > 16)
-  {
-    gameOverAndStageFase++;
-    globalCounter = 0;
-  }
-}
-
-void nextLevelSlideToMiddle()
-{
-  if (leftX < 39)
+  byte amount;
+  if (gameState == STATE_GAME_NEXT_LEVEL) amount = 39;
+  else amount = 31;
+  if (leftX < amount)
   {
     leftX += 4;
     rightX -= 4;
@@ -56,9 +47,12 @@ void nextLevelSlideToMiddle()
   else gameOverAndStageFase++;
 }
 
-void nextLevelSlideOpen()
+void slideOpen()
 {
-  if (leftX > 39)
+  byte amount;
+  if (gameState == STATE_GAME_NEXT_LEVEL) amount = 39;
+  else amount = 31;
+  if (leftX > amount)
   {
     leftX -= 4;
     rightX += 4;
@@ -69,7 +63,7 @@ void nextLevelSlideOpen()
 void nextLevelFlicker()
 {
   objectVisible = !objectVisible;
-  nextLevelWait();
+  wait();
 }
 
 
@@ -88,13 +82,13 @@ void nextLevelEnd()
 typedef void (*FunctionPointer) ();
 const FunctionPointer PROGMEM nextLevelFases[] =
 {
-  nextLevelStart,
-  nextLevelWait,
-  nextLevelSlideToMiddle,
-  nextLevelSlideOpen,
-  nextLevelSlideToMiddle,
-  nextLevelWait,
-  //nextLevelFlicker,
+  start,
+  wait,
+  slideToMiddle,
+  slideOpen,
+  slideToMiddle,
+  wait,
+  nextLevelFlicker,
   nextLevelEnd,
 };
 
@@ -124,20 +118,20 @@ void stateGamePlaying()
   checkEnemyBullet();
   checkEnemies();
   checkEndBoss();
-  //checkBackground();
+  checkBackground();
 
   if (arduboy.everyXFrames(2)) ((FunctionPointer) pgm_read_word (&Levels[level - 1][currentWave]))();
-  if (checkEndLevel()) gameState = STATE_GAME_NEXT_LEVEL;
+  //if (checkEndLevel()) gameState = STATE_GAME_NEXT_LEVEL;
 
-  //drawBackground();
-  
+  drawBackground();
+
   drawBosses();
   drawEnemies();
   drawEnemyBullet();
   drawMermaid();
   drawWeapons();
   drawLifeHUD();
-  drawScore(93, 0, SCORE_SMALL_FONT);
+  drawScore(93, SCORE_SMALL_FONT);
 };
 
 void stateGamePause()
@@ -145,66 +139,12 @@ void stateGamePause()
   if (arduboy.justPressed(A_BUTTON)) gameState = STATE_GAME_PLAYING;
 };
 
-void gameOverStart()
-{
-  leftX = -32;
-  rightX = 132;
-  gameOverAndStageFase++;
-}
-
-void gameOverWait()
-{
-  if (arduboy.everyXFrames(4)) globalCounter++;
-  if (globalCounter > 8)
-  {
-    gameOverAndStageFase++;
-    globalCounter = 0;
-  }
-}
-
-void gameOverSlideToMiddle()
-{
-  if (leftX < 31)
-  {
-    leftX += 4;
-    rightX -= 4;
-  }
-  else gameOverAndStageFase++;
-}
-
-void gameOverSlideOpen()
-{
-  if (leftX > 31)
-  {
-    leftX -= 4;
-    rightX += 4;
-  }
-  else gameOverAndStageFase++;
-}
-
 void gameOverShowHighScore()
 {
   objectVisible = true;
   gameOverAndStageFase++;
 }
 
-void gameOverScoreSlideUp()
-{
-  if (upY > 41)
-  {
-    upY -= 4;
-  }
-  else gameOverAndStageFase++;
-}
-
-void gameOverScoreSlideDown()
-{
-  if (upY < 41)
-  {
-    upY += 4;
-  }
-  else gameOverAndStageFase++;
-}
 
 void gameOverEnd()
 {
@@ -218,17 +158,13 @@ void gameOverEnd()
 typedef void (*FunctionPointer) ();
 const FunctionPointer PROGMEM gameOverFases[] =
 {
-  gameOverStart,
-  //gameOverSlideToMiddle,
-  //gameOverSlideOpen,
-  //gameOverSlideToMiddle,
-  gameOverWait,
+  start,
+  slideToMiddle,
+  slideOpen,
+  slideToMiddle,
+  wait,
   gameOverShowHighScore,
-  gameOverWait,
-  //gameOverScoreSlideUp,
-  //gameOverScoreSlideDown,
-  //gameOverScoreSlideUp,
-  gameOverWait,
+  wait,
   gameOverEnd,
 };
 
@@ -238,8 +174,10 @@ void stateGameOver()
   ((FunctionPointer) pgm_read_word (&gameOverFases[gameOverAndStageFase]))();
   sprites.drawSelfMasked(leftX, 16, game, 0);
   sprites.drawSelfMasked(rightX, 16, over, 0);
-  if (objectVisible)sprites.drawSelfMasked(35, 28, highscore, 0);
-  drawScore(40, upY, SCORE_BIG_FONT);
+  if (objectVisible) {
+    sprites.drawSelfMasked(35, 28, highscore, 0);
+    drawScore(40, SCORE_BIG_FONT);
+  }
 };
 
 

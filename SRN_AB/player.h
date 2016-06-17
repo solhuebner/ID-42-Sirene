@@ -126,7 +126,11 @@ void checkMermaid()
       mermaid.isVisible = true;
     }
   }
-  if (mermaid.HP < 2) gameState = STATE_GAME_OVER;
+  if (mermaid.HP < 2)
+  {
+    rightX = 132;
+    gameState = STATE_GAME_OVER;
+  }
   if (arduboy.everyXFrames(10)) mermaid.frame++;
   if (mermaid.frame > 5 ) mermaid.frame = 0;
   if (arduboy.everyXFrames(5))
@@ -232,7 +236,7 @@ void drawWeapons()
 {
   for (byte i = 0; i < MAX_ONSCREEN_BULLETS; i++)
   {
-    if (bullet[i].isVisible) sprites.drawPlusMask(bullet[i].x, bullet[i].y, weapons_plus_mask[bullet[i].type], bullet[i].frame);
+    if (bullet[i].isVisible) sprites.drawSelfMasked(bullet[i].x, bullet[i].y, weapons[bullet[i].type], bullet[i].frame);
   }
 }
 

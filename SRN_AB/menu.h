@@ -43,7 +43,7 @@ void stateMenuMain()
   {
     sprites.drawSelfMasked(108, 32 +(i*8), menuText, i);
   }
-  sprites.drawPlusMask(92, 32 + 8*(menuSelection-2), trident_plus_mask, 0);
+  sprites.drawSelfMasked(92, 32 + 8*(menuSelection-2), trident, 0);
   if (arduboy.justPressed(DOWN_BUTTON) && (menuSelection < 5)) menuSelection++;
   if (arduboy.justPressed(UP_BUTTON) && (menuSelection > 2)) menuSelection--;
   if (arduboy.justPressed(B_BUTTON)) gameState = menuSelection;
@@ -72,7 +72,7 @@ void stateMenuSoundfx()
   {
     sprites.drawSelfMasked(108, 40 +(i*8), menuText, i+4);
   }
-  sprites.drawPlusMask(92, 48 + 8*arduboy.audio.enabled(), trident_plus_mask, 0);
+  sprites.drawSelfMasked(92, 48 + 8*arduboy.audio.enabled(), trident, 0);
   if (arduboy.justPressed(DOWN_BUTTON)) arduboy.audio.on();
   if (arduboy.justPressed(UP_BUTTON)) arduboy.audio.off();
   if (arduboy.justPressed(A_BUTTON | B_BUTTON))

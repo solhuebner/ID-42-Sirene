@@ -38,17 +38,17 @@ void drawBackground()
 {
   if (backgroundIsVisible)
   {
-    for (byte i=0; i < 4; i++)
+    for (byte z = 0; z < 2; z++)
     {
-      sprites.drawSelfMasked(17 + (8 * i),(8 * i), sunRay, i);
-    }
-    for (byte i=0; i < 4; i++)
-    {
-      sprites.drawSelfMasked(32 + (8 * i), (8 * i), sunRay, i);
+      for (byte i = 0; i < 3; i++)
+      {
+        sprites.drawSelfMasked(28 + (z * 15) + (8 * i), (8 * i), sunRay, i);
+      }
     }
     sprites.drawPlusMask(Column[0].x, 20, columnSmall_plus_mask, 0);
     sprites.drawPlusMask(Column[1].x, 20, columnSmall_plus_mask, 0);
-    sprites.drawPlusMask(Column[2].x, 16, columnBig_plus_mask, 0);
+    sprites.drawPlusMask(Column[2].x, 18, columnBig_plus_mask, 0);
+    sprites.drawPlusMask(Column[2].x + 8, 18, columnSmall_plus_mask, 0);
   }
 }
 

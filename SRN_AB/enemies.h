@@ -342,10 +342,10 @@ void drawEnemies()
             sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyOctopus_plus_mask, enemy[i].frame);
             break;
           case ENEMY_SKULL:
-            sprites.drawPlusMask(enemy[i].x, enemy[i].y, pirateSkull_plus_mask, enemy[i].frame);
+            sprites.drawSelfMasked(enemy[i].x, enemy[i].y, pirateSkull, enemy[i].frame);
             break;
           case ENEMY_SEAHORSETINY:
-            sprites.drawPlusMask(enemy[i].x, enemy[i].y, seahorseTiny_plus_mask, 0);
+            sprites.drawSelfMasked(enemy[i].x, enemy[i].y, seahorseTiny, 0);
             break;
         }
       }
