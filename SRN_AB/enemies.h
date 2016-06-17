@@ -6,11 +6,10 @@
 
 #define ENEMY_FISHY                     0
 #define ENEMY_FISH                      1
-#define ENEMY_EEL                       2
-#define ENEMY_JELLYFISH                 3
-#define ENEMY_OCTOPUS                   4
-#define ENEMY_SKULL                     5
-#define ENEMY_SEAHORSETINY              6
+#define ENEMY_JELLYFISH                 2
+#define ENEMY_OCTOPUS                   3
+#define ENEMY_SKULL                     4
+#define ENEMY_SEAHORSETINY              5
 
 #define ENDBOSS_SHARK                   0
 #define ENDBOSS_SEAHORSE                1
@@ -22,7 +21,6 @@
 
 #define POINTS_FISHY                    5
 #define POINTS_FISH                     8
-#define POINTS_EEL                      15
 #define POINTS_JELLYFISH                20
 #define POINTS_OCTOPUS                  25
 #define POINTS_SKULL                    4
@@ -30,7 +28,6 @@
 
 #define MAX_HP_FISHY                    2
 #define MAX_HP_FISH                     4
-#define MAX_HP_EEL                      4
 #define MAX_HP_JELLYFISH                2
 #define MAX_HP_OCTOPUS                  4
 #define MAX_HP_SKULL                    1
@@ -60,7 +57,6 @@
 
 #define FISHY_COLLISION_WIDTH           14
 #define FISH_COLLISION_WIDTH            14
-#define EEL_COLLISION_WIDTH             30
 #define JELLYFISH_COLLISION_WIDTH       16
 #define OCTOPUS_COLLISION_WIDTH         16
 #define SKULL_COLLISION_WIDTH           8
@@ -68,24 +64,22 @@
 
 #define FISHY_COLLISION_HEIGHT          8
 #define FISH_COLLISION_HEIGHT           14
-#define EEL_COLLISION_HEIGHT            7
 #define JELLYFISH_COLLISION_HEIGHT      13
 #define OCTOPUS_COLLISION_HEIGHT        16
 #define SKULL_COLLISION_HEIGHT          8
 #define SEAHORSETINY_COLLISION_HEIGHT   8
 
-#define MAX_ONSCREEN_ENEMY_BULLETS      16
-#define EEL_SPARKLE_BULLET              0
-#define OCTOPUS_INK_BULLET              1
+#define MAX_ONSCREEN_ENEMY_BULLETS      8
+#define OCTOPUS_INK_BULLET              0
 #define BULLET_DAMAGE                   1
 
 
 
 byte endBossMaxHP[] = {MAX_HP_SHARK, MAX_HP_SEAHORSE, MAX_HP_PIRATESHIP};
-byte enemiesMaxHP[] = {MAX_HP_FISHY, MAX_HP_FISH, MAX_HP_EEL, MAX_HP_JELLYFISH, MAX_HP_OCTOPUS, MAX_HP_SKULL, MAX_HP_SEAHORSETINY};
-byte enemiesPoints[] = {POINTS_FISHY, POINTS_FISH, POINTS_EEL, POINTS_JELLYFISH, POINTS_OCTOPUS, POINTS_SKULL, POINTS_SEAHORSETINY};
-byte enemyCollisionWidth[] = {FISHY_COLLISION_WIDTH, FISH_COLLISION_WIDTH, EEL_COLLISION_WIDTH, JELLYFISH_COLLISION_WIDTH, OCTOPUS_COLLISION_WIDTH, SKULL_COLLISION_WIDTH, SEAHORSETINY_COLLISION_WIDTH};
-byte enemyCollisionHeight[] = {FISHY_COLLISION_HEIGHT, FISH_COLLISION_HEIGHT, EEL_COLLISION_HEIGHT, JELLYFISH_COLLISION_HEIGHT, OCTOPUS_COLLISION_HEIGHT, SKULL_COLLISION_HEIGHT, SEAHORSETINY_COLLISION_HEIGHT};
+byte enemiesMaxHP[] = {MAX_HP_FISHY, MAX_HP_FISH, MAX_HP_JELLYFISH, MAX_HP_OCTOPUS, MAX_HP_SKULL, MAX_HP_SEAHORSETINY};
+byte enemiesPoints[] = {POINTS_FISHY, POINTS_FISH, POINTS_JELLYFISH, POINTS_OCTOPUS, POINTS_SKULL, POINTS_SEAHORSETINY};
+byte enemyCollisionWidth[] = {FISHY_COLLISION_WIDTH, FISH_COLLISION_WIDTH, JELLYFISH_COLLISION_WIDTH, OCTOPUS_COLLISION_WIDTH, SKULL_COLLISION_WIDTH, SEAHORSETINY_COLLISION_WIDTH};
+byte enemyCollisionHeight[] = {FISHY_COLLISION_HEIGHT, FISH_COLLISION_HEIGHT, JELLYFISH_COLLISION_HEIGHT, OCTOPUS_COLLISION_HEIGHT, SKULL_COLLISION_HEIGHT, SEAHORSETINY_COLLISION_HEIGHT};
 
 byte jellyFrame;
 byte faseTimer;
@@ -120,7 +114,6 @@ struct EnemyBullets
   public:
     int x;
     int y;
-    byte type;
     byte frame;
     boolean isVisible;
     boolean direction;
@@ -139,23 +132,9 @@ void checkEnemyBullet()
       if ((enemyBullet[i].x < -8) || (enemyBullet[i].y < -8) || (enemyBullet[i].y > 64)) enemyBullet[i].isVisible = false;
       if (enemyBullet[i].isVisible)
       {
-        if (enemyBullet[i].type == EEL_SPARKLE_BULLET)
-        {
-          enemyBullet[i].x -= 2;
-          enemyBullet[i].frame++;
-          if (mermaid.x + 16 < enemyBullet[i].x)
-          {
-            if (enemyBullet[i].y < mermaid.y)enemyBullet[i].y++;
-            if (enemyBullet[i].y > mermaid.y)enemyBullet[i].y--;
-          }
-        }
-        if (enemyBullet[i].type == OCTOPUS_INK_BULLET)
-        {
-          enemyBullet[i].x -= 2;
-          enemyBullet[i].frame++;
-          enemyBullet[i].y += (1 - (2 * enemyBullet[i].direction));
-
-        }
+        enemyBullet[i].x -= 2;
+        enemyBullet[i].frame++;
+        enemyBullet[i].y += (1 - (2 * enemyBullet[i].direction));
         if ((enemyBullet[i].frame) > 3) enemyBullet[i].frame = 0;
       }
     }
@@ -166,7 +145,7 @@ void drawEnemyBullet()
 {
   for (byte i = 0; i < MAX_ONSCREEN_ENEMY_BULLETS; i++)
   {
-    if (enemyBullet[i].isVisible) sprites.drawSelfMasked(enemyBullet[i].x, enemyBullet[i].y, enemyBullets, enemyBullet[i].frame + 4 * enemyBullet[i].type);
+    if (enemyBullet[i].isVisible) sprites.drawSelfMasked(enemyBullet[i].x, enemyBullet[i].y, enemyBullets, enemyBullet[i].frame);
   }
 }
 
@@ -189,7 +168,6 @@ void setEnemies()
   for (byte i = 0; i < MAX_ONSCREEN_ENEMY_BULLETS; i++)
   {
     enemyBullet[i].isVisible = false;
-    enemyBullet[i].type = OCTOPUS_INK_BULLET;
   }
 }
 
@@ -327,8 +305,6 @@ void enemyShoot(byte firstEnemy, byte lastEnemy, byte amount)
         enemyBullet[currentEnemyBullet].isVisible = true;
         enemyBullet[currentEnemyBullet].x = enemy[i].x + 2;
         enemyBullet[currentEnemyBullet].y = enemy[i].y;
-        if (enemy[i].type == ENEMY_OCTOPUS) enemyBullet[currentEnemyBullet].type = OCTOPUS_INK_BULLET;
-        else enemyBullet[currentEnemyBullet].type = EEL_SPARKLE_BULLET;
         if (enemy[i].y < 24) enemyBullet[currentEnemyBullet].direction = false;
         else enemyBullet[currentEnemyBullet].direction = true;
         currentEnemyBullet++;
@@ -356,9 +332,6 @@ void drawEnemies()
             break;
           case ENEMY_FISH:
             sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFish_plus_mask, enemy[i].frame);
-            break;
-          case ENEMY_EEL:
-            sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyEel_plus_mask, enemy[i].frame);
             break;
           case ENEMY_JELLYFISH:
             jellyFrame = enemy[i].frame;

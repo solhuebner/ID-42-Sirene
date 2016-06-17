@@ -39,7 +39,7 @@ void nextLevelStart()
 void nextLevelWait()
 {
   if (arduboy.everyXFrames(4)) globalCounter++;
-  if (globalCounter > 8)
+  if (globalCounter > 16)
   {
     gameOverAndStageFase++;
     globalCounter = 0;
@@ -94,7 +94,7 @@ const FunctionPointer PROGMEM nextLevelFases[] =
   nextLevelSlideOpen,
   nextLevelSlideToMiddle,
   nextLevelWait,
-  nextLevelFlicker,
+  //nextLevelFlicker,
   nextLevelEnd,
 };
 
@@ -219,15 +219,15 @@ typedef void (*FunctionPointer) ();
 const FunctionPointer PROGMEM gameOverFases[] =
 {
   gameOverStart,
-  gameOverSlideToMiddle,
-  gameOverSlideOpen,
-  gameOverSlideToMiddle,
+  //gameOverSlideToMiddle,
+  //gameOverSlideOpen,
+  //gameOverSlideToMiddle,
   gameOverWait,
   gameOverShowHighScore,
   gameOverWait,
-  gameOverScoreSlideUp,
-  gameOverScoreSlideDown,
-  gameOverScoreSlideUp,
+  //gameOverScoreSlideUp,
+  //gameOverScoreSlideDown,
+  //gameOverScoreSlideUp,
   gameOverWait,
   gameOverEnd,
 };

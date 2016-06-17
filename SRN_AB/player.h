@@ -220,7 +220,6 @@ void shootWeapon()
       bullet[mermaid.currentBullet].frame = mermaid.currentSeaShell;
       mermaid.currentSeaShell++;
       if (mermaid.currentSeaShell > 2) mermaid.currentSeaShell = 0;
-
     }
     mermaid.chargeBarFrame = 0;
   }
