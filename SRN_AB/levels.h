@@ -36,14 +36,15 @@ void wait()
   if (arduboy.everyXFrames(4)) globalCounter++;
   if (globalCounter > 16)
   {
-    currentWave++;
+    if (gameState == STATE_GAME_PLAYING) currentWave++;
+    else gameOverAndStageFase++;
     globalCounter = 0;
   }
 }
 
 void wave000()
 {
-  wait;
+  wait();
 }
 
 void wave001()
@@ -235,7 +236,9 @@ void wave254()
 
 void wave255()
 {
-  gameState = STATE_GAME_NEXT_LEVEL;
+  mermaid.x = 16;
+  mermaid.y = 32;
+  gameState = STATE_GAME_ENDED;
 }
 
 
@@ -245,7 +248,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
   { //LEVEL 01-01
     wave000,
     wave018,
-    wave019,
+    wave017,
     wave016,
     wave015,
     wave014,
@@ -262,7 +265,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave003,
     wave002,
     wave000,
-    wave254,
+    wave255,
   },
   { //LEVEL 01-02
     wave000,
@@ -542,8 +545,8 @@ void checkCollisions()
 
 void drawLifeHUD()
 {
-  for (byte i = 0; i < 3; i++) sprites.drawSelfMasked(8*i, 0, hearts, 0);
-  for (byte i = 0; i < mermaid.HP - 1; i++)sprites.drawSelfMasked(8*i, 0, hearts, 1);
+  for (byte i = 0; i < 3; i++) sprites.drawSelfMasked(8 * i, 0, hearts, 0);
+  for (byte i = 0; i < mermaid.HP - 1; i++)sprites.drawSelfMasked(8 * i, 0, hearts, 1);
 }
 
 

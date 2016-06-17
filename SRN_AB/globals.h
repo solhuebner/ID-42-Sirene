@@ -18,6 +18,7 @@
 #define STATE_GAME_PLAYING           7
 #define STATE_GAME_PAUSE             8
 #define STATE_GAME_OVER              9
+#define STATE_GAME_ENDED             10
 
 #define GAME_TOP                     0
 #define GAME_BOTTOM                  64
@@ -39,6 +40,7 @@ byte globalCounter = 0;
 byte level = LEVEL_TO_START_WITH -1;
 unsigned long scorePlayer; 
 byte backgroundIsVisible;
+byte gameOverAndStageFase;
 
 int leftX;
 byte rightX;

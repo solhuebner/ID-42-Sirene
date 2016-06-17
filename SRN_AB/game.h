@@ -9,7 +9,6 @@
 #include "elements.h"
 #include "levels.h"
 
-byte gameOverAndStageFase;
 boolean objectVisible;
 
 void stateMenuPlay()
@@ -29,8 +28,8 @@ void stateMenuPlay()
 
 void start()
 {
-  if (gameState == STATE_GAME_NEXT_LEVEL) objectVisible = true;
-  else objectVisible = false;
+  if (gameState == STATE_GAME_OVER) objectVisible = false;
+  else objectVisible = true;
   gameOverAndStageFase++;
 }
 
@@ -121,7 +120,6 @@ void stateGamePlaying()
   checkBackground();
 
   if (arduboy.everyXFrames(2)) ((FunctionPointer) pgm_read_word (&Levels[level - 1][currentWave]))();
-  //if (checkEndLevel()) gameState = STATE_GAME_NEXT_LEVEL;
 
   drawBackground();
 
@@ -180,7 +178,27 @@ void stateGameOver()
   }
 };
 
+typedef void (*FunctionPointer) ();
+const FunctionPointer PROGMEM gameEndFases[] =
+{
+  start,
+  wait,
+  wait,
+  gameOverEnd,
+};
 
+void stateGameEnded()
+{
+  ((FunctionPointer) pgm_read_word (&gameEndFases[gameOverAndStageFase]))();
+  if (objectVisible) {
+    checkMermaid();
+    checkBackground();
+    drawBackground();
+    drawMermaid();
+    sprites.drawSelfMasked(35, 28, highscore, 0);
+    drawScore(40, SCORE_BIG_FONT);
+  }
+}
 
 
 
