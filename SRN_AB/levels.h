@@ -177,7 +177,7 @@ void wave017()
     enemySetInLine(ENEMY_EEL, 1, 2, 176, 56, 0, 0);
   }
   enemySwimRightLeft(0, 2, 2);
-  enemyShoot(0, 2, 2);
+  enemyShoot(0, 2, 1);
   checkEndWave();
 }
 
@@ -190,7 +190,7 @@ void wave018()
   }
 
   enemySwimRightLeft(0, 6, 2);
-  enemyShoot(0, 6, 2);
+  enemyShoot(0, 6, 1);
   checkEndWave();
 }
 

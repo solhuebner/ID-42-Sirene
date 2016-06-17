@@ -143,8 +143,11 @@ void checkEnemyBullet()
         {
           enemyBullet[i].x -= 2;
           enemyBullet[i].frame++;
-          if (enemyBullet[i].y < mermaid.y)enemyBullet[i].y++;
-          if (enemyBullet[i].y > mermaid.y)enemyBullet[i].y--;
+          if (mermaid.x + 16 < enemyBullet[i].x)
+          {
+            if (enemyBullet[i].y < mermaid.y)enemyBullet[i].y++;
+            if (enemyBullet[i].y > mermaid.y)enemyBullet[i].y--;
+          }
         }
         if (enemyBullet[i].type == OCTOPUS_INK_BULLET)
         {
