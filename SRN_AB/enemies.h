@@ -74,7 +74,7 @@
 #define SKULL_COLLISION_HEIGHT          8
 #define SEAHORSETINY_COLLISION_HEIGHT   8
 
-#define MAX_ONSCREEN_ENEMY_BULLETS      6
+#define MAX_ONSCREEN_ENEMY_BULLETS      16
 #define EEL_SPARKLE_BULLET              0
 #define OCTOPUS_INK_BULLET              1
 #define BULLET_DAMAGE                   1
@@ -91,7 +91,6 @@ byte jellyFrame;
 byte faseTimer;
 byte mermaidsPosition;
 byte currentEnemyBullet;
-byte amountEnemyBulletsShot;
 boolean endBossSwitch;
 boolean endBossSwimsRight;
 
@@ -113,6 +112,7 @@ struct Enemies
     byte imuneTimer;
     byte frame;
     byte type;
+    byte bulletsShot;
 };
 
 struct EnemyBullets
@@ -136,6 +136,7 @@ void checkEnemyBullet()
   {
     for (byte i = 0; i < MAX_ONSCREEN_ENEMY_BULLETS; i++)
     {
+      if ((enemyBullet[i].x < -8) || (enemyBullet[i].y < -8) || (enemyBullet[i].y > 64)) enemyBullet[i].isVisible = false;
       if (enemyBullet[i].isVisible)
       {
         if (enemyBullet[i].type == EEL_SPARKLE_BULLET)
@@ -180,6 +181,7 @@ void setEnemies()
     enemy[i].isAlive = false;
     enemy[i].imuneTimer = 0;
     enemy[i].x = 128;
+    enemy[i].bulletsShot = 0;
   }
   for (byte i = 0; i < MAX_ONSCREEN_ENEMY_BULLETS; i++)
   {
@@ -253,8 +255,8 @@ void enemySetInLine(byte enemyType, byte firstEnemy, byte lastEnemy, byte x, byt
     enemy[i].x = x + (spacingX * (i - firstEnemy));
     enemy[i].y = y + (spacingY * (i - firstEnemy));
     enemy[i].HP = enemiesMaxHP[enemyType];
+    enemy[i].bulletsShot = 0;
   }
-  amountEnemyBulletsShot = 0;
 }
 
 void enemySwimRightLeft(byte firstEnemy, byte lastEnemy, byte speedEnemy)
@@ -312,22 +314,22 @@ void enemySwimDownUp(byte firstEnemy, byte lastEnemy, byte speedEnemy)
 
 void enemyShoot(byte firstEnemy, byte lastEnemy, byte amount)
 {
-  if (arduboy.everyXFrames(60) && (amountEnemyBulletsShot < amount))
+  if (arduboy.everyXFrames(50))
   {
-    amountEnemyBulletsShot++;
     for (byte i = firstEnemy; i < lastEnemy; i++)
     {
-      if ((!enemy[i].isDying) && (enemy[i].x < 120))
+      if ((!enemy[i].isDying) && (enemy[i].x < 128) && (enemy[i].bulletsShot < amount))
       {
+        enemy[i].bulletsShot++;
         enemyBullet[currentEnemyBullet].isVisible = true;
         enemyBullet[currentEnemyBullet].x = enemy[i].x + 2;
         enemyBullet[currentEnemyBullet].y = enemy[i].y;
         if (enemy[i].type == ENEMY_OCTOPUS) enemyBullet[currentEnemyBullet].type = OCTOPUS_INK_BULLET;
         else enemyBullet[currentEnemyBullet].type = EEL_SPARKLE_BULLET;
-        currentEnemyBullet++;
-        if (currentEnemyBullet > MAX_ONSCREEN_ENEMY_BULLETS - 1) currentEnemyBullet = 0;
         if (enemy[i].y < 24) enemyBullet[currentEnemyBullet].direction = false;
         else enemyBullet[currentEnemyBullet].direction = true;
+        currentEnemyBullet++;
+        if (currentEnemyBullet > MAX_ONSCREEN_ENEMY_BULLETS - 1) currentEnemyBullet = 0;
       }
     }
   }
