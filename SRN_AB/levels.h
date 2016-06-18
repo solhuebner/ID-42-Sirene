@@ -550,7 +550,7 @@ void drawLifeHUD()
 }
 
 
-void drawScore(byte scoreX, byte fontType)
+void drawScore(byte fontType)
 {
   char buf[10];
   //scorePlayer = arduboy.cpuLoad();

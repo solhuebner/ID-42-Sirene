@@ -129,7 +129,7 @@ void stateGamePlaying()
   drawMermaid();
   drawWeapons();
   drawLifeHUD();
-  drawScore(93, SCORE_SMALL_FONT);
+  drawScore(SCORE_SMALL_FONT);
 };
 
 void stateGamePause()
@@ -174,7 +174,7 @@ void stateGameOver()
   sprites.drawSelfMasked(rightX, 16, over, 0);
   if (objectVisible) {
     sprites.drawSelfMasked(35, 28, highscore, 0);
-    drawScore(40, SCORE_BIG_FONT);
+    drawScore(SCORE_BIG_FONT);
   }
 };
 
@@ -196,7 +196,7 @@ void stateGameEnded()
     drawBackground();
     drawMermaid();
     sprites.drawSelfMasked(35, 28, highscore, 0);
-    drawScore(40, SCORE_BIG_FONT);
+    drawScore(SCORE_BIG_FONT);
   }
 }
 
