@@ -1,6 +1,14 @@
 #ifndef ELEMENTS_H
 #define ELEMENTS_H
 
+#define POWER_UP_HEART             0
+#define POWER_UP_STAR              1
+#define POWER_UP_TRIDENT           2
+#define POWER_UP_BUBBLE            3
+#define POWER_UP_SEASHELL          4
+#define POWER_UP_MAGIC             5
+
+
 #include <Arduino.h>
 #include "globals.h"
 
@@ -10,7 +18,19 @@ struct Background
     int x;
 };
 
+struct Elements
+{
+  public:
+    int x;
+    byte y;
+    byte type;
+    boolean isVisible;
+    boolean isActive;
+};
+
 Background Column[3];
+Elements powerUP;
+
 
 void setBackground()
 {
@@ -34,6 +54,29 @@ void checkBackground()
   if (Column[2].x < -16) Column[2].x = 128;
 }
 
+void checkPowerUP()
+{
+  if (powerUP.isActive)
+  {
+    if (arduboy.everyXFrames(10)) powerUP.isVisible = !powerUP.isVisible;
+    if (powerUP.x < -8) powerUP.isActive = false;
+  }
+}
+
+void powerUPSet(int x, byte y, byte type)
+{
+  powerUP.isActive = true;
+  powerUP.x = x;
+  powerUP.y = y;
+  powerUP.type = type;
+}
+
+void powerUPFloatRightLeft(byte floatSpeed)
+{
+  powerUP.x -= floatSpeed;
+}
+
+
 void drawBackground()
 {
   if (backgroundIsVisible)
@@ -51,6 +94,13 @@ void drawBackground()
     sprites.drawPlusMask(Column[2].x + 8, 18, columnSmall_plus_mask, 0);
   }
 }
+
+void drawPowerUP()
+{
+  if (powerUP.isActive && powerUP.isVisible) sprites.drawPlusMask(powerUP.x, powerUP.y, powerUP_plus_mask, powerUP.type);
+}
+
+
 
 
 #endif

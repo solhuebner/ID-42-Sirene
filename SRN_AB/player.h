@@ -32,6 +32,7 @@
 #define MAX_ONSCREEN_SPARKLES        8
 
 #define MERMAID_IMUNE_TIME           30
+#define MERMAID_SUPER_TIME           250
 
 #define MERMAID_COLLISION_OFFSET     4
 #define MERMAID_COLLISION_SIZE       8
@@ -47,7 +48,7 @@ byte coolDown[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COO
 byte coolDownMax[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COOLDOWN_SEASHELL, WEAPON_COOLDOWN_MAGIC};
 byte bulletSpeed[] = {BULLET_SPEED_TRIDENT, BULLET_SPEED_BUBBLES, BULLET_SPEED_SEASHELL, BULLET_SPEED_MAGIC};
 byte bulletDamage[] = {DAMAGE_TRIDENT, DAMAGE_BUBBLES, DAMAGE_SEASHELL, DAMAGE_MAGIC};
-byte bulletCollisionOffset[]= {TRIDENT_COLLISION_OFFSET,BUBBLES_COLLISION_OFFSET,SEASHELL_COLLISION_OFFSET,MAGIC_COLLISION_OFFSET};
+byte bulletCollisionOffset[] = {TRIDENT_COLLISION_OFFSET, BUBBLES_COLLISION_OFFSET, SEASHELL_COLLISION_OFFSET, MAGIC_COLLISION_OFFSET};
 
 
 //////// define player and weapons /////////
@@ -61,6 +62,7 @@ struct Players
     byte weaponType;
     boolean isVisible;
     boolean isImune;
+    boolean isSuper;
     byte imuneTimer;
     byte HP;
     byte frame;
@@ -117,8 +119,11 @@ void checkMermaid()
 {
   if (mermaid.isImune)
   {
-    if (arduboy.everyXFrames(3)) mermaid.isVisible = !mermaid.isVisible;
-    mermaid.imuneTimer++;
+    if (arduboy.everyXFrames(3))
+    {
+      mermaid.imuneTimer++;
+      mermaid.isVisible = !mermaid.isVisible;
+    }
     if (mermaid.imuneTimer > MERMAID_IMUNE_TIME)
     {
       mermaid.imuneTimer = 0;
@@ -126,6 +131,22 @@ void checkMermaid()
       mermaid.isVisible = true;
     }
   }
+
+  if (mermaid.isSuper)
+  {
+    if (arduboy.everyXFrames(3)) 
+    {
+      mermaid.imuneTimer++;
+      mermaid.isVisible = !mermaid.isVisible;
+    }
+    if (mermaid.imuneTimer > MERMAID_SUPER_TIME)
+    {
+      mermaid.imuneTimer = 0;
+      mermaid.isSuper = false;
+      mermaid.isVisible = true;
+    }
+  }
+
   if (mermaid.HP < 2)
   {
     rightX = 132;

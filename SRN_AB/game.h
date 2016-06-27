@@ -74,6 +74,7 @@ void nextLevelEnd()
   leftX = -32;
   rightX = 148;
   mermaid.isImune = true;
+  mermaid.isSuper = false;
   objectVisible = false;
   setBackground();
 }
@@ -118,11 +119,13 @@ void stateGamePlaying()
   checkEnemies();
   checkEndBoss();
   checkBackground();
+  checkPowerUP();
 
   if (arduboy.everyXFrames(2)) ((FunctionPointer) pgm_read_word (&Levels[level - 1][currentWave]))();
 
   drawBackground();
-
+  drawPowerUP();
+  
   drawBosses();
   drawEnemies();
   drawEnemyBullet();

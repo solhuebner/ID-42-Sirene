@@ -26,8 +26,9 @@ boolean checkEndWave()
   byte test = 0;
   for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
   {
-    test = test + enemy[i].isAlive;
+    test += enemy[i].isAlive;
   }
+  test += powerUP.isActive;
   if (test < 1) currentWave++;
 }
 
@@ -49,8 +50,13 @@ void wave000()
 
 void wave001()
 {
-  if (checkStartWave())enemySetInLine(ENEMY_FISHY, 0, 3, 128, 12, 20, 0);
+  if (checkStartWave())
+  {
+    enemySetInLine(ENEMY_FISHY, 0, 3, 128, 12, 20, 0);
+    powerUPSet(128, 24, POWER_UP_STAR);
+  }
   enemySwimRightLeft(0, 3, 2);
+  powerUPFloatRightLeft(1);
   checkEndWave();
 }
 
@@ -247,7 +253,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
 {
   { //LEVEL 01-01
     wave000,
-    wave018,
+    wave001,
     wave017,
     wave016,
     wave015,
@@ -539,6 +545,44 @@ void checkCollisions()
         mermaid.isImune = true;
         mermaid.HP -= 1;
       }
+    }
+  }
+
+#define POWER_UP_HEART             0
+#define POWER_UP_STAR              1
+#define POWER_UP_TRIDENT           2
+#define POWER_UP_BUBBLE            3
+#define POWER_UP_SEASHELL          4
+#define POWER_UP_MAGIC             5
+
+  if (powerUP.isActive)
+  {
+    Rect powerUPRect = {.x = powerUP.x, .y = powerUP.y, .width = 8, .height = 8};
+    if (arduboy.collide(mermaidRect, powerUPRect))
+    {
+      switch (powerUP.type)
+      {
+        case POWER_UP_HEART:
+          if (mermaid.HP < 4) mermaid.HP++;
+          else scorePlayer += 1000;
+          break;
+        case POWER_UP_STAR:
+          mermaid.isSuper = true;
+          break;
+        case POWER_UP_TRIDENT:
+          mermaid.weaponType = WEAPON_TYPE_TRIDENT;
+          break;
+        case POWER_UP_BUBBLE:
+          mermaid.weaponType = WEAPON_TYPE_BUBBLES;
+          break;
+        case POWER_UP_SEASHELL:
+          mermaid.weaponType = WEAPON_TYPE_SEASHELL;
+          break;
+        case POWER_UP_MAGIC:
+          mermaid.weaponType = WEAPON_TYPE_MAGIC;
+          break;
+      }
+      powerUP.isActive = false;
     }
   }
 }

@@ -26,8 +26,7 @@ void checkInputs()
 
   if (arduboy.justPressed(A_BUTTON))
   {
-    mermaid.weaponType++;
-    if (mermaid.weaponType > 3) mermaid.weaponType = 0;
+    gameState = STATE_GAME_PAUSE;
   }
 
   if (arduboy.justPressed(B_BUTTON) && (coolDown[mermaid.weaponType] == coolDownMax[mermaid.weaponType]))
