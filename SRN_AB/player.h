@@ -63,10 +63,10 @@ struct Players
     boolean isVisible;
     boolean isImune;
     boolean isSuper;
+    boolean magicCharging;
     byte imuneTimer;
     byte HP;
     byte frame;
-    boolean magicCharging;
     byte chargeBarFrame;
     byte currentBullet;
     byte currentSeaShell;

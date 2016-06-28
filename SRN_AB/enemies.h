@@ -76,6 +76,7 @@
 
 
 byte endBossMaxHP[] = {MAX_HP_SHARK, MAX_HP_SEAHORSE, MAX_HP_PIRATESHIP};
+byte endBossStartY[] = {28, 16, 10};
 byte enemiesMaxHP[] = {MAX_HP_FISHY, MAX_HP_FISH, MAX_HP_JELLYFISH, MAX_HP_OCTOPUS, MAX_HP_SKULL, MAX_HP_SEAHORSETINY};
 byte enemiesPoints[] = {POINTS_FISHY, POINTS_FISH, POINTS_JELLYFISH, POINTS_OCTOPUS, POINTS_SKULL, POINTS_SEAHORSETINY};
 byte enemyCollisionWidth[] = {FISHY_COLLISION_WIDTH, FISH_COLLISION_WIDTH, JELLYFISH_COLLISION_WIDTH, OCTOPUS_COLLISION_WIDTH, SKULL_COLLISION_WIDTH, SEAHORSETINY_COLLISION_WIDTH};
@@ -99,18 +100,16 @@ struct Enemies
     int x;
     int y;
     int HP;
-
-    byte characteristics = 0b00000000;   //this byte holds all the enemies characteristics
-    //                       ||||||||
-    //                       |||||||└->  0 \
-    //                       ||||||└-->  1  |  These 4 bits are used to determine the enemy frame
-    //                       |||||└--->  2  |
-    //                       ||||└---->  3  /
-    //                       |||└----->  4 the enemy is visible  (0 = false / 1 = true)
-    //                       ||└------>  5 the enemy is dying    (0 = false / 1 = true)
-    //                       |└------->  6 the enemy is imune    (0 = false / 1 = true)
-    //                       └-------->  7 the enemy is alive    (0 = false / 1 = true)
-
+    byte characteristics;//B00000000;   //this byte holds all the enemies characteristics
+    //                      ||||||||
+    //                      |||||||└->  0 \
+    //                      ||||||└-->  1  |  These 4 bits are used to determine the enemy frame
+    //                      |||||└--->  2  |
+    //                      ||||└---->  3  /
+    //                      |||└----->  4 the enemy is visible  (0 = false / 1 = true)
+    //                      ||└------>  5 the enemy is dying    (0 = false / 1 = true)
+    //                      |└------->  6 the enemy is imune    (0 = false / 1 = true)
+    //                      └-------->  7 the enemy is alive    (0 = false / 1 = true)
     byte imuneTimer;
     byte type;
     byte bulletsShot;
@@ -181,13 +180,12 @@ void checkEnemies()
   {
     if ((enemy[i].HP < 1) && !bitRead(enemy[i].characteristics, 5))
     {
-      bitClear(enemy[i].characteristics, 6);
       bitSet(enemy[i].characteristics, 5);
-      enemy[i].characteristics &= 0B11110000;
+      enemy[i].characteristics &= 0B10110000;
     }
     if (bitRead(enemy[i].characteristics, 6))
     {
-      if (arduboy.everyXFrames(3)) enemy[i].characteristics ^= 0B00010000;
+      if (arduboy.everyXFrames(3)) enemy[i].characteristics ^= B00010000;
       enemy[i].imuneTimer++;
       if (enemy[i].imuneTimer > ENEMY_IMUNE_TIME)
       {
@@ -199,8 +197,8 @@ void checkEnemies()
     if (!bitRead(enemy[i].characteristics, 5))
     {
       if (arduboy.everyXFrames(6)) enemy[i].characteristics = enemy[i].characteristics + 1;
-      if (enemy[i].type != ENEMY_JELLYFISH && ((enemy[i].characteristics & 0B00001111) > FRAMES_ENEMY)) enemy[i].characteristics &= 0B11110000;
-      if (enemy[i].type == ENEMY_JELLYFISH && ((enemy[i].characteristics & 0B00001111) > FRAMES_JELLYFISH)) enemy[i].characteristics &= 0B11110000;
+      if (enemy[i].type != ENEMY_JELLYFISH && ((enemy[i].characteristics & B00001111) > FRAMES_ENEMY)) enemy[i].characteristics &= B11110000;
+      if (enemy[i].type == ENEMY_JELLYFISH && ((enemy[i].characteristics & B00001111) > FRAMES_JELLYFISH)) enemy[i].characteristics &= B11110000;
     }
 
     if (bitRead(enemy[i].characteristics, 5))
@@ -210,19 +208,14 @@ void checkEnemies()
         if (bitRead(enemy[i].characteristics, 4)) scorePlayer += enemiesPoints[enemy[i].type];
         enemy[i].characteristics = enemy[i].characteristics + 1;
       }
-      if ((enemy[i].characteristics & 0B00001111) > FRAMES_DYING)
+      if ((enemy[i].characteristics & B00001111) > FRAMES_DYING)
       {
-        bitClear(enemy[i].characteristics, 5);
-        bitClear(enemy[i].characteristics, 7);
-        bitClear(enemy[i].characteristics, 4);
-        enemy[i].characteristics &= 0B11110000;
+        enemy[i].characteristics = 0;
       }
     }
     if ((enemy[i].x < -32) || (enemy[i].y < -32))
     {
-      bitClear(enemy[i].characteristics, 4);
-      bitClear(enemy[i].characteristics, 7);
-      enemy[i].characteristics &= 0B11110000;
+      enemy[i].characteristics = 0;
     }
   }
 }
@@ -233,7 +226,6 @@ void enemySetInLine(byte enemyType, byte firstEnemy, byte lastEnemy, byte x, byt
   {
     enemy[i].characteristics = i;
     bitSet(enemy[i].characteristics, 4);
-    bitClear(enemy[i].characteristics, 5);
     bitSet(enemy[i].characteristics, 7);
     enemy[i].type = enemyType;
     enemy[i].x = x + (spacingX * (i - firstEnemy));
@@ -289,8 +281,8 @@ void enemySwimDownUp(byte firstEnemy, byte lastEnemy, byte speedEnemy)
   {
     if (!bitRead(enemy[i].characteristics, 5))
     {
-      if ((enemy[i].characteristics & 0B00001111) > 4 && (enemy[i].characteristics & 0B00001111) < 7 )enemy[i].y = enemy[i].y - speedEnemy - 1;
-      if ((enemy[i].characteristics & 0B00001111) > 6 )enemy[i].y = enemy[i].y - speedEnemy;
+      if ((enemy[i].characteristics & B00001111) > 4 && (enemy[i].characteristics & B00001111) < 7 )enemy[i].y = enemy[i].y - speedEnemy - 1;
+      if ((enemy[i].characteristics & B00001111) > 6 )enemy[i].y = enemy[i].y - speedEnemy;
     }
   }
 }
@@ -325,27 +317,27 @@ void drawEnemies()
   {
     if (bitRead(enemy[i].characteristics, 4))
     {
-      if (bitRead(enemy[i].characteristics, 5)) sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].characteristics & 0B00001111);
+      if (bitRead(enemy[i].characteristics, 5)) sprites.drawSelfMasked(enemy[i].x, enemy[i].y, puff, enemy[i].characteristics & B00001111);
       else
       {
         switch (enemy[i].type)
         {
           case ENEMY_FISHY:
-            sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFishy_plus_mask, enemy[i].characteristics & 0B00001111);
+            sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFishy_plus_mask, enemy[i].characteristics & B00001111);
             break;
           case ENEMY_FISH:
-            sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFish_plus_mask, enemy[i].characteristics & 0B00001111);
+            sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyFish_plus_mask, enemy[i].characteristics & B00001111);
             break;
           case ENEMY_JELLYFISH:
-            jellyFrame = enemy[i].characteristics & 0B00001111;
+            jellyFrame = enemy[i].characteristics & B00001111;
             if (jellyFrame > 4) jellyFrame = 0;
             sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyJellyfish_plus_mask, jellyFrame);
             break;
           case ENEMY_OCTOPUS:
-            sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyOctopus_plus_mask, enemy[i].characteristics & 0B00001111);
+            sprites.drawPlusMask(enemy[i].x, enemy[i].y, enemyOctopus_plus_mask, enemy[i].characteristics & B00001111);
             break;
           case ENEMY_SKULL:
-            sprites.drawSelfMasked(enemy[i].x, enemy[i].y, pirateSkull, enemy[i].characteristics & 0B00001111);
+            sprites.drawSelfMasked(enemy[i].x, enemy[i].y, pirateSkull, enemy[i].characteristics & B00001111);
             break;
           case ENEMY_SEAHORSETINY:
             sprites.drawSelfMasked(enemy[i].x, enemy[i].y, seahorseTiny, 0);
@@ -368,24 +360,16 @@ struct EndBosses
     int x;
     int y;
     int HP;
-    
-    byte characteristics = 0b00000000;   //this byte holds all the enemies characteristics
-    //                       ||||||||
-    //                       |||||||└->  0 \
-    //                       ||||||└-->  1  |  These 4 bits are used to determine the endBoss frame
-    //                       |||||└--->  2  |
-    //                       ||||└---->  3  /
-    //                       |||└----->  4 the endBoss is visible  (0 = false / 1 = true)
-    //                       ||└------>  5 the endBoss is dying    (0 = false / 1 = true)
-    //                       |└------->  6 the endBoss is imune    (0 = false / 1 = true)
-    //                       └-------->  7 the endBoss is alive    (0 = false / 1 = true)
-    
-    //boolean isVisible;
-    //boolean isImune;
-    //boolean isDying;
-    //boolean isAlive;
-    byte frame;
-    
+    byte characteristics;//B00000000;   //this byte holds all the enemies characteristics
+    //                      ||||||||
+    //                      |||||||└->  0 \
+    //                      ||||||└-->  1  |  These 4 bits are used to determine the endBoss frame
+    //                      |||||└--->  2  |
+    //                      ||||└---->  3  /
+    //                      |||└----->  4 the endBoss is visible  (0 = false / 1 = true)
+    //                      ||└------>  5 the endBoss is dying    (0 = false / 1 = true)
+    //                      |└------->  6 the endBoss is imune    (0 = false / 1 = true)
+    //                      └-------->  7 the endBoss is alive    (0 = false / 1 = true)
     byte attackFase;
     byte currentBullet;
     byte imuneTimer;
@@ -398,54 +382,31 @@ EndBosses endBoss;
 
 void setBosses()
 {
-  bitClear(endBoss.characteristics,7);
-  bitClear(endBoss.characteristics,4);
-  bitClear(endBoss.characteristics,6);
-  endBoss.y = 128;
+  endBoss.characteristics = B00000000;
+  endBoss.x = 128;
 }
 
 
 void setEndBoss()
 {
   backgroundIsVisible = false;
-  bitSet(endBoss.characteristics,4);
-  bitClear(endBoss.characteristics,6);
-  bitClear(endBoss.characteristics,5);
-  bitSet(endBoss.characteristics,7);
+  endBoss.characteristics = B10010000;
   endBoss.attackFase = 0;
   endBoss.imuneTimer = 0;
-  endBoss.frame = 0;
   endBoss.actingFase = 0;
   faseTimer = 0;
   endBossSwitch = true;
   endBossSwimsRight = false;
-  switch (level)
-  {
-    case LEVEL_WITH_SHARK:
-      endBoss.x = 128;
-      endBoss.y = 28;
-      endBoss.type = ENDBOSS_SHARK;
-      endBoss.HP = MAX_HP_SHARK;
-      break;
-    case LEVEL_WITH_SEAHORSE:
-      endBoss.x = 128;
-      endBoss.y = 16;
-      endBoss.type = ENDBOSS_SEAHORSE;
-      endBoss.HP = MAX_HP_SEAHORSE;
-      break;
-    case LEVEL_WITH_PIRATESHIP:
-      endBoss.x = 128;
-      endBoss.y = 10;
-      endBoss.type = ENDBOSS_PIRATESHIP;
-      endBoss.HP = MAX_HP_PIRATESHIP;
-      break;
-  }
+  endBoss.x = 128;
+  endBoss.y = endBossStartY[(level-1) / 3];
+  endBoss.HP = endBossMaxHP[(level-1) / 3];
+  endBoss.type = (level-1) / 3;
 }
 
 
 void checkEndBoss()
 {
-  if (bitRead(endBoss.characteristics,4))
+  if (bitRead(endBoss.characteristics, 4))
   {
     if (endBoss.currentBullet > MAX_BOSS_BULLETS - 1) endBoss.currentBullet = 0;
     for (byte i = 0; i < MAX_BOSS_BULLETS; i++)
@@ -472,47 +433,44 @@ void checkEndBoss()
     }
   }
 
-  if ((endBoss.HP < 1) && !bitRead(endBoss.characteristics,5))
+  if ((endBoss.HP < 1) && !bitRead(endBoss.characteristics, 5))
   {
-    bitClear(endBoss.characteristics,6);
-    bitSet(endBoss.characteristics,5);
+    bitClear(endBoss.characteristics, 6);
+    bitSet(endBoss.characteristics, 5);
     for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
     {
       bitSet(enemy[i].characteristics, 5);
     }
-    endBoss.frame = 0;
+    endBoss.characteristics &= B11110000;
   }
-  if (bitRead(endBoss.characteristics,6))
+  if (bitRead(endBoss.characteristics, 6))
   {
-    if (arduboy.everyXFrames(3)) endBoss.characteristics ^= 0B00010000;
+    if (arduboy.everyXFrames(3)) endBoss.characteristics ^= B00010000;
     endBoss.imuneTimer++;
     if (endBoss.imuneTimer > SHARK_IMUNE_TIME)
     {
       endBoss.imuneTimer = 0;
-      bitClear(endBoss.characteristics,6);
-      bitSet(endBoss.characteristics,4);
+      bitClear(endBoss.characteristics, 6);
+      bitSet(endBoss.characteristics, 4);
     }
   }
-  if (bitRead(endBoss.characteristics,4))
+  if (bitRead(endBoss.characteristics, 4))
   {
-    if (!bitRead(endBoss.characteristics,5))
+    if (!bitRead(endBoss.characteristics, 5))
     {
       if (endBoss.type == ENDBOSS_SHARK)
       {
-        if (arduboy.everyXFrames(4 + (6 * endBossSwitch))) endBoss.frame++;
+        if (arduboy.everyXFrames(4 + (6 * endBossSwitch))) endBoss.characteristics++;
       }
-      else if (arduboy.everyXFrames(10)) endBoss.frame++;
-      if (endBoss.frame > 3 ) endBoss.frame = 0;
+      else if (arduboy.everyXFrames(10)) endBoss.characteristics++;
+      if ((endBoss.characteristics & B00001111) > 3 ) endBoss.characteristics &= B11110000;
     }
     else
     {
-      if (arduboy.everyXFrames(3)) endBoss.frame++;
-      if (endBoss.frame > FRAMES_DYING)
+      if (arduboy.everyXFrames(3)) endBoss.characteristics++;
+      if ((endBoss.characteristics & B00001111) > FRAMES_DYING)
       {
-        bitClear(endBoss.characteristics,5);
-        bitClear(endBoss.characteristics,4);
-        bitClear(endBoss.characteristics,7);
-        endBoss.frame = 0;
+        endBoss.characteristics = 0;
       }
     }
   }
@@ -530,26 +488,26 @@ void drawEnemyHud(byte currentLife, byte maxLife)
 
 void drawBosses()
 {
-  if (bitRead(endBoss.characteristics,7)) drawEnemyHud(endBoss.HP, endBossMaxHP[endBoss.type]);
-  if (bitRead(endBoss.characteristics,4))
+  if (bitRead(endBoss.characteristics, 7)) drawEnemyHud(endBoss.HP, endBossMaxHP[endBoss.type]);
+  if (bitRead(endBoss.characteristics, 4))
   {
-    if (bitRead(endBoss.characteristics,5)) sprites.drawSelfMasked(endBoss.x, endBoss.y, puff, endBoss.frame);
+    if (bitRead(endBoss.characteristics, 5)) sprites.drawSelfMasked(endBoss.x, endBoss.y, puff, endBoss.characteristics & B00001111);
     else
     {
       switch (endBoss.type)
       {
         case ENDBOSS_SHARK:
-          sprites.drawSelfMasked(endBoss.x, endBoss.y, Shark, endBoss.frame + (4 * endBossSwimsRight));
+          sprites.drawSelfMasked(endBoss.x, endBoss.y, Shark, (endBoss.characteristics & B00001111) + (4 * endBossSwimsRight));
           break;
         case ENDBOSS_SEAHORSE:
           sprites.drawSelfMasked(endBoss.x, endBoss.y, seahorse, 0);
-          sprites.drawSelfMasked(endBoss.x + 12, endBoss.y + 15, seahorseFin, endBoss.frame);
+          sprites.drawSelfMasked(endBoss.x + 12, endBoss.y + 15, seahorseFin, endBoss.characteristics & B00001111);
           break;
         case ENDBOSS_PIRATESHIP:
           sprites.drawSelfMasked(endBoss.x, endBoss.y + 23, pirateshipBowsprit, 0);
           sprites.drawSelfMasked(endBoss.x + 16, endBoss.y + 24, pirateshipHull, 0);
           sprites.drawSelfMasked(endBoss.x + 24, endBoss.y + 16, pirateshipSail, 0);
-          //sprites.drawSelfMasked(endBoss.x + 24, endBoss.y + 16, pirateshipSail, endBoss.frame);
+          //sprites.drawSelfMasked(endBoss.x + 24, endBoss.y + 16, pirateshipSail, endBoss.characteristics & B00001111);
           sprites.drawSelfMasked(endBoss.x + 24, endBoss.y + 8, pirateshipYardarm, 0);
           sprites.drawSelfMasked(endBoss.x + 36, endBoss.y, pirateshipCrowsnest, 0);
           break;
@@ -563,7 +521,7 @@ void drawBosses()
 void sharkSwimsRightOnScreen()
 {
   endBossSwitch = true;
-  bitSet(endBoss.characteristics,6);
+  bitSet(endBoss.characteristics, 6);
   if (endBoss.x > 96)endBoss.x--;
   else endBoss.attackFase++;
 }
@@ -572,7 +530,7 @@ void sharkSwimsRightOnScreen()
 void sharkSwimsLeftOnScreen()
 {
   endBossSwitch = true;
-  bitSet(endBoss.characteristics,6);
+  bitSet(endBoss.characteristics, 6);
   if (endBoss.x < 0)endBoss.x++;
   else endBoss.attackFase++;
 }
@@ -725,7 +683,7 @@ void shootingSeahorse()
 void seahorseSwimsRightOnScreen()
 {
   endBossSwitch = true;
-  bitSet(endBoss.characteristics,6);
+  bitSet(endBoss.characteristics, 6);
   if (endBoss.x > 96)endBoss.x--;
   else endBoss.attackFase++;
 }
@@ -813,7 +771,7 @@ const FunctionPointer PROGMEM seahorseAttackFases[] =
 
 void shootingSkull()
 {
-  enemy[endBoss.currentBullet].characteristics &= 0B11110000;
+  enemy[endBoss.currentBullet].characteristics &= B11110000;
   bitSet(enemy[endBoss.currentBullet].characteristics, 4);
   bitClear(enemy[endBoss.currentBullet].characteristics, 5);
   enemy[endBoss.currentBullet].type = ENEMY_SKULL;
