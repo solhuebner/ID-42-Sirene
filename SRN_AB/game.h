@@ -88,7 +88,7 @@ const FunctionPointer PROGMEM nextLevelFases[] =
   slideOpen,
   slideToMiddle,
   wait,
-  nextLevelFlicker,
+  //nextLevelFlicker,
   nextLevelEnd,
 };
 
@@ -119,12 +119,12 @@ void stateGamePlaying()
   checkEnemies();
   checkEndBoss();
   checkBackground();
-  //checkPowerUP();
+  checkPowerUP();
 
   if (arduboy.everyXFrames(2)) ((FunctionPointer) pgm_read_word (&Levels[level - 1][currentWave]))();
 
   drawBackground();
-  //drawPowerUP();
+  drawPowerUP();
   
   drawBosses();
   drawEnemies();

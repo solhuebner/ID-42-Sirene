@@ -8,6 +8,13 @@
 #define TOTAL_AMOUNT_OF_LEVELS  9
 #define TOTAL_AMOUNT_OF_WAVES   20
 
+#define POWER_UP_HEART             0
+#define POWER_UP_STAR              1
+#define POWER_UP_TRIDENT           2
+#define POWER_UP_BUBBLE            3
+#define POWER_UP_SEASHELL          4
+#define POWER_UP_MAGIC             5
+
 byte currentWave;
 byte previousWave;
 
@@ -28,7 +35,7 @@ boolean checkEndWave()
   {
     test += bitRead(enemy[i].characteristics, 7);
   }
-  //test += powerUP.isActive;
+  test += powerUP.isActive;
   if (test < 1) currentWave++;
 }
 
@@ -53,10 +60,10 @@ void wave001()
   if (checkStartWave())
   {
     enemySetInLine(ENEMY_FISHY, 0, 3, 128, 12, 20, 0);
-    //powerUPSet(128, 24, POWER_UP_STAR);
+    powerUPSet(128, 24, POWER_UP_STAR);
   }
   enemySwimRightLeft(0, 3, 2);
-  //powerUPFloatRightLeft(1);
+  powerUPFloatRightLeft(1);
   checkEndWave();
 }
 
@@ -503,15 +510,15 @@ void checkCollisions()
     Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = enemyCollisionWidth[enemy[i].type], .height = enemyCollisionHeight[enemy[i].type]};
     if (bitRead(enemy[i].characteristics, 4) && !bitRead(enemy[i].characteristics, 5) && arduboy.collide(mermaidRect, enemyRect))
     {
-      if (!mermaid.isImune)
+      if (!mermaid.isImune && !mermaid.isSuper)
       {
-        arduboy.audio.tone(2349, 15);
         mermaid.isImune = true;
         mermaid.HP -= 1;
       }
       if (!bitRead(enemy[i].characteristics, 6))
       {
         bitSet(enemy[i].characteristics, 5);
+        arduboy.audio.tone(2349, 15);
       }
     }
   }
@@ -520,7 +527,7 @@ void checkCollisions()
     Rect enemyBulletRect = {.x = enemyBullet[i].x + 1, .y = enemyBullet[i].y + 1, .width = 6, .height = 6};
     if (enemyBullet[i].isVisible && arduboy.collide(mermaidRect, enemyBulletRect))
     {
-      if (!mermaid.isImune)
+      if (!mermaid.isImune && !mermaid.isSuper)
       {
         arduboy.audio.tone(2349, 15);
         mermaid.isImune = true;
@@ -538,19 +545,12 @@ void checkCollisions()
       bitSet(endBoss.characteristics,6);
       endBoss.HP--;
     }
-    if (!mermaid.isImune)
+    if (!mermaid.isImune && !mermaid.isSuper)
     {
       mermaid.isImune = true;
       mermaid.HP -= 1;
     }
   }
-
-#define POWER_UP_HEART             0
-#define POWER_UP_STAR              1
-#define POWER_UP_TRIDENT           2
-#define POWER_UP_BUBBLE            3
-#define POWER_UP_SEASHELL          4
-#define POWER_UP_MAGIC             5
 
   if (powerUP.isActive)
   {
