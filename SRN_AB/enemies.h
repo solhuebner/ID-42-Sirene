@@ -103,16 +103,15 @@ struct Enemies
     byte characteristics = 0b00000000;   //this byte holds all the enemies characteristics
     //                       ||||||||
     //                       |||||||└->  0 \
-    //                       ||||||└-->  1  |  These 3 bits are used to determine the enemy type
-    //                       |||||└--->  2 /
-    //                       ||||└---->  3
+    //                       ||||||└-->  1  |  These 4 bits are used to determine the enemy frame
+    //                       |||||└--->  2  |
+    //                       ||||└---->  3  /
     //                       |||└----->  4 the enemy is visible  (0 = false / 1 = true)
     //                       ||└------>  5 the enemy is dying    (0 = false / 1 = true)
     //                       |└------->  6 the enemy is imune    (0 = false / 1 = true)
     //                       └-------->  7 the enemy is alive    (0 = false / 1 = true)
 
     byte imuneTimer;
-    //byte frame;
     byte type;
     byte bulletsShot;
 };
@@ -165,10 +164,6 @@ void setEnemies()
   for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
   {
     enemy[i].characteristics = i;
-    bitClear(enemy[i].characteristics, 4);
-    bitClear(enemy[i].characteristics, 5);
-    bitClear(enemy[i].characteristics, 6);
-    bitClear(enemy[i].characteristics, 7);
     enemy[i].imuneTimer = 0;
     enemy[i].x = 128;
     enemy[i].bulletsShot = 0;
