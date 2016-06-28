@@ -99,10 +99,23 @@ struct Enemies
     int x;
     int y;
     int HP;
+    /*
+    byte characteristics = 0b00000000;   //this byte holds all the enemies characteristics
+    //                       ||||||||
+    //                       |||||||└->  0 \
+    //                       ||||||└-->  1  |  These 3 bits are used to determine the enemy type
+    //                       |||||└--->  2 /
+    //                       ||||└---->  3 the enemy is visible  (0 = false / 1 = true)
+    //                       |||└----->  4 the enemy is dying    (0 = false / 1 = true)
+    //                       ||└------>  5 the enemy is imune    (0 = false / 1 = true)
+    //                       |└------->  6 the enemy is alive    (0 = false / 1 = true)
+    //                       └-------->  7
+    */
     boolean isVisible;
     boolean isDying;
     boolean isImune;
     boolean isAlive;
+    
     byte imuneTimer;
     byte frame;
     byte type;

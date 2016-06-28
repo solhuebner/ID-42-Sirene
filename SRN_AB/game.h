@@ -102,7 +102,7 @@ void stateGameNextLevel()
   endBoss.isVisible = false;
   if (objectVisible)
   {
-    sprites.drawSelfMasked(leftX, 28, stage, 0);
+    sprites.drawSelfMasked(leftX, 28, textStage, 0);
     sprites.drawSelfMasked(rightX, 28, numbersBig, level + 1);
   }
   ((FunctionPointer) pgm_read_word (&nextLevelFases[gameOverAndStageFase]))();
@@ -173,10 +173,10 @@ const FunctionPointer PROGMEM gameOverFases[] =
 void stateGameOver()
 {
   ((FunctionPointer) pgm_read_word (&gameOverFases[gameOverAndStageFase]))();
-  sprites.drawSelfMasked(leftX, 16, game, 0);
-  sprites.drawSelfMasked(rightX, 16, over, 0);
+  sprites.drawSelfMasked(leftX, 16, textGame, 0);
+  sprites.drawSelfMasked(rightX, 16, textOver, 0);
   if (objectVisible) {
-    sprites.drawSelfMasked(35, 28, highscore, 0);
+    sprites.drawSelfMasked(35, 28, textHighscore, 0);
     drawScore(SCORE_BIG_FONT);
   }
 };
@@ -198,7 +198,7 @@ void stateGameEnded()
     checkBackground();
     drawBackground();
     drawMermaid();
-    sprites.drawSelfMasked(35, 28, highscore, 0);
+    sprites.drawSelfMasked(35, 28, textHighscore, 0);
     drawScore(SCORE_BIG_FONT);
   }
 }
