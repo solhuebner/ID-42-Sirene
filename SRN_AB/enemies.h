@@ -511,7 +511,7 @@ void drawBosses()
       switch (endBoss.characteristics & 0B00000011)
       {
         case ENDBOSS_SHARK:
-          sprites.drawSelfMasked(endBoss.x, endBoss.y, Shark, endBoss.frame + (4 * bitRead(endBoss.characteristics,2)));
+          sprites.drawSelfMasked(endBoss.x, endBoss.y, shark, endBoss.frame + (4 * bitRead(endBoss.characteristics,2)));
           break;
         case ENDBOSS_SEAHORSE:
           sprites.drawSelfMasked(endBoss.x, endBoss.y, seahorse, 0);
@@ -520,7 +520,6 @@ void drawBosses()
         case ENDBOSS_PIRATESHIP:
           sprites.drawSelfMasked(endBoss.x, endBoss.y + 23, pirateshipBowsprit, 0);
           sprites.drawSelfMasked(endBoss.x + 16, endBoss.y + 24, pirateshipHull, 0);
-          //sprites.drawSelfMasked(endBoss.x + 24, endBoss.y + 16, pirateshipSail, 0);
           sprites.drawSelfMasked(endBoss.x + 24, endBoss.y + 16, pirateshipSail, endBoss.frame);
           sprites.drawSelfMasked(endBoss.x + 24, endBoss.y + 8, pirateshipYardarm, 0);
           sprites.drawSelfMasked(endBoss.x + 36, endBoss.y, pirateshipCrowsnest, 0);
