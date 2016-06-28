@@ -26,7 +26,7 @@ boolean checkEndWave()
   byte test = 0;
   for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
   {
-    test += bitRead(enemy[i].characteristics,7);
+    test += bitRead(enemy[i].characteristics, 7);
   }
   //test += powerUP.isActive;
   if (test < 1) currentWave++;
@@ -213,7 +213,7 @@ void wave250()
   //Shark attack
   if (checkStartWave())setEndBoss();
   ((FunctionPointer) pgm_read_word (&sharkAttackFases[endBoss.attackFase]))();
-  if (!endBoss.isAlive) currentWave++;
+  if (!bitRead(endBoss.characteristics,7)) currentWave++;
 }
 
 void wave251()
@@ -221,7 +221,7 @@ void wave251()
   //seahorse attack
   if (checkStartWave())setEndBoss();
   ((FunctionPointer) pgm_read_word (&seahorseAttackFases[endBoss.attackFase]))();
-  if (!endBoss.isAlive) currentWave++;
+  if (!bitRead(endBoss.characteristics,7)) currentWave++;
 }
 
 void wave252()
@@ -229,7 +229,7 @@ void wave252()
   //pirateShip attack
   if (checkStartWave())setEndBoss();
   ((FunctionPointer) pgm_read_word (&pirateShipAttackFases[endBoss.attackFase]))();
-  if (!endBoss.isAlive) currentWave++;
+  if (!bitRead(endBoss.characteristics,7)) currentWave++;
 }
 
 
@@ -467,13 +467,13 @@ void checkCollisions()
       for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
       {
         Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = enemyCollisionWidth[enemy[i].type], .height = enemyCollisionHeight[enemy[i].type]};
-        if (bitRead(enemy[i].characteristics,4) && !bitRead(enemy[i].characteristics,5) && arduboy.collide(bulletsRect, enemyRect))
+        if (bitRead(enemy[i].characteristics, 4) && !bitRead(enemy[i].characteristics, 5) && arduboy.collide(bulletsRect, enemyRect))
         {
-          if (!bitRead(enemy[i].characteristics,6))
+          if (!bitRead(enemy[i].characteristics, 6))
           {
             arduboy.audio.tone(523, 10);
             enemy[i].HP -= bullet[k].damage;
-            bitSet(enemy[i].characteristics,6);
+            bitSet(enemy[i].characteristics, 6);
           }
           if (bullet[k].type != WEAPON_TYPE_MAGIC)
           {
@@ -481,12 +481,12 @@ void checkCollisions()
           }
         }
       }
-      if (endBoss.isVisible && !endBoss.isDying && arduboy.collide(bulletsRect, endBossRect))
+      if (bitRead(endBoss.characteristics,4) && !bitRead(endBoss.characteristics,5) && arduboy.collide(bulletsRect, endBossRect))
       {
-        if (!endBoss.isImune)
+        if (!bitRead(endBoss.characteristics,6))
         {
           arduboy.audio.tone(523, 10);
-          endBoss.isImune = true;
+          bitSet(endBoss.characteristics,6);
           bullet[k].isVisible = false;
           endBoss.HP -= bullet[k].damage;
         }
@@ -501,7 +501,7 @@ void checkCollisions()
   for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
   {
     Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = enemyCollisionWidth[enemy[i].type], .height = enemyCollisionHeight[enemy[i].type]};
-    if (bitRead(enemy[i].characteristics,4) && !bitRead(enemy[i].characteristics,5) && arduboy.collide(mermaidRect, enemyRect))
+    if (bitRead(enemy[i].characteristics, 4) && !bitRead(enemy[i].characteristics, 5) && arduboy.collide(mermaidRect, enemyRect))
     {
       if (!mermaid.isImune)
       {
@@ -509,9 +509,9 @@ void checkCollisions()
         mermaid.isImune = true;
         mermaid.HP -= 1;
       }
-      if (!bitRead(enemy[i].characteristics,6))
+      if (!bitRead(enemy[i].characteristics, 6))
       {
-        bitSet(enemy[i].characteristics,5);
+        bitSet(enemy[i].characteristics, 5);
       }
     }
   }
@@ -530,21 +530,18 @@ void checkCollisions()
     }
   }
 
-  if (endBoss.isVisible)
+  if (bitRead(endBoss.characteristics,4) && !bitRead(endBoss.characteristics,5) && arduboy.collide(mermaidRect, endBossRect))
   {
-    if (endBoss.isVisible && !endBoss.isDying && arduboy.collide(mermaidRect, endBossRect))
+    if (!bitRead(endBoss.characteristics,6))
     {
-      if (!endBoss.isImune)
-      {
-        arduboy.audio.tone(2349, 15);
-        endBoss.isImune = true;
-        endBoss.HP--;
-      }
-      if (!mermaid.isImune)
-      {
-        mermaid.isImune = true;
-        mermaid.HP -= 1;
-      }
+      arduboy.audio.tone(2349, 15);
+      bitSet(endBoss.characteristics,6);
+      endBoss.HP--;
+    }
+    if (!mermaid.isImune)
+    {
+      mermaid.isImune = true;
+      mermaid.HP -= 1;
     }
   }
 

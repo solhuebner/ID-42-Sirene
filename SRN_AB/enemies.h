@@ -368,14 +368,27 @@ struct EndBosses
     int x;
     int y;
     int HP;
-    boolean isVisible;
-    boolean isImune;
-    boolean isDying;
-    boolean isAlive;
+    
+    byte characteristics = 0b00000000;   //this byte holds all the enemies characteristics
+    //                       ||||||||
+    //                       |||||||└->  0 \
+    //                       ||||||└-->  1  |  These 4 bits are used to determine the endBoss frame
+    //                       |||||└--->  2  |
+    //                       ||||└---->  3  /
+    //                       |||└----->  4 the endBoss is visible  (0 = false / 1 = true)
+    //                       ||└------>  5 the endBoss is dying    (0 = false / 1 = true)
+    //                       |└------->  6 the endBoss is imune    (0 = false / 1 = true)
+    //                       └-------->  7 the endBoss is alive    (0 = false / 1 = true)
+    
+    //boolean isVisible;
+    //boolean isImune;
+    //boolean isDying;
+    //boolean isAlive;
+    byte frame;
+    
     byte attackFase;
     byte currentBullet;
     byte imuneTimer;
-    byte frame;
     byte type;
     byte actingFase;
 };
@@ -385,9 +398,9 @@ EndBosses endBoss;
 
 void setBosses()
 {
-  endBoss.isAlive = false;
-  endBoss.isVisible = false;
-  endBoss.isImune = false;
+  bitClear(endBoss.characteristics,7);
+  bitClear(endBoss.characteristics,4);
+  bitClear(endBoss.characteristics,6);
   endBoss.y = 128;
 }
 
@@ -395,10 +408,10 @@ void setBosses()
 void setEndBoss()
 {
   backgroundIsVisible = false;
-  endBoss.isVisible = true;
-  endBoss.isImune = false;
-  endBoss.isDying = false;
-  endBoss.isAlive = true;
+  bitSet(endBoss.characteristics,4);
+  bitClear(endBoss.characteristics,6);
+  bitClear(endBoss.characteristics,5);
+  bitSet(endBoss.characteristics,7);
   endBoss.attackFase = 0;
   endBoss.imuneTimer = 0;
   endBoss.frame = 0;
@@ -432,7 +445,7 @@ void setEndBoss()
 
 void checkEndBoss()
 {
-  if (endBoss.isVisible)
+  if (bitRead(endBoss.characteristics,4))
   {
     if (endBoss.currentBullet > MAX_BOSS_BULLETS - 1) endBoss.currentBullet = 0;
     for (byte i = 0; i < MAX_BOSS_BULLETS; i++)
@@ -459,30 +472,30 @@ void checkEndBoss()
     }
   }
 
-  if ((endBoss.HP < 1) && !endBoss.isDying)
+  if ((endBoss.HP < 1) && !bitRead(endBoss.characteristics,5))
   {
-    endBoss.isImune = false;
-    endBoss.isDying = true;
+    bitClear(endBoss.characteristics,6);
+    bitSet(endBoss.characteristics,5);
     for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
     {
       bitSet(enemy[i].characteristics, 5);
     }
     endBoss.frame = 0;
   }
-  if (endBoss.isImune)
+  if (bitRead(endBoss.characteristics,6))
   {
-    if (arduboy.everyXFrames(3)) endBoss.isVisible = !endBoss.isVisible;
+    if (arduboy.everyXFrames(3)) endBoss.characteristics ^= 0B00010000;
     endBoss.imuneTimer++;
     if (endBoss.imuneTimer > SHARK_IMUNE_TIME)
     {
       endBoss.imuneTimer = 0;
-      endBoss.isImune = false;
-      endBoss.isVisible = true;
+      bitClear(endBoss.characteristics,6);
+      bitSet(endBoss.characteristics,4);
     }
   }
-  if (endBoss.isVisible)
+  if (bitRead(endBoss.characteristics,4))
   {
-    if (!endBoss.isDying)
+    if (!bitRead(endBoss.characteristics,5))
     {
       if (endBoss.type == ENDBOSS_SHARK)
       {
@@ -496,9 +509,9 @@ void checkEndBoss()
       if (arduboy.everyXFrames(3)) endBoss.frame++;
       if (endBoss.frame > FRAMES_DYING)
       {
-        endBoss.isDying = false;
-        endBoss.isVisible = false;
-        endBoss.isAlive = false;
+        bitClear(endBoss.characteristics,5);
+        bitClear(endBoss.characteristics,4);
+        bitClear(endBoss.characteristics,7);
         endBoss.frame = 0;
       }
     }
@@ -517,10 +530,10 @@ void drawEnemyHud(byte currentLife, byte maxLife)
 
 void drawBosses()
 {
-  if (endBoss.isAlive) drawEnemyHud(endBoss.HP, endBossMaxHP[endBoss.type]);
-  if (endBoss.isVisible)
+  if (bitRead(endBoss.characteristics,7)) drawEnemyHud(endBoss.HP, endBossMaxHP[endBoss.type]);
+  if (bitRead(endBoss.characteristics,4))
   {
-    if (endBoss.isDying) sprites.drawSelfMasked(endBoss.x, endBoss.y, puff, endBoss.frame);
+    if (bitRead(endBoss.characteristics,5)) sprites.drawSelfMasked(endBoss.x, endBoss.y, puff, endBoss.frame);
     else
     {
       switch (endBoss.type)
@@ -550,7 +563,7 @@ void drawBosses()
 void sharkSwimsRightOnScreen()
 {
   endBossSwitch = true;
-  endBoss.isImune = true;
+  bitSet(endBoss.characteristics,6);
   if (endBoss.x > 96)endBoss.x--;
   else endBoss.attackFase++;
 }
@@ -559,7 +572,7 @@ void sharkSwimsRightOnScreen()
 void sharkSwimsLeftOnScreen()
 {
   endBossSwitch = true;
-  endBoss.isImune = true;
+  bitSet(endBoss.characteristics,6);
   if (endBoss.x < 0)endBoss.x++;
   else endBoss.attackFase++;
 }
@@ -712,7 +725,7 @@ void shootingSeahorse()
 void seahorseSwimsRightOnScreen()
 {
   endBossSwitch = true;
-  endBoss.isImune = true;
+  bitSet(endBoss.characteristics,6);
   if (endBoss.x > 96)endBoss.x--;
   else endBoss.attackFase++;
 }

@@ -99,7 +99,7 @@ void stateGameNextLevel()
   drawMermaid();
   currentWave = 0;
   previousWave = 255;
-  endBoss.isVisible = false;
+  bitClear(endBoss.characteristics,4);
   if (objectVisible)
   {
     sprites.drawSelfMasked(leftX, 28, textStage, 0);
