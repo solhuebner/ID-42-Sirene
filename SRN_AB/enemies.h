@@ -87,10 +87,6 @@ byte faseTimer;
 byte mermaidsPosition;
 byte currentEnemyBullet;
 
-boolean endBossSwitch;
-boolean endBossSwimsRight;
-
-
 
 //////// Enemy functions ///////////////////
 ////////////////////////////////////////////
@@ -114,7 +110,7 @@ struct Enemies
     //                       └-------->  7
 
     byte imuneTimer;
-    
+
     byte frame;
     byte bulletsShot;
 };
@@ -363,6 +359,8 @@ void drawEnemies()
 
 //////// BOSS functions ////////////////////
 ////////////////////////////////////////////
+//boolean endBossSwitch;
+//boolean endBossSwimsRight;
 struct EndBosses
 {
   public:
@@ -373,13 +371,13 @@ struct EndBosses
     byte characteristics = 0b00000000;   //this byte holds all the enemies characteristics
     //                       ||||||||
     //                       |||||||└->  0 \
-    //                       ||||||└-->  1  |  These 3 bits are used to determine the boss type
-    //                       |||||└--->  2 /
+    //                       ||||||└-->  1 /  These 2 bits are used to determine the boss type
+    //                       |||||└--->  2 the boss swims right (0 = false / 1 = true)
     //                       ||||└---->  3 the boss is visible  (0 = false / 1 = true)
     //                       |||└----->  4 the boss is dying    (0 = false / 1 = true)
     //                       ||└------>  5 the boss is imune    (0 = false / 1 = true)
     //                       |└------->  6 the boss is alive    (0 = false / 1 = true)
-    //                       └-------->  7
+    //                       └-------->  7 the boss switches    (0 = false / 1 = true)
 
     byte attackFase;
     byte currentBullet;
@@ -401,18 +399,16 @@ void setBosses()
 void setEndBoss()
 {
   backgroundIsVisible = false;
-  endBoss.characteristics = 0;
+  endBoss.characteristics = 0B10000000;
   endBoss.attackFase = 0;
   endBoss.imuneTimer = 0;
   endBoss.frame = 0;
   endBoss.actingFase = 0;
   faseTimer = 0;
-  endBossSwitch = true;
-  endBossSwimsRight = false;
   endBoss.x = 128;
   endBoss.y = endBossStartX[level / 3];
   endBoss.HP = endBossMaxHP[level / 3];
-  endBoss.characteristics = (endBoss.characteristics & 0B11111000) + (level / 3);
+  endBoss.characteristics = (endBoss.characteristics & 0B11111100) + (level / 3);
 
 }
 
@@ -456,6 +452,7 @@ void checkEndBoss()
     }
     endBoss.frame = 0;
   }
+  
   if (bitRead(endBoss.characteristics, 5))
   {
     if (arduboy.everyXFrames(3)) endBoss.characteristics = endBoss.characteristics ^ 0B00001000;
@@ -467,13 +464,14 @@ void checkEndBoss()
       bitClear(endBoss.characteristics, 5);
     }
   }
+  
   if (bitRead(endBoss.characteristics, 3))
   {
     if (!bitRead(endBoss.characteristics, 4))
     {
-      if (endBoss.characteristics & 0B00000111 == ENDBOSS_SHARK)
+      if (endBoss.characteristics & 0B00000011 == ENDBOSS_SHARK)
       {
-        if (arduboy.everyXFrames(4 + (6 * endBossSwitch))) endBoss.frame++;
+        if (arduboy.everyXFrames(4 + (6 * bitRead(endBoss.characteristics,7)))) endBoss.frame++;
       }
       else if (arduboy.everyXFrames(10)) endBoss.frame++;
       if (endBoss.frame > 3 ) endBoss.frame = 0;
@@ -504,16 +502,16 @@ void drawEnemyHud(byte currentLife, byte maxLife)
 
 void drawBosses()
 {
-  if (bitRead(endBoss.characteristics, 6)) drawEnemyHud(endBoss.HP, endBossMaxHP[endBoss.characteristics & 0B00000111]);
+  if (bitRead(endBoss.characteristics, 6)) drawEnemyHud(endBoss.HP, endBossMaxHP[endBoss.characteristics & 0B00000011]);
   if (bitRead(endBoss.characteristics, 3))
   {
     if (bitRead(endBoss.characteristics, 4)) sprites.drawSelfMasked(endBoss.x, endBoss.y, puff, endBoss.frame);
     else
     {
-      switch (endBoss.characteristics & 0B00000111)
+      switch (endBoss.characteristics & 0B00000011)
       {
         case ENDBOSS_SHARK:
-          sprites.drawSelfMasked(endBoss.x, endBoss.y, Shark, endBoss.frame + (4 * endBossSwimsRight));
+          sprites.drawSelfMasked(endBoss.x, endBoss.y, Shark, endBoss.frame + (4 * bitRead(endBoss.characteristics,2)));
           break;
         case ENDBOSS_SEAHORSE:
           sprites.drawSelfMasked(endBoss.x, endBoss.y, seahorse, 0);
@@ -536,7 +534,7 @@ void drawBosses()
 ////////////////////////////////////////////
 void sharkSwimsRightOnScreen()
 {
-  endBossSwitch = true;
+  bitSet(endBoss.characteristics,7);
   bitSet(endBoss.characteristics, 5);
   if (endBoss.x > 96)endBoss.x--;
   else endBoss.attackFase++;
@@ -545,7 +543,7 @@ void sharkSwimsRightOnScreen()
 
 void sharkSwimsLeftOnScreen()
 {
-  endBossSwitch = true;
+  bitSet(endBoss.characteristics,7);
   bitSet(endBoss.characteristics, 5);
   if (endBoss.x < 0)endBoss.x++;
   else endBoss.attackFase++;
@@ -562,7 +560,7 @@ void sharkSwimsLeftFollow()
   if (endBoss.x > -40) endBoss.x -= 2;
   else
   {
-    endBossSwimsRight = !endBossSwimsRight;
+    endBoss.characteristics = endBoss.characteristics ^ 0B00000100;
     endBoss.attackFase++;
   }
 }
@@ -578,7 +576,7 @@ void sharkSwimsRightFollow()
   if (endBoss.x < 136) endBoss.x += 2;
   else
   {
-    endBossSwimsRight = !endBossSwimsRight;
+    endBoss.characteristics = endBoss.characteristics ^ 0B00000100;
     endBoss.attackFase++;
   }
 }
@@ -597,7 +595,7 @@ void sharkWait()
 
 void sharkSpeedUpFrame()
 {
-  endBossSwitch = false;
+  bitClear(endBoss.characteristics,7);
   endBoss.attackFase++;
 }
 
@@ -619,7 +617,7 @@ void sharkSwimsRightFast()
   if (endBoss.x < 136) endBoss.x += 5;
   else
   {
-    endBossSwimsRight = !endBossSwimsRight;
+    endBoss.characteristics = endBoss.characteristics ^ 0B00000100;
     endBoss.attackFase++;
   }
 }
@@ -635,7 +633,7 @@ void sharkSwimsLeftFast()
   if (endBoss.x > -40) endBoss.x -= 5;
   else
   {
-    endBossSwimsRight = !endBossSwimsRight;
+    endBoss.characteristics = endBoss.characteristics ^ 0B00000100;
     endBoss.attackFase++;
   }
 }
@@ -698,7 +696,7 @@ void shootingSeahorse()
 
 void seahorseSwimsRightOnScreen()
 {
-  endBossSwitch = true;
+  bitSet(endBoss.characteristics,7);
   bitSet(endBoss.characteristics, 5);
   if (endBoss.x > 96)endBoss.x--;
   else endBoss.attackFase++;
@@ -817,16 +815,16 @@ void pirateShipWait()
 
 void pirateShipGoesUpDownAndShoots()
 {
-  if (endBossSwitch)
+  if (bitRead(endBoss.characteristics,7))
   {
     if (endBoss.y > -20)
     {
       if (arduboy.everyXFrames(22)) shootingSkull();
       endBoss.y -= 2;
     }
-    else endBossSwitch = !endBossSwitch;
+    else endBoss.characteristics = endBoss.characteristics ^ 0B10000000;
   }
-  if (!endBossSwitch)
+  if (!bitRead(endBoss.characteristics,7))
   {
     if (endBoss.y < 40)
     {
@@ -835,7 +833,7 @@ void pirateShipGoesUpDownAndShoots()
     }
     else
     {
-      endBossSwitch = !endBossSwitch;
+      endBoss.characteristics = endBoss.characteristics ^ 0B10000000;
       endBoss.actingFase++;
     }
   }
@@ -873,8 +871,8 @@ void pirateShipLaunches()
 
 void pirateShipTrembles()
 {
-  endBoss.x =  endBoss.x + (2 * (1 - (2 * endBossSwitch)));
-  endBossSwitch = !endBossSwitch;
+  endBoss.x =  endBoss.x + (2 * (1 - (2 * bitRead(endBoss.characteristics,7))));
+  endBoss.characteristics = endBoss.characteristics ^ 0B10000000;
   endBoss.actingFase++;
   if (endBoss.actingFase > 5)
   {
