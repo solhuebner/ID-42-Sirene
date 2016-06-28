@@ -60,13 +60,15 @@ struct Players
     byte x;
     byte y;
     byte weaponType;
+    
     boolean isVisible;
     boolean isImune;
     boolean isSuper;
+    boolean magicCharging;
+    
     byte imuneTimer;
     byte HP;
     byte frame;
-    boolean magicCharging;
     byte chargeBarFrame;
     byte currentBullet;
     byte currentSeaShell;
@@ -103,7 +105,6 @@ Sparkles sparkle[MAX_ONSCREEN_SPARKLES];
 
 //////// Player functions //////////////////
 ////////////////////////////////////////////
-
 void setMermaid()
 {
   mermaid.x = 0;
@@ -134,7 +135,7 @@ void checkMermaid()
 
   if (mermaid.isSuper)
   {
-    if (arduboy.everyXFrames(3)) 
+    if (arduboy.everyXFrames(3))
     {
       mermaid.imuneTimer++;
       mermaid.isVisible = !mermaid.isVisible;

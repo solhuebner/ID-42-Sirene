@@ -26,7 +26,7 @@ boolean checkEndWave()
   byte test = 0;
   for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
   {
-    test += enemy[i].isAlive;
+    test += bitRead(enemy[i].characteristics, 6);
   }
   test += powerUP.isActive;
   if (test < 1) currentWave++;
@@ -213,7 +213,7 @@ void wave250()
   //Shark attack
   if (checkStartWave())setEndBoss();
   ((FunctionPointer) pgm_read_word (&sharkAttackFases[endBoss.attackFase]))();
-  if (!endBoss.isAlive) currentWave++;
+  if (!bitRead(endBoss.characteristics, 6)) currentWave++;
 }
 
 void wave251()
@@ -221,7 +221,7 @@ void wave251()
   //seahorse attack
   if (checkStartWave())setEndBoss();
   ((FunctionPointer) pgm_read_word (&seahorseAttackFases[endBoss.attackFase]))();
-  if (!endBoss.isAlive) currentWave++;
+  if (!bitRead(endBoss.characteristics, 6)) currentWave++;
 }
 
 void wave252()
@@ -229,7 +229,7 @@ void wave252()
   //pirateShip attack
   if (checkStartWave())setEndBoss();
   ((FunctionPointer) pgm_read_word (&pirateShipAttackFases[endBoss.attackFase]))();
-  if (!endBoss.isAlive) currentWave++;
+  if (!bitRead(endBoss.characteristics, 6)) currentWave++;
 }
 
 
@@ -271,7 +271,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave003,
     wave002,
     wave000,
-    wave255,
+    wave250,
   },
   { //LEVEL 01-02
     wave000,
@@ -466,14 +466,14 @@ void checkCollisions()
       Rect bulletsRect {.x = bullet[k].x + bulletCollisionOffset[bullet[k].type], .y = bullet[k].y, .width = 8, .height = 8};
       for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
       {
-        Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = enemyCollisionWidth[enemy[i].type], .height = enemyCollisionHeight[enemy[i].type]};
-        if (enemy[i].isVisible && !enemy[i].isDying && arduboy.collide(bulletsRect, enemyRect))
+        Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = enemyCollisionWidth[enemy[i].characteristics & 0B00000111], .height = enemyCollisionHeight[enemy[i].characteristics & 0B00000111]};
+        if (bitRead(enemy[i].characteristics, 3) && !bitRead(enemy[i].characteristics, 4) && arduboy.collide(bulletsRect, enemyRect))
         {
-          if (!enemy[i].isImune)
+          if (!bitRead(enemy[i].characteristics, 5))
           {
             arduboy.audio.tone(523, 10);
             enemy[i].HP -= bullet[k].damage;
-            enemy[i].isImune = true;
+            bitSet(enemy[i].characteristics, 5);
           }
           if (bullet[k].type != WEAPON_TYPE_MAGIC)
           {
@@ -481,12 +481,12 @@ void checkCollisions()
           }
         }
       }
-      if (endBoss.isVisible && !endBoss.isDying && arduboy.collide(bulletsRect, endBossRect))
+      if (bitRead(endBoss.characteristics, 3) && !bitRead(endBoss.characteristics, 4) && arduboy.collide(bulletsRect, endBossRect))
       {
-        if (!endBoss.isImune)
+        if (!bitRead(endBoss.characteristics,5))
         {
           arduboy.audio.tone(523, 10);
-          endBoss.isImune = true;
+          bitSet(endBoss.characteristics,5);
           bullet[k].isVisible = false;
           endBoss.HP -= bullet[k].damage;
         }
@@ -500,8 +500,8 @@ void checkCollisions()
 
   for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
   {
-    Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = enemyCollisionWidth[enemy[i].type], .height = enemyCollisionHeight[enemy[i].type]};
-    if (enemy[i].isVisible && !enemy[i].isDying && arduboy.collide(mermaidRect, enemyRect))
+    Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = enemyCollisionWidth[enemy[i].characteristics & 0B00000111], .height = enemyCollisionHeight[enemy[i].characteristics & 0B00000111]};
+    if (bitRead(enemy[i].characteristics, 3) && bitRead(enemy[i].characteristics, 4) && arduboy.collide(mermaidRect, enemyRect))
     {
       if (!mermaid.isImune)
       {
@@ -509,12 +509,13 @@ void checkCollisions()
         mermaid.isImune = true;
         mermaid.HP -= 1;
       }
-      if (!enemy[i].isImune)
+      if (!bitRead(enemy[i].characteristics, 5))
       {
-        enemy[i].isDying = true;
+        bitSet (enemy[i].characteristics, 4);
       }
     }
   }
+
   for (byte i = 0; i < MAX_ONSCREEN_ENEMY_BULLETS; i++)
   {
     Rect enemyBulletRect = {.x = enemyBullet[i].x + 1, .y = enemyBullet[i].y + 1, .width = 6, .height = 6};
@@ -530,30 +531,21 @@ void checkCollisions()
     }
   }
 
-  if (endBoss.isVisible)
+  if (bitRead(endBoss.characteristics, 3) && !bitRead(endBoss.characteristics, 4) && arduboy.collide(mermaidRect, endBossRect))
   {
-    if (endBoss.isVisible && !endBoss.isDying && arduboy.collide(mermaidRect, endBossRect))
+    if (!bitRead(endBoss.characteristics,5))
     {
-      if (!endBoss.isImune)
-      {
-        arduboy.audio.tone(2349, 15);
-        endBoss.isImune = true;
-        endBoss.HP--;
-      }
-      if (!mermaid.isImune)
-      {
-        mermaid.isImune = true;
-        mermaid.HP -= 1;
-      }
+      arduboy.audio.tone(2349, 15);
+      bitSet(endBoss.characteristics,5);
+      endBoss.HP--;
+    }
+    if (!mermaid.isImune)
+    {
+      mermaid.isImune = true;
+      mermaid.HP -= 1;
     }
   }
 
-#define POWER_UP_HEART             0
-#define POWER_UP_STAR              1
-#define POWER_UP_TRIDENT           2
-#define POWER_UP_BUBBLE            3
-#define POWER_UP_SEASHELL          4
-#define POWER_UP_MAGIC             5
 
   if (powerUP.isActive)
   {

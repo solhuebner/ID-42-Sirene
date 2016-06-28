@@ -99,7 +99,7 @@ void stateGameNextLevel()
   drawMermaid();
   currentWave = 0;
   previousWave = 255;
-  endBoss.isVisible = false;
+  bitClear(endBoss.characteristics,3);
   if (objectVisible)
   {
     sprites.drawSelfMasked(leftX, 28, stage, 0);
@@ -125,7 +125,6 @@ void stateGamePlaying()
 
   drawBackground();
   drawPowerUP();
-  
   drawBosses();
   drawEnemies();
   drawEnemyBullet();
