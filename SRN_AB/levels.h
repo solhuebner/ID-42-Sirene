@@ -26,9 +26,9 @@ boolean checkEndWave()
   byte test = 0;
   for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
   {
-    test += enemy[i].isAlive;
+    test += bitRead(enemy[i].characteristics,7);
   }
-  test += powerUP.isActive;
+  //test += powerUP.isActive;
   if (test < 1) currentWave++;
 }
 
@@ -53,10 +53,10 @@ void wave001()
   if (checkStartWave())
   {
     enemySetInLine(ENEMY_FISHY, 0, 3, 128, 12, 20, 0);
-    powerUPSet(128, 24, POWER_UP_STAR);
+    //powerUPSet(128, 24, POWER_UP_STAR);
   }
   enemySwimRightLeft(0, 3, 2);
-  powerUPFloatRightLeft(1);
+  //powerUPFloatRightLeft(1);
   checkEndWave();
 }
 
@@ -467,13 +467,13 @@ void checkCollisions()
       for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
       {
         Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = enemyCollisionWidth[enemy[i].type], .height = enemyCollisionHeight[enemy[i].type]};
-        if (enemy[i].isVisible && !enemy[i].isDying && arduboy.collide(bulletsRect, enemyRect))
+        if (bitRead(enemy[i].characteristics,4) && !bitRead(enemy[i].characteristics,5) && arduboy.collide(bulletsRect, enemyRect))
         {
-          if (!enemy[i].isImune)
+          if (!bitRead(enemy[i].characteristics,6))
           {
             arduboy.audio.tone(523, 10);
             enemy[i].HP -= bullet[k].damage;
-            enemy[i].isImune = true;
+            bitSet(enemy[i].characteristics,6);
           }
           if (bullet[k].type != WEAPON_TYPE_MAGIC)
           {
@@ -501,7 +501,7 @@ void checkCollisions()
   for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; i++)
   {
     Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = enemyCollisionWidth[enemy[i].type], .height = enemyCollisionHeight[enemy[i].type]};
-    if (enemy[i].isVisible && !enemy[i].isDying && arduboy.collide(mermaidRect, enemyRect))
+    if (bitRead(enemy[i].characteristics,4) && !bitRead(enemy[i].characteristics,5) && arduboy.collide(mermaidRect, enemyRect))
     {
       if (!mermaid.isImune)
       {
@@ -509,9 +509,9 @@ void checkCollisions()
         mermaid.isImune = true;
         mermaid.HP -= 1;
       }
-      if (!enemy[i].isImune)
+      if (!bitRead(enemy[i].characteristics,6))
       {
-        enemy[i].isDying = true;
+        bitSet(enemy[i].characteristics,5);
       }
     }
   }
