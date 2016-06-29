@@ -88,7 +88,7 @@ const FunctionPointer PROGMEM nextLevelFases[] =
   slideOpen,
   slideToMiddle,
   wait,
-  //nextLevelFlicker,
+  nextLevelFlicker,
   nextLevelEnd,
 };
 
