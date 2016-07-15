@@ -152,7 +152,7 @@ void checkMermaid()
     rightX = 132;
     gameState = STATE_GAME_OVER;
   }
-  if (arduboy.everyXFrames(10)) mermaid.frame++;
+  if (arduboy.everyXFrames(10))mermaid.frame++;
   if (mermaid.frame > 5 ) mermaid.frame = 0;
   if (arduboy.everyXFrames(5))
   {

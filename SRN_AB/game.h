@@ -126,7 +126,7 @@ void stateGamePlaying()
   drawBackground();
   drawPowerUP();
   
-  drawBosses();
+  //drawBosses();
   drawEnemies();
   drawEnemyBullet();
   drawMermaid();

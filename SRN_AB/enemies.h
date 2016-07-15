@@ -139,8 +139,8 @@ void checkEnemyBullet()
       if (enemyBullet[i].isVisible)
       {
         enemyBullet[i].x -= 2;
-        enemyBullet[i].frame++;
         enemyBullet[i].y += (1 - (2 * enemyBullet[i].direction));
+        enemyBullet[i].frame++;
         if ((enemyBullet[i].frame) > 3) enemyBullet[i].frame = 0;
       }
     }
