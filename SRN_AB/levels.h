@@ -280,8 +280,8 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
   },
   { //LEVEL 01-02
     wave000,
-    wave001,
-    wave002,
+    wave004,
+    wave005,
     wave003,
     wave004,
     wave005,
@@ -301,8 +301,8 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave254,
   },
   { //LEVEL 01-03
-    wave002,
-    wave003,
+    wave004,
+    wave005,
     wave004,
     wave005,
     wave006,
