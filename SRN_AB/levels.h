@@ -146,8 +146,10 @@ void wave012()
 
 void wave013()
 {
-  if (checkStartWave())enemySetInLine(ENEMY_JELLYFISH, 0, 3, 96, 64, -40, 16);
-  enemySwimDownUp(0, 3, 2);
+  if (checkStartWave())enemySetInLine(ENEMY_FISHY, 0, 3, 128, 56, 20, 0);
+  if (checkStartWave())enemySetInLine(ENEMY_FISHY, 0, 3, 128, 12, 20, 0);
+  
+  enemySwimToMiddle(0, 3, 2);
   checkEndWave();
 }
 
@@ -280,7 +282,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
   },
   { //LEVEL 01-02
     wave000,
-    wave004,
+    wave013,
     wave005,
     wave003,
     wave004,
