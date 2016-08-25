@@ -137,6 +137,7 @@ void stateGamePlaying()
 
 void stateGamePause()
 {
+  sprites.drawSelfMasked(47, 24, textPause, 0);
   if (arduboy.justPressed(A_BUTTON)) gameState = STATE_GAME_PLAYING;
 };
 

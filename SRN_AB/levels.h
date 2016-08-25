@@ -146,10 +146,12 @@ void wave012()
 
 void wave013()
 {
-  if (checkStartWave())enemySetInLine(ENEMY_FISHY, 0, 3, 128, 56, 20, 0);
-  if (checkStartWave())enemySetInLine(ENEMY_FISHY, 0, 3, 128, 12, 20, 0);
-  
-  enemySwimToMiddle(0, 3, 2);
+  if (checkStartWave())
+  {
+    enemySetInLine(ENEMY_FISHY, 0, 4, 128, 56, 20, 0);
+    enemySetInLine(ENEMY_FISHY, 4, 8, 128, 12, 20, 0);
+  }
+  enemySwimToMiddle(0, 8, 2);
   checkEndWave();
 }
 
