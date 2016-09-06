@@ -7,7 +7,7 @@
 
 void checkInputs()
 {
-  if (arduboy.pressed(DOWN_BUTTON) && (mermaid.y < GAME_BOTTOM - 16))
+  if (arduboy.pressed(DOWN_BUTTON) && (mermaid.y < GAME_BOTTOM - 12))
   {
     mermaid.y++;
   }

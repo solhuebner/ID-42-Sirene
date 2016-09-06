@@ -250,7 +250,7 @@ void enemySwimToMiddle(byte firstEnemy, byte lastEnemy, byte speedEnemy)
     if (!bitRead(enemy[i].characteristics, 5))
     {
       enemy[i].x = enemy[i].x - speedEnemy;
-      if (enemy[i].x < 120)
+      if (enemy[i].x < 72)
       {
         if (enemy[i].y < 32) enemy[i].y++;
         if (enemy[i].y > 31) enemy[i].y--;

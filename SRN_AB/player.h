@@ -106,8 +106,8 @@ Sparkles sparkle[MAX_ONSCREEN_SPARKLES];
 
 void setMermaid()
 {
-  mermaid.x = 0;
-  mermaid.y = 20;
+  mermaid.x = 16;
+  mermaid.y = 24;
   mermaid.weaponType = WEAPON_TYPE_TRIDENT;
   mermaid.isVisible = true;
   mermaid.HP = 4;
