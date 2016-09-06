@@ -55,8 +55,9 @@ void wave000()
   wait();
 }
 
-void wave001()
-{
+/*
+  void wave001()
+  {
   if (checkStartWave())
   {
     enemySetInLine(ENEMY_FISHY, 0, 3, 128, 12, 20, 0);
@@ -65,33 +66,62 @@ void wave001()
   enemySwimRightLeft(0, 3, 2);
   powerUPFloatRightLeft(1);
   checkEndWave();
+  }
+*/
+
+void wave001()
+{
+  if (checkStartWave())
+  {
+    enemySetInLine(ENEMY_FISH, 0, 3, 128, 12, 288, 0);
+    enemySetInLine(ENEMY_FISH, 3, 5, 320, 32, 288, 0);
+    enemySetInLine(ENEMY_FISH, 5, 8, 224, 48, 288, 0);
+  }
+  enemySwimRightLeft(0, 8, 3);
+  checkEndWave();
 }
 
 void wave002()
 {
-  if (checkStartWave())enemySetInLine(ENEMY_FISHY, 0, 3, 128, 32, 20, 0);
-  enemySwimRightLeft(0, 3, 2);
+  if (checkStartWave())
+  {
+    enemySetInLine(ENEMY_FISHY, 0, 4, 128, 12, 64, 0);
+    enemySetInLine(ENEMY_FISHY, 4, 8, 160, 52, 64, 0);
+  }
+  enemySwimToMiddle(0, 8, 2);
   checkEndWave();
 }
 
 void wave003()
 {
-  if (checkStartWave())enemySetInLine(ENEMY_FISHY, 0, 3, 128, 56, 20, 0);
-  enemySwimRightLeft(0, 3, 2);
+  if (checkStartWave())
+  {
+    enemySetInLine(ENEMY_FISHY, 0, 4, 128, 32, 72, 0);
+    enemySetInLine(ENEMY_FISHY, 4, 8, 164, 32, 72, 0);
+  }
+  enemySwimSine(0, 8, 1);
   checkEndWave();
 }
 
 void wave004()
 {
-  if (checkStartWave())enemySetInLine(ENEMY_FISHY, 0, 3, 128, 12, 20, 0);
-  enemySwimToMiddle(0, 3, 2);
+  if (checkStartWave())
+  {
+    enemySetInLine(ENEMY_FISHY, 0, 8, 128, 12, 40, 6);
+  }
+  enemySwimRightLeft(0, 8, 3);
   checkEndWave();
 }
 
 void wave005()
 {
-  if (checkStartWave())enemySetInLine(ENEMY_FISHY, 0, 3, 128, 56, 20, 0);
-  enemySwimToMiddle(0, 3, 2);
+  if (checkStartWave())
+  {
+    enemySetInLine(ENEMY_FISH, 0, 3, 128, 12, 24, 0);
+    enemySetInLine(ENEMY_FISH, 3, 5, 128, 32, 48, 0);
+    enemySetInLine(ENEMY_FISH, 5, 8, 128, 48, 24, 0);
+  }
+  enemySwimRightLeft(0, 8, 3);
   checkEndWave();
 }
 
@@ -191,9 +221,9 @@ void wave017()
 void wave018()
 {
   if (checkStartWave())
-  
+
     enemySetInLine(ENEMY_FISHY, 0, 3, 128, 32, 32, 0);
-      
+
 
   enemySwimSine(0, 3, 2);
   checkEndWave();
@@ -222,7 +252,7 @@ void wave250()
   //Shark attack
   if (checkStartWave())setEndBoss();
   ((FunctionPointer) pgm_read_word (&sharkAttackFases[endBoss.attackFase]))();
-  if (!bitRead(endBoss.characteristics,7)) currentWave++;
+  if (!bitRead(endBoss.characteristics, 7)) currentWave++;
 }
 
 void wave251()
@@ -230,7 +260,7 @@ void wave251()
   //seahorse attack
   if (checkStartWave())setEndBoss();
   ((FunctionPointer) pgm_read_word (&seahorseAttackFases[endBoss.attackFase]))();
-  if (!bitRead(endBoss.characteristics,7)) currentWave++;
+  if (!bitRead(endBoss.characteristics, 7)) currentWave++;
 }
 
 void wave252()
@@ -238,7 +268,7 @@ void wave252()
   //pirateShip attack
   if (checkStartWave())setEndBoss();
   ((FunctionPointer) pgm_read_word (&pirateShipAttackFases[endBoss.attackFase]))();
-  if (!bitRead(endBoss.characteristics,7)) currentWave++;
+  if (!bitRead(endBoss.characteristics, 7)) currentWave++;
 }
 
 
@@ -262,23 +292,23 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
 {
   { //LEVEL 01-01
     wave000,
-    wave020,
-    wave019,
-    wave018,
-    wave007,
-    wave008,
-    wave009,
-    wave010,
-    wave011,
-    wave012,
-    wave009,
-    wave008,
-    wave007,
-    wave006,
-    wave005,
-    wave004,
-    wave003,
+    wave001,
     wave002,
+    wave003,
+    wave005,
+    wave005,
+    wave001,
+    wave002,
+    wave001,
+    wave002,
+    wave003,
+    wave004,
+    wave004,
+    wave001,
+    wave005,
+    wave005,
+    wave001,
+    wave001,
     wave000,
     wave254,
   },
@@ -358,12 +388,12 @@ void checkCollisions()
           }
         }
       }
-      if (bitRead(endBoss.characteristics,4) && !bitRead(endBoss.characteristics,5) && arduboy.collide(bulletsRect, endBossRect))
+      if (bitRead(endBoss.characteristics, 4) && !bitRead(endBoss.characteristics, 5) && arduboy.collide(bulletsRect, endBossRect))
       {
-        if (!bitRead(endBoss.characteristics,6))
+        if (!bitRead(endBoss.characteristics, 6))
         {
           arduboy.audio.tone(523, 10);
-          bitSet(endBoss.characteristics,6);
+          bitSet(endBoss.characteristics, 6);
           bullet[k].isVisible = false;
           endBoss.HP -= bullet[k].damage;
         }
@@ -407,12 +437,12 @@ void checkCollisions()
     }
   }
 
-  if (bitRead(endBoss.characteristics,4) && !bitRead(endBoss.characteristics,5) && arduboy.collide(mermaidRect, endBossRect))
+  if (bitRead(endBoss.characteristics, 4) && !bitRead(endBoss.characteristics, 5) && arduboy.collide(mermaidRect, endBossRect))
   {
-    if (!bitRead(endBoss.characteristics,6))
+    if (!bitRead(endBoss.characteristics, 6))
     {
       arduboy.audio.tone(2349, 15);
-      bitSet(endBoss.characteristics,6);
+      bitSet(endBoss.characteristics, 6);
       endBoss.HP--;
     }
     if (!mermaid.isImune && !mermaid.isSuper)

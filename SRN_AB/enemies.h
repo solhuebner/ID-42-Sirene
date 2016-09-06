@@ -220,7 +220,7 @@ void checkEnemies()
   }
 }
 
-void enemySetInLine(byte enemyType, byte firstEnemy, byte lastEnemy, byte x, byte y, int spacingX, int spacingY)
+void enemySetInLine(byte enemyType, byte firstEnemy, byte lastEnemy, int x, byte y, int spacingX, int spacingY)
 {
   for (byte i = firstEnemy; i < lastEnemy; i++)
   {
@@ -250,10 +250,10 @@ void enemySwimToMiddle(byte firstEnemy, byte lastEnemy, byte speedEnemy)
     if (!bitRead(enemy[i].characteristics, 5))
     {
       enemy[i].x = enemy[i].x - speedEnemy;
-      if (enemy[i].x < 64)
+      if (enemy[i].x < 120)
       {
-        if (enemy[i].y < 27) enemy[i].y++;
-        if (enemy[i].y > 36) enemy[i].y--;
+        if (enemy[i].y < 32) enemy[i].y++;
+        if (enemy[i].y > 31) enemy[i].y--;
       }
     }
   }
@@ -266,11 +266,11 @@ void enemySwimSine(byte firstEnemy, byte lastEnemy, byte speedEnemy)
     if (!bitRead(enemy[i].characteristics, 5))
     {
       enemy[i].x = enemy[i].x - speedEnemy;
-      if ((enemy[i].x < 120 ) && (enemy[i].x > 104) && (enemy[i].y > 16)) enemy[i].y--;
-      if ((enemy[i].x < 105) && (enemy[i].x > 73) && (enemy[i].y < 48)) enemy[i].y++;
-      if ((enemy[i].x < 74 ) && (enemy[i].x > 42) && (enemy[i].y > 16)) enemy[i].y--;
-      if ((enemy[i].x < 43) && (enemy[i].x > 10) && (enemy[i].y < 48)) enemy[i].y++;
-      if ((enemy[i].x < 11) && (enemy[i].y > 16)) enemy[i].y--;
+      if ((enemy[i].x < 120 ) && (enemy[i].x > 104) && (enemy[i].y > 12)) enemy[i].y -=2;
+      if ((enemy[i].x < 105) && (enemy[i].x > 73) && (enemy[i].y < 52)) enemy[i].y +=2;
+      if ((enemy[i].x < 74 ) && (enemy[i].x > 42) && (enemy[i].y > 12)) enemy[i].y -=2;
+      if ((enemy[i].x < 43) && (enemy[i].x > 10) && (enemy[i].y < 52)) enemy[i].y +=2;
+      if ((enemy[i].x < 11) && (enemy[i].y > 16)) enemy[i].y -=2;
     }
   }
 }

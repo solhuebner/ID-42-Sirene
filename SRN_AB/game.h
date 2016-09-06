@@ -111,7 +111,7 @@ void stateGameNextLevel()
 
 void stateGamePlaying()
 {
-  checkCollisions();
+  //checkCollisions();
   checkInputs();
   checkWeapons();
   checkMermaid();
@@ -126,7 +126,7 @@ void stateGamePlaying()
   drawBackground();
   drawPowerUP();
   
-  //drawBosses();
+  drawBosses();
   drawEnemies();
   drawEnemyBullet();
   drawMermaid();
