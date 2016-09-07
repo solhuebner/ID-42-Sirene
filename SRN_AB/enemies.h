@@ -220,7 +220,7 @@ void checkEnemies()
   }
 }
 
-void enemySetInLine(byte enemyType, byte firstEnemy, byte lastEnemy, int x, byte y, int spacingX, int spacingY)
+void enemySetInLine(byte enemyType, byte firstEnemy, byte lastEnemy, int x, int y, int spacingX, int spacingY)
 {
   for (byte i = firstEnemy; i < lastEnemy; i++)
   {

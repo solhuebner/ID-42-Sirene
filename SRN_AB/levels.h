@@ -5,7 +5,7 @@
 #include "globals.h"
 #include "enemies.h"
 
-#define TOTAL_AMOUNT_OF_LEVELS  3
+#define TOTAL_AMOUNT_OF_LEVELS  6
 #define TOTAL_AMOUNT_OF_WAVES   20
 
 #define POWER_UP_HEART             0
@@ -204,8 +204,14 @@ void wave011()
 
 void wave012()
 {
-  if (checkStartWave())enemySetInLine(ENEMY_FISHY, 0, 1, 128, 56, 0, 0);
-  enemySwimRightLeft(0, 1, 3);
+  if (checkStartWave())
+  {
+    enemySetInLine(ENEMY_FISHY, 0, 3, 128, 31, 96, 0);
+    enemySetInLine(ENEMY_FISHY, 3, 5, 256, 12, 384, 0);
+    enemySetInLine(ENEMY_FISHY, 5, 7, 256, 52, 384, 0);
+  }
+  enemySwimSine(0, 3, 1);
+  enemySwimRightLeft(3, 7, 3);
   checkEndWave();
 }
 
@@ -213,10 +219,11 @@ void wave013()
 {
   if (checkStartWave())
   {
-    enemySetInLine(ENEMY_FISHY, 0, 4, 128, 56, 20, 0);
-    enemySetInLine(ENEMY_FISHY, 4, 8, 128, 12, 20, 0);
+    enemySetInLine(ENEMY_JELLYFISH, 0, 3, 16, 64, 40, -16);
+    enemySetInLine(ENEMY_JELLYFISH, 3, 5, 32, 172, 48, 0);
+    enemySetInLine(ENEMY_JELLYFISH, 5, 8, 16, 256, 40, 16);
   }
-  enemySwimToMiddle(0, 8, 2);
+  enemySwimDownUp(0, 8, 1);
   checkEndWave();
 }
 
@@ -325,6 +332,7 @@ void wave255()
 typedef void (*FunctionPointer) ();
 const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAVES] =
 {
+  //WORLD 1
   { //LEVEL 01-01
     wave000,
     wave001,
@@ -388,6 +396,74 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave005,
     wave011,
     wave250,
+    wave000,
+    wave254,
+  },
+
+  //WORLD 2
+  { //LEVEL 02-01
+    wave012,
+    wave001,
+    wave012,
+    wave001,
+    wave013,
+    wave002,
+    wave013,
+    wave001,
+    wave012,
+    wave001,
+    wave007,
+    wave007,
+    wave011,
+    wave010,
+    wave011,
+    wave007,
+    wave012,
+    wave001,
+    wave000,
+    wave254,
+  },
+  { //LEVEL 02-02
+    wave000, //<----
+    wave001,
+    wave002,
+    wave002,
+    wave003,
+    wave001,
+    wave002,
+    wave002,
+    wave003,
+    wave003,
+    wave004,
+    wave007,
+    wave007,
+    wave005,
+    wave006,
+    wave005,
+    wave006,
+    wave007,
+    wave000,
+    wave254,
+  },
+  { //LEVEL 02-03
+    wave010,
+    wave009,
+    wave008,
+    wave006,
+    wave005,
+    wave011,
+    wave011,
+    wave005,
+    wave006,
+    wave008,
+    wave009,
+    wave010,
+    wave009,
+    wave006,
+    wave005,
+    wave005,
+    wave011,
+    wave251,
     wave000,
     wave254,
   },
