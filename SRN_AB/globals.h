@@ -25,7 +25,7 @@
 #define GAME_LEFT                    0
 #define GAME_RIGHT                   128
 
-#define LEVEL_TO_START_WITH          3
+#define LEVEL_TO_START_WITH          1
 
 #define SCORE_SMALL_FONT             0
 #define SCORE_BIG_FONT               1
