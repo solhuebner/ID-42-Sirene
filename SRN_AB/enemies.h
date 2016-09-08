@@ -266,11 +266,11 @@ void enemySwimSine(byte firstEnemy, byte lastEnemy, byte speedEnemy)
     if (!bitRead(enemy[i].characteristics, 5))
     {
       enemy[i].x = enemy[i].x - speedEnemy;
-      if ((enemy[i].x < 120 ) && (enemy[i].x > 104) && (enemy[i].y > 12)) enemy[i].y -=2;
-      if ((enemy[i].x < 105) && (enemy[i].x > 73) && (enemy[i].y < 52)) enemy[i].y +=2;
-      if ((enemy[i].x < 74 ) && (enemy[i].x > 42) && (enemy[i].y > 12)) enemy[i].y -=2;
-      if ((enemy[i].x < 43) && (enemy[i].x > 10) && (enemy[i].y < 52)) enemy[i].y +=2;
-      if ((enemy[i].x < 11) && (enemy[i].y > 16)) enemy[i].y -=2;
+      if ((enemy[i].x < 120 ) && (enemy[i].x > 104) && (enemy[i].y > 12)) enemy[i].y -= 2;
+      if ((enemy[i].x < 105) && (enemy[i].x > 73) && (enemy[i].y < 52)) enemy[i].y += 2;
+      if ((enemy[i].x < 74 ) && (enemy[i].x > 42) && (enemy[i].y > 12)) enemy[i].y -= 2;
+      if ((enemy[i].x < 43) && (enemy[i].x > 10) && (enemy[i].y < 52)) enemy[i].y += 2;
+      if ((enemy[i].x < 11) && (enemy[i].y > 16)) enemy[i].y -= 2;
     }
   }
 }
@@ -398,9 +398,9 @@ void setEndBoss()
   endBossSwitch = true;
   endBossSwimsRight = false;
   endBoss.x = 128;
-  endBoss.y = endBossStartY[(level-1) / 3];
-  endBoss.HP = endBossMaxHP[(level-1) / 3];
-  endBoss.type = (level-1) / 3;
+  endBoss.y = endBossStartY[(level - 1) / 3];
+  endBoss.HP = endBossMaxHP[(level - 1) / 3];
+  endBoss.type = (level - 1) / 3;
 }
 
 
@@ -488,7 +488,7 @@ void drawEnemyHud(byte currentLife, byte maxLife)
 
 void drawBosses()
 {
-  if (bitRead(endBoss.characteristics, 7)) drawEnemyHud(endBoss.HP, endBossMaxHP[endBoss.type]);
+  if (endBoss.HP > 0) drawEnemyHud(endBoss.HP, endBossMaxHP[endBoss.type]); // && bitRead(endBoss.characteristics, 7)
   if (bitRead(endBoss.characteristics, 4))
   {
     if (bitRead(endBoss.characteristics, 5)) sprites.drawSelfMasked(endBoss.x, endBoss.y, puff, endBoss.characteristics & B00001111);
