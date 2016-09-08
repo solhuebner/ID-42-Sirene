@@ -219,9 +219,9 @@ void wave013()
 {
   if (checkStartWave())
   {
-    enemySetInLine(ENEMY_JELLYFISH, 0, 3, 16, 64, 40, -16);
+    enemySetInLine(ENEMY_JELLYFISH, 0, 3, 16, 64, 40, 16);
     enemySetInLine(ENEMY_JELLYFISH, 3, 5, 32, 172, 48, 0);
-    enemySetInLine(ENEMY_JELLYFISH, 5, 8, 16, 256, 40, 16);
+    enemySetInLine(ENEMY_JELLYFISH, 5, 8, 16, 256, 40, -16);
   }
   enemySwimDownUp(0, 8, 1);
   checkEndWave();

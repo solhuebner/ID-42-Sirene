@@ -149,8 +149,9 @@ void checkMermaid()
 
   if (mermaid.HP < 2)
   {
-    rightX = 132;
-    gameState = STATE_GAME_OVER;
+    mermaid.HP = 4;
+    //rightX = 132;
+    //gameState = STATE_GAME_OVER;
   }
   if (arduboy.everyXFrames(10))mermaid.frame++;
   if (mermaid.frame > 5 ) mermaid.frame = 0;

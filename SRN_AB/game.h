@@ -111,7 +111,7 @@ void stateGameNextLevel()
 
 void stateGamePlaying()
 {
-  //checkCollisions();
+  checkCollisions();
   checkInputs();
   checkWeapons();
   checkMermaid();
