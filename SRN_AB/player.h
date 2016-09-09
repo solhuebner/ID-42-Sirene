@@ -14,7 +14,7 @@
 #define SEASHELL_GO_DOWN             -1
 
 #define WEAPON_COOLDOWN_TRIDENT      24
-#define WEAPON_COOLDOWN_BUBBLES      16
+#define WEAPON_COOLDOWN_BUBBLES      8
 #define WEAPON_COOLDOWN_SEASHELL     24
 #define WEAPON_COOLDOWN_MAGIC        24
 
@@ -28,7 +28,7 @@
 #define BULLET_SPEED_SEASHELL        2
 #define BULLET_SPEED_MAGIC           3
 
-#define MAX_ONSCREEN_BULLETS         8
+#define MAX_ONSCREEN_BULLETS         9
 #define MAX_ONSCREEN_SPARKLES        8
 
 #define MERMAID_IMUNE_TIME           30

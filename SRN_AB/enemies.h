@@ -26,15 +26,15 @@
 #define POINTS_SKULL                    4
 #define POINTS_SEAHORSETINY             3
 
-#define MAX_HP_FISHY                    2
+#define MAX_HP_FISHY                    1
 #define MAX_HP_FISH                     4
 #define MAX_HP_JELLYFISH                2
 #define MAX_HP_OCTOPUS                  4
 #define MAX_HP_SKULL                    1
 #define MAX_HP_SEAHORSETINY             1
 
-#define MAX_HP_SHARK                    18
-#define MAX_HP_SEAHORSE                 36
+#define MAX_HP_SHARK                    27
+#define MAX_HP_SEAHORSE                 42
 #define MAX_HP_PIRATESHIP               60
 
 #define POINTS_SHARK                    100
@@ -802,9 +802,9 @@ void pirateShipGoesUpDownAndShoots()
 {
   if (endBossSwitch)
   {
-    if (endBoss.y > -20)
+    if (endBoss.y > -22)
     {
-      if (arduboy.everyXFrames(22)) shootingSkull();
+      if (arduboy.everyXFrames(18)) shootingSkull();
       endBoss.y -= 2;
     }
     else endBossSwitch = !endBossSwitch;

@@ -56,7 +56,7 @@ void wave001()
     enemySetInLine(ENEMY_FISHY, 3, 6, 256, 32, 192, 0);
     enemySetInLine(ENEMY_FISHY, 5, 9, 192, 48, 192, 0);
   }
-  enemySwimRightLeft(0, 9, 4);
+  enemySwimRightLeft(0, 9, 3);
   checkEndWave();
 }
 
@@ -355,7 +355,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
 {
   //WORLD 1
   { //STAGE 1
-    wave100, //POWER_UP_HEART
+    wave001,
     wave001,
     wave002,
     wave100, //POWER_UP_HEART
@@ -509,7 +509,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
 
   //WORLD 3
   { //STAGE 7
-    wave016,
+    wave012,
     wave013,
     wave012,
     wave100, //POWER_UP_HEART
@@ -590,7 +590,6 @@ void checkCollisions()
   Rect mermaidRect = {.x = mermaid.x + MERMAID_COLLISION_OFFSET, .y = mermaid.y + MERMAID_COLLISION_OFFSET, .width = MERMAID_COLLISION_SIZE, .height = MERMAID_COLLISION_SIZE};
   Rect endBossRect = {.x = endBoss.x, .y = endBoss.y + 2, .width = 32, .height = 12};
 
-
   ////// Check collision bullets with enemies and bosses /////
   ////////////////////////////////////////////////////////////
   for (byte k = 0; k < MAX_ONSCREEN_BULLETS; k++)
@@ -615,9 +614,22 @@ void checkCollisions()
           }
         }
       }
-      if (bitRead(endBoss.characteristics, 4) && !bitRead(endBoss.characteristics, 5) && arduboy.collide(bulletsRect, endBossRect))
+      //if (bitRead(endBoss.characteristics, 4) && !bitRead(endBoss.characteristics, 5) && arduboy.collide(bulletsRect, endBossRect))
+      if (bitRead(endBoss.characteristics, 4) && !bitRead(endBoss.characteristics, 5) && !bitRead(endBoss.characteristics, 6))
       {
-        if (!bitRead(endBoss.characteristics, 6))
+        switch (endBoss.type)
+        {
+          case ENDBOSS_SHARK:
+            endBossRect = {.x = endBoss.x, .y = endBoss.y + 2, .width = 32, .height = 12};
+            break;
+          case ENDBOSS_SEAHORSE:
+            endBossRect = {.x = endBoss.x + 2, .y = endBoss.y + 2, .width = 6, .height = 6};
+            break;
+          case ENDBOSS_PIRATESHIP:
+            endBossRect = {.x = endBoss.x + 38, .y = endBoss.y + 15, .width = 5, .height = 5};
+            break;
+        }
+        if (arduboy.collide(bulletsRect, endBossRect))
         {
           arduboy.audio.tone(523, 10);
           bitSet(endBoss.characteristics, 6);
@@ -664,18 +676,33 @@ void checkCollisions()
     }
   }
 
-  if (bitRead(endBoss.characteristics, 4) && !bitRead(endBoss.characteristics, 5) && arduboy.collide(mermaidRect, endBossRect))
+  if (bitRead(endBoss.characteristics, 4) && !bitRead(endBoss.characteristics, 5))
   {
-    if (!bitRead(endBoss.characteristics, 6))
+    switch (endBoss.type)
     {
-      arduboy.audio.tone(2349, 15);
-      bitSet(endBoss.characteristics, 6);
-      endBoss.HP--;
+      case ENDBOSS_SHARK:
+        endBossRect = {.x = endBoss.x, .y = endBoss.y + 2, .width = 32, .height = 12};
+        break;
+      case ENDBOSS_SEAHORSE:
+        endBossRect = {.x = endBoss.x + 2, .y = endBoss.y + 2, .width = 12, .height = 28};
+        break;
+      case ENDBOSS_PIRATESHIP:
+        endBossRect = {.x = endBoss.x + 19, .y = endBoss.y + 10, .width = 46, .height = 40};
+        break;
     }
-    if (!mermaid.isImune && !mermaid.isSuper)
+    if (arduboy.collide(mermaidRect, endBossRect))
     {
-      mermaid.isImune = true;
-      mermaid.HP -= 1;
+      if (!bitRead(endBoss.characteristics, 6))
+      {
+        arduboy.audio.tone(2349, 15);
+        bitSet(endBoss.characteristics, 6);
+        endBoss.HP--;
+      }
+      if (!mermaid.isImune && !mermaid.isSuper)
+      {
+        mermaid.isImune = true;
+        mermaid.HP -= 1;
+      }
     }
   }
 
