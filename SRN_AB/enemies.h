@@ -34,8 +34,8 @@
 #define MAX_HP_SEAHORSETINY             1
 
 #define MAX_HP_SHARK                    18
-#define MAX_HP_SEAHORSE                 27
-#define MAX_HP_PIRATESHIP               36
+#define MAX_HP_SEAHORSE                 36
+#define MAX_HP_PIRATESHIP               60
 
 #define POINTS_SHARK                    100
 #define POINTS_SEAHORSE                 150
@@ -45,7 +45,7 @@
 #define FRAMES_JELLYFISH                10
 #define FRAMES_DYING                    5
 
-#define MAX_ONSCREEN_ENEMIES            8
+#define MAX_ONSCREEN_ENEMIES            9
 #define MAX_ENEMY_BULLETS               3
 #define MAX_BOSS_BULLETS                6
 
@@ -288,13 +288,13 @@ void enemySwimDownUp(byte firstEnemy, byte lastEnemy, byte speedEnemy)
 }
 
 
-void enemyShoot(byte firstEnemy, byte lastEnemy, byte amount)
+void enemyShoot(byte firstEnemy, byte lastEnemy)
 {
   if (arduboy.everyXFrames(50))
   {
     for (byte i = firstEnemy; i < lastEnemy; i++)
     {
-      if ((!bitRead(enemy[i].characteristics, 5)) && (enemy[i].x < 128) && (enemy[i].bulletsShot < amount))
+      if ((!bitRead(enemy[i].characteristics, 5)) && (enemy[i].x < 128) && (enemy[i].bulletsShot < 2))
       {
         enemy[i].bulletsShot++;
         enemyBullet[currentEnemyBullet].isVisible = true;
