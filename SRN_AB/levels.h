@@ -6,14 +6,7 @@
 #include "enemies.h"
 
 #define TOTAL_AMOUNT_OF_LEVELS  9
-#define TOTAL_AMOUNT_OF_WAVES   20
-
-#define POWER_UP_HEART             0
-#define POWER_UP_STAR              1
-#define POWER_UP_TRIDENT           2
-#define POWER_UP_BUBBLE            3
-#define POWER_UP_SEASHELL          4
-#define POWER_UP_MAGIC             5
+#define TOTAL_AMOUNT_OF_WAVES   23
 
 byte currentWave;
 byte previousWave;
@@ -54,20 +47,6 @@ void wave000()
 {
   wait();
 }
-
-/*
-  void wave001()
-  {
-  if (checkStartWave())
-  {
-    enemySetInLine(ENEMY_FISHY, 0, 3, 128, 12, 20, 0);
-    powerUPSet(128, 24, POWER_UP_STAR);
-  }
-  enemySwimRightLeft(0, 3, 2);
-  powerUPFloatRightLeft(1);
-  checkEndWave();
-  }
-*/
 
 void wave001()
 {
@@ -289,6 +268,43 @@ void wave018()
   checkEndWave();
 }
 
+// POWER UPS
+////////////
+void wave100()
+{
+  powerUPSet(POWER_UP_HEART, 128, 12);
+  currentWave++;
+}
+
+void wave101()
+{
+  powerUPSet(POWER_UP_STAR, 128, 12);
+  currentWave++;
+}
+
+void wave102()
+{
+  powerUPSet(POWER_UP_TRIDENT, 128, 12);
+  currentWave++;
+}
+
+void wave103()
+{
+  powerUPSet(POWER_UP_BUBBLE, 128, 12);
+  currentWave++;
+}
+
+void wave104()
+{
+  powerUPSet(POWER_UP_SEASHELL, 128, 12);
+  currentWave++;
+}
+
+void wave105()
+{
+  powerUPSet(POWER_UP_MAGIC, 128, 12);
+  currentWave++;
+}
 
 
 
@@ -338,66 +354,75 @@ typedef void (*FunctionPointer) ();
 const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAVES] =
 {
   //WORLD 1
-  { //LEVEL 01-01
-    wave000,
+  { //STAGE 1
+    wave100, //POWER_UP_HEART
     wave001,
     wave002,
+    wave100, //POWER_UP_HEART
     wave003,
     wave005,
     wave005,
     wave001,
     wave002,
     wave001,
+    wave103, //POWER_UP_BUBBLE
     wave002,
     wave003,
     wave004,
     wave004,
     wave001,
     wave005,
+    wave101, //POWER_UP_STAR
     wave005,
     wave001,
     wave007,
     wave000,
     wave254,
   },
-  { //LEVEL 01-02
-    wave000,
+  { //STAGE 2
+    wave001,
     wave001,
     wave002,
+    wave104, //POWER_UP_SEASHELL
     wave002,
     wave003,
     wave001,
     wave002,
     wave002,
     wave003,
+    wave101, //POWER_UP_STAR
     wave003,
     wave004,
     wave007,
     wave007,
     wave005,
     wave006,
+    wave100, //POWER_UP_HEART
     wave005,
     wave006,
     wave007,
     wave000,
     wave254,
   },
-  { //LEVEL 01-03
+  { //STAGE 3
     wave010,
     wave009,
     wave008,
+    wave101, //POWER_UP_STAR
     wave006,
     wave005,
     wave011,
     wave011,
     wave005,
     wave006,
+    wave100, //POWER_UP_HEART
     wave008,
     wave009,
     wave010,
     wave009,
     wave006,
     wave005,
+    wave103, //POWER_UP_BUBBLE
     wave005,
     wave011,
     wave250,
@@ -406,66 +431,75 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
   },
 
   //WORLD 2
-  { //LEVEL 02-01
+  { //STAGE 4
     wave012,
     wave001,
     wave012,
+    wave100, //POWER_UP_HEART
     wave001,
     wave013,
     wave002,
     wave013,
     wave001,
     wave012,
+    wave105, //POWER_UP_MAGIC
     wave001,
     wave013,
     wave007,
     wave011,
     wave010,
     wave013,
+    wave102, //POWER_UP_TRIDENT
     wave007,
     wave012,
     wave001,
     wave000,
     wave254,
   },
-  { //LEVEL 02-02
+  { //STAGE 5
     wave015,
     wave015,
     wave014,
+    wave104, //POWER_UP_SEASHELL
     wave013,
     wave006,
     wave005,
     wave006,
     wave010,
     wave015,
+    wave101, //POWER_UP_STAR
     wave014,
     wave013,
     wave013,
     wave009,
     wave008,
     wave006,
+    wave100, //POWER_UP_HEART
     wave015,
     wave014,
     wave013,
     wave000,
     wave254,
   },
-  { //LEVEL 02-03
+  { //STAGE 6
     wave001,
     wave002,
     wave003,
+    wave100, //POWER_UP_HEART
     wave004,
     wave005,
     wave006,
     wave007,
     wave008,
     wave009,
+    wave103, //POWER_UP_BUBBLE
     wave010,
     wave011,
     wave012,
     wave013,
     wave014,
     wave015,
+    wave102, //POWER_UP_TRIDENT
     wave014,
     wave013,
     wave251,
@@ -474,66 +508,75 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
   },
 
   //WORLD 3
-  { //LEVEL 03-01
+  { //STAGE 7
     wave016,
     wave013,
     wave012,
+    wave100, //POWER_UP_HEART
     wave010,
     wave016,
     wave013,
     wave012,
     wave010,
     wave011,
+    wave105, //POWER_UP_MAGIC
     wave011,
     wave007,
     wave016,
     wave011,
     wave010,
     wave013,
+    wave101, //POWER_UP_STAR
     wave007,
     wave012,
     wave001,
     wave000,
     wave254,
   },
-  { //LEVEL 03-02
+  { //STAGE 8
     wave007,
     wave014,
     wave017,
+    wave104, //POWER_UP_SEASHELL
     wave016,
     wave003,
     wave001,
     wave013,
     wave012,
     wave003,
+    wave100, //POWER_UP_HEART
     wave016,
     wave017,
     wave016,
     wave007,
     wave005,
     wave010,
+    wave105, //POWER_UP_MAGIC
     wave009,
     wave006,
     wave007,
     wave000,
     wave254,
   },
-  { //LEVEL 03-03
+  { //STAGE 9
     wave016,
     wave017,
     wave018,
+    wave102, //POWER_UP_TRIDENT
     wave004,
     wave005,
     wave006,
     wave007,
     wave008,
     wave016,
+    wave100, //POWER_UP_HEART
     wave017,
     wave018,
     wave012,
     wave013,
     wave014,
     wave015,
+    wave100, //POWER_UP_HEART
     wave016,
     wave017,
     wave018,

@@ -58,12 +58,13 @@ void checkPowerUP()
 {
   if (powerUP.isActive)
   {
-    if (arduboy.everyXFrames(10)) powerUP.isVisible = !powerUP.isVisible;
+    if (arduboy.everyXFrames(5)) powerUP.isVisible = !powerUP.isVisible;
+    if (arduboy.everyXFrames(2)) powerUP.x--;
     if (powerUP.x < -8) powerUP.isActive = false;
   }
 }
 
-void powerUPSet(int x, byte y, byte type)
+void powerUPSet(byte type, int x, byte y)
 {
   powerUP.isActive = true;
   powerUP.x = x;
@@ -71,11 +72,12 @@ void powerUPSet(int x, byte y, byte type)
   powerUP.type = type;
 }
 
-void powerUPFloatRightLeft(byte floatSpeed)
+/*
+void powerUPFloatRightLeft()
 {
-  powerUP.x -= floatSpeed;
+  powerUP.x -= 2;
 }
-
+*/
 
 void drawBackground()
 {
