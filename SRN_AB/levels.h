@@ -272,37 +272,43 @@ void wave018()
 ////////////
 void wave100()
 {
-  powerUPSet(POWER_UP_HEART, 128, 12);
+  powerUPSet(POWER_UP_HEART);
   currentWave++;
 }
 
 void wave101()
 {
-  powerUPSet(POWER_UP_STAR, 128, 12);
+  powerUPSet(POWER_UP_STAR);
   currentWave++;
 }
 
 void wave102()
 {
-  powerUPSet(POWER_UP_TRIDENT, 128, 12);
+  powerUPSet(POWER_UP_TRIDENT);
   currentWave++;
 }
 
 void wave103()
 {
-  powerUPSet(POWER_UP_BUBBLE, 128, 12);
+  powerUPSet(POWER_UP_BUBBLE);
   currentWave++;
 }
 
 void wave104()
 {
-  powerUPSet(POWER_UP_SEASHELL, 128, 12);
+  powerUPSet(POWER_UP_SEASHELL);
   currentWave++;
 }
 
 void wave105()
 {
-  powerUPSet(POWER_UP_MAGIC, 128, 12);
+  powerUPSet(POWER_UP_MAGIC);
+  currentWave++;
+}
+
+void wave106()
+{
+  powerUPSet(POWER_UP_COIN);
   currentWave++;
 }
 

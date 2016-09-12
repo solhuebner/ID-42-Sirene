@@ -7,10 +7,14 @@
 #define POWER_UP_BUBBLE            3
 #define POWER_UP_SEASHELL          4
 #define POWER_UP_MAGIC             5
+#define POWER_UP_COIN              6
 
 
 #include <Arduino.h>
 #include "globals.h"
+
+int powerUpArrayX[] = {128,320,256,192};
+byte powerUpArrayY[] = {11,47,23,41,35,29,17,53};
 
 struct Background
 {
@@ -64,20 +68,15 @@ void checkPowerUP()
   }
 }
 
-void powerUPSet(byte type, int x, byte y)
+void powerUPSet(byte type)
 {
   powerUP.isActive = true;
-  powerUP.x = x;
-  powerUP.y = y;
+  powerUP.x = powerUpArrayX[powerUpSelectorX];
+  powerUP.y = powerUpArrayY[powerUpSelectorY];
   powerUP.type = type;
+  powerUpSelectorX = (++powerUpSelectorX) % 4;
+  powerUpSelectorX = (++powerUpSelectorY) % 8;
 }
-
-/*
-void powerUPFloatRightLeft()
-{
-  powerUP.x -= 2;
-}
-*/
 
 void drawBackground()
 {

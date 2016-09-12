@@ -45,4 +45,7 @@ byte gameOverAndStageFase;
 int leftX;
 byte rightX;
 
+byte powerUpSelectorX = 0;
+byte powerUpSelectorY = 0;
+
 #endif
