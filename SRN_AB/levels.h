@@ -259,7 +259,7 @@ void wave018()
   {
     enemySetInLine(ENEMY_OCTOPUS, 0, 3, 128, 10, 192, 0);
     enemySetInLine(ENEMY_OCTOPUS, 3, 6, 128, 48, 192, 0);
-    enemySetInLine(ENEMY_FISH, 6, 9, 288, 28, 192, 0);
+    enemySetInLine(ENEMY_FISH, 6, 9, 288, 29, 192, 0);
   }
   enemySwimRightLeft(0, 6, 2);
   enemySwimRightLeft(6, 9, 3);
@@ -360,7 +360,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
 {
   //WORLD 1
   { //STAGE 1
-    wave017,
+    wave001,
     wave001,
     wave002,
     wave100, //POWER_UP_HEART
