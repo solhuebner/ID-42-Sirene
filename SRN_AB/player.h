@@ -177,6 +177,7 @@ void drawMermaid()
     }
     sprites.drawPlusMask(mermaid.x, mermaid.y, chargeBar_plus_mask, mermaid.chargeBarFrame);
   }
+  sprites.drawPlusMask(mermaid.x, mermaid.y, mermaid_plus_mask, mermaid.frame);
 }
 
 
