@@ -70,6 +70,7 @@
 #define SEAHORSETINY_COLLISION_HEIGHT   8
 
 #define MAX_ONSCREEN_ENEMY_BULLETS      8
+#define MAX_SHOOTS_PER_ENEMY            1
 #define OCTOPUS_INK_BULLET              0
 #define BULLET_DAMAGE                   1
 
@@ -294,7 +295,7 @@ void enemyShoot(byte firstEnemy, byte lastEnemy)
   {
     for (byte i = firstEnemy; i < lastEnemy; i++)
     {
-      if ((!bitRead(enemy[i].characteristics, 5)) && (enemy[i].x < 128) && (enemy[i].bulletsShot < 2))
+      if ((!bitRead(enemy[i].characteristics, 5)) && (enemy[i].x < 128) && (enemy[i].bulletsShot < MAX_SHOOTS_PER_ENEMY))
       {
         enemy[i].bulletsShot++;
         enemyBullet[currentEnemyBullet].isVisible = true;

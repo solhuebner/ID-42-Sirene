@@ -28,7 +28,7 @@ boolean checkEndWave()
   {
     test += bitRead(enemy[i].characteristics, 7);
   }
-  test += powerUP.isActive;
+  //test += powerUP.isActive;
   if (test < 1) currentWave++;
 }
 
@@ -123,8 +123,8 @@ void wave007()
     enemySetInLine(ENEMY_FISHY, 3, 6, 128, 48, 192, 0);
     enemySetInLine(ENEMY_FISH, 6, 9, 192, 26, 256, 0);
   }
-  enemySwimRightLeft(0, 6, 3);
-  enemySwimRightLeft(6, 9, 4);
+  enemySwimRightLeft(0, 6, 2);
+  enemySwimRightLeft(6, 9, 3);
   checkEndWave();
 }
 
@@ -190,7 +190,7 @@ void wave012()
     enemySetInLine(ENEMY_FISH, 6, 9, 256, 48, 256, 0);
   }
   enemySwimSine(0, 3, 1);
-  enemySwimRightLeft(3, 9, 3);
+  enemySwimRightLeft(3, 9, 2);
   checkEndWave();
 }
 
@@ -360,8 +360,8 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
 {
   //WORLD 1
   { //STAGE 1
-    wave001,
-    wave001,
+    wave007,
+    wave012,
     wave002,
     wave100, //POWER_UP_HEART
     wave003,
@@ -736,6 +736,9 @@ void checkCollisions()
           break;
         case POWER_UP_MAGIC:
           mermaid.weaponType = WEAPON_TYPE_MAGIC;
+          break;
+        case POWER_UP_COIN:
+          scorePlayer += 2500;
           break;
       }
       powerUP.isActive = false;
