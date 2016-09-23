@@ -13,8 +13,8 @@
 #include <Arduino.h>
 #include "globals.h"
 
-int powerUpArrayX[] = {128,320,256,192};
-byte powerUpArrayY[] = {11,47,23,41,35,29,17,53};
+int powerUpArrayX[] = {128, 320, 256, 192};
+byte powerUpArrayY[] = {11, 47, 23, 41, 35, 29, 17, 53};
 
 struct Background
 {
@@ -32,8 +32,19 @@ struct Elements
     boolean isActive;
 };
 
+struct Bonus
+{
+  public:
+    byte x;
+    byte y;
+    int amount;
+    boolean isVisible;
+    boolean isActive;
+};
+
 Background Column[3];
 Elements powerUP;
+Bonus bonus[MAX_ONSCREEN_ENEMIES];
 
 
 void setBackground()
@@ -68,6 +79,28 @@ void checkPowerUP()
   }
 }
 
+
+void checkBonus()
+{
+  for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; ++i)
+  {
+    if (bonus[i].isActive)
+    {
+
+    }
+  }
+}
+
+
+void giveBonus()
+{
+  for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; ++i)
+  {
+    
+  }
+}
+
+
 void powerUPSet(byte type)
 {
   powerUP.isActive = true;
@@ -96,12 +129,23 @@ void drawBackground()
   }
 }
 
+
 void drawPowerUP()
 {
   if (powerUP.isActive && powerUP.isVisible) sprites.drawPlusMask(powerUP.x, powerUP.y, powerUP_plus_mask, powerUP.type);
 }
 
 
+void drawBonus()
+{
+  for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; ++i)
+  {
+    if (bonus[i].isActive && bonus[i].isVisible)
+    {
+
+    }
+  }
+}
 
 
 #endif
