@@ -74,7 +74,7 @@ void nextLevelEnd()
   leftX = -32;
   rightX = 148;
   mermaid.isImune = true;
-  mermaid.isSuper = false;
+  mermaid.hasShield = false;
   objectVisible = false;
   setBackground();
 }

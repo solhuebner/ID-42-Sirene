@@ -2,12 +2,12 @@
 #define ELEMENTS_H
 
 #define POWER_UP_HEART             0
-#define POWER_UP_STAR              1
+#define POWER_UP_SHIELD            1
 #define POWER_UP_TRIDENT           2
 #define POWER_UP_BUBBLE            3
 #define POWER_UP_SEASHELL          4
 #define POWER_UP_MAGIC             5
-#define POWER_UP_COIN              6
+#define POWER_UP_STAR              6
 
 
 #include <Arduino.h>

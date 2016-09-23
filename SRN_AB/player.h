@@ -30,6 +30,7 @@
 
 #define MAX_ONSCREEN_BULLETS         9
 #define MAX_ONSCREEN_SPARKLES        8
+#define MAX_ONSCREEN_SHIELDS         3
 
 #define MERMAID_IMUNE_TIME           30
 #define MERMAID_SUPER_TIME           250
@@ -49,6 +50,9 @@ byte coolDownMax[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_
 byte bulletSpeed[] = {BULLET_SPEED_TRIDENT, BULLET_SPEED_BUBBLES, BULLET_SPEED_SEASHELL, BULLET_SPEED_MAGIC};
 byte bulletDamage[] = {DAMAGE_TRIDENT, DAMAGE_BUBBLES, DAMAGE_SEASHELL, DAMAGE_MAGIC};
 byte bulletCollisionOffset[] = {TRIDENT_COLLISION_OFFSET, BUBBLES_COLLISION_OFFSET, SEASHELL_COLLISION_OFFSET, MAGIC_COLLISION_OFFSET};
+byte shieldX[] = {11, 7, 3, 1, 0, 1, 4, 7, 12, 16, 20, 22, 23, 22, 19, 16};
+byte shieldY[] = {0, 1, 4, 7, 12, 16, 20, 22, 23, 22, 19, 16, 11, 7, 3, 1};
+
 
 
 //////// define player and weapons /////////
@@ -62,7 +66,7 @@ struct Players
     byte weaponType;
     boolean isVisible;
     boolean isImune;
-    boolean isSuper;
+    boolean hasShield;
     boolean magicCharging;
     byte imuneTimer;
     byte HP;
@@ -96,9 +100,16 @@ struct Sparkles
     byte frame;
 };
 
+struct Shield
+{
+  public:
+    byte frame;
+};
+
 
 Bullets bullet[MAX_ONSCREEN_BULLETS];
 Sparkles sparkle[MAX_ONSCREEN_SPARKLES];
+Shield shield[MAX_ONSCREEN_SHIELDS];
 
 
 //////// Player functions //////////////////
@@ -112,11 +123,17 @@ void setMermaid()
   mermaid.isVisible = true;
   mermaid.HP = 4;
   mermaid.imuneTimer = 0;
+  for (byte i = 0; i < MAX_ONSCREEN_SHIELDS; i++)
+  {
+    shield[i].frame = i * (16 / MAX_ONSCREEN_SHIELDS);
+  }
+
 }
 
 
 void checkMermaid()
 {
+  // MERMAID is IMUNE
   if (mermaid.isImune)
   {
     if (arduboy.everyXFrames(3))
@@ -132,35 +149,44 @@ void checkMermaid()
     }
   }
 
-  if (mermaid.isSuper)
+  // MERMAID has SHIELD
+  if (mermaid.hasShield)
   {
-    if (arduboy.everyXFrames(3)) 
+    if (arduboy.everyXFrames(3))
     {
       mermaid.imuneTimer++;
-      mermaid.isVisible = !mermaid.isVisible;
     }
     if (mermaid.imuneTimer > MERMAID_SUPER_TIME)
     {
       mermaid.imuneTimer = 0;
-      mermaid.isSuper = false;
+      mermaid.hasShield = false;
       mermaid.isVisible = true;
+    }
+    if (arduboy.everyXFrames(4)) {
+      for (byte i = 0; i < MAX_ONSCREEN_SHIELDS; i++)
+      {
+        shield[i].frame = (++shield[i].frame) % 16;
+      }
     }
   }
 
+  // MERMAID dies
   if (mermaid.HP < 2)
   {
     mermaid.HP = 4;
     //rightX = 132;
     //gameState = STATE_GAME_OVER;
   }
-  if (arduboy.everyXFrames(10))mermaid.frame++;
-  if (mermaid.frame > 5 ) mermaid.frame = 0;
+
+  // MERMAID animation
+  if (arduboy.everyXFrames(10)) mermaid.frame = (++mermaid.frame) % 6;
+
+  // MERMAID SPARKLE animation
   if (arduboy.everyXFrames(5))
   {
     for (byte i = 0; i < MAX_ONSCREEN_SPARKLES; i++)
     {
-      sparkle[i].frame++;
-      if (sparkle[i].frame > 7 ) sparkle[i].frame = 0;
+      sparkle[i].frame = (++sparkle[i].frame) % 8;
     }
   }
 }
@@ -168,7 +194,19 @@ void checkMermaid()
 
 void drawMermaid()
 {
+  // SHOW SHIELD
+  if (mermaid.hasShield)
+  {
+    for (byte i = 0; i < MAX_ONSCREEN_SHIELDS; i++)
+    {
+      sprites.drawSelfMasked(mermaid.x - 5 + shieldX[shield[i].frame], mermaid.y - 6 + shieldY[shield[i].frame], chargeSparkles, shield[i].frame % 3);
+    }
+  }
+
+  // SHOW MERMAID
   if (mermaid.isVisible) sprites.drawPlusMask(mermaid.x, mermaid.y, mermaid_plus_mask, mermaid.frame);
+
+  // SHOW CHARGING
   if (mermaid.magicCharging)
   {
     for (byte i = 0; i < MAX_ONSCREEN_SPARKLES; i++)
@@ -177,7 +215,6 @@ void drawMermaid()
     }
     sprites.drawPlusMask(mermaid.x, mermaid.y, chargeBar_plus_mask, mermaid.chargeBarFrame);
   }
-  sprites.drawPlusMask(mermaid.x, mermaid.y, mermaid_plus_mask, mermaid.frame);
 }
 
 
@@ -204,6 +241,7 @@ void setWeapons()
   sparkle[6] = { .x = -5, .y = -6, .speedX = 2, .speedY = 3, .frame = 2};
   sparkle[7] = { .x = 7, .y = 19, .speedX = 0, .speedY = -2, .frame = 1};
 }
+
 
 void checkWeapons()
 {

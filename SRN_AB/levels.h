@@ -277,7 +277,7 @@ void wave100()
 
 void wave101()
 {
-  powerUPSet(POWER_UP_STAR);
+  powerUPSet(POWER_UP_SHIELD);
   currentWave++;
 }
 
@@ -307,7 +307,7 @@ void wave105()
 
 void wave106()
 {
-  powerUPSet(POWER_UP_COIN);
+  powerUPSet(POWER_UP_STAR);
   currentWave++;
 }
 
@@ -360,10 +360,10 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
 {
   //WORLD 1
   { //STAGE 1
-    wave007,
-    wave012,
+    wave001,
+    wave001,
     wave002,
-    wave100, //POWER_UP_HEART
+    wave101, //POWER_UP_SHIELD
     wave003,
     wave005,
     wave005,
@@ -377,7 +377,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave004,
     wave001,
     wave005,
-    wave101, //POWER_UP_STAR
+    wave100, //POWER_UP_HEART
     wave005,
     wave001,
     wave007,
@@ -395,7 +395,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave002,
     wave002,
     wave003,
-    wave101, //POWER_UP_STAR
+    wave101, //POWER_UP_SHIELD
     wave003,
     wave004,
     wave007,
@@ -413,7 +413,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave010,
     wave009,
     wave008,
-    wave101, //POWER_UP_STAR
+    wave101, //POWER_UP_SHIELD
     wave006,
     wave005,
     wave011,
@@ -472,7 +472,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave006,
     wave010,
     wave015,
-    wave101, //POWER_UP_STAR
+    wave101, //POWER_UP_SHIELD
     wave014,
     wave013,
     wave013,
@@ -531,7 +531,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave011,
     wave010,
     wave013,
-    wave101, //POWER_UP_STAR
+    wave101, //POWER_UP_SHIELD
     wave007,
     wave012,
     wave001,
@@ -654,7 +654,7 @@ void checkCollisions()
     Rect enemyRect = {.x = enemy[i].x, .y = enemy[i].y, .width = enemyCollisionWidth[enemy[i].type], .height = enemyCollisionHeight[enemy[i].type]};
     if (bitRead(enemy[i].characteristics, 4) && !bitRead(enemy[i].characteristics, 5) && arduboy.collide(mermaidRect, enemyRect))
     {
-      if (!mermaid.isImune && !mermaid.isSuper)
+      if (!mermaid.isImune && !mermaid.hasShield)
       {
         mermaid.isImune = true;
         mermaid.HP -= 1;
@@ -671,7 +671,7 @@ void checkCollisions()
     Rect enemyBulletRect = {.x = enemyBullet[i].x + 1, .y = enemyBullet[i].y + 1, .width = 6, .height = 6};
     if (enemyBullet[i].isVisible && arduboy.collide(mermaidRect, enemyBulletRect))
     {
-      if (!mermaid.isImune && !mermaid.isSuper)
+      if (!mermaid.isImune && !mermaid.hasShield)
       {
         arduboy.audio.tone(2349, 15);
         mermaid.isImune = true;
@@ -703,7 +703,7 @@ void checkCollisions()
         bitSet(endBoss.characteristics, 6);
         endBoss.HP--;
       }
-      if (!mermaid.isImune && !mermaid.isSuper)
+      if (!mermaid.isImune && !mermaid.hasShield)
       {
         mermaid.isImune = true;
         mermaid.HP -= 1;
@@ -722,8 +722,8 @@ void checkCollisions()
           if (mermaid.HP < 4) mermaid.HP++;
           else scorePlayer += 1000;
           break;
-        case POWER_UP_STAR:
-          mermaid.isSuper = true;
+        case POWER_UP_SHIELD:
+          mermaid.hasShield = true;
           break;
         case POWER_UP_TRIDENT:
           mermaid.weaponType = WEAPON_TYPE_TRIDENT;
@@ -737,7 +737,7 @@ void checkCollisions()
         case POWER_UP_MAGIC:
           mermaid.weaponType = WEAPON_TYPE_MAGIC;
           break;
-        case POWER_UP_COIN:
+        case POWER_UP_STAR:
           scorePlayer += 2500;
           break;
       }
