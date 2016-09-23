@@ -6,7 +6,7 @@
 #include "enemies.h"
 
 #define TOTAL_AMOUNT_OF_LEVELS  9
-#define TOTAL_AMOUNT_OF_WAVES   23
+#define TOTAL_AMOUNT_OF_WAVES   25
 
 byte currentWave;
 byte previousWave;
@@ -358,7 +358,7 @@ void wave255()
 typedef void (*FunctionPointer) ();
 const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAVES] =
 {
-  //WORLD 1
+  //PART 1
   { //STAGE 1
     wave001,
     wave001,
@@ -367,6 +367,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave003,
     wave005,
     wave005,
+    wave106, //POWER_UP_STAR
     wave001,
     wave002,
     wave001,
@@ -374,6 +375,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave002,
     wave003,
     wave004,
+    wave106, //POWER_UP_STAR
     wave004,
     wave001,
     wave005,
@@ -392,6 +394,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave002,
     wave003,
     wave001,
+    wave106, //POWER_UP_STAR
     wave002,
     wave002,
     wave003,
@@ -399,6 +402,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave003,
     wave004,
     wave007,
+    wave106, //POWER_UP_STAR
     wave007,
     wave005,
     wave006,
@@ -417,6 +421,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave006,
     wave005,
     wave011,
+    wave106, //POWER_UP_STAR
     wave011,
     wave005,
     wave006,
@@ -424,6 +429,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave008,
     wave009,
     wave010,
+    wave106, //POWER_UP_STAR
     wave009,
     wave006,
     wave005,
@@ -435,7 +441,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave254,
   },
 
-  //WORLD 2
+  //PART 2
   { //STAGE 4
     wave012,
     wave001,
@@ -444,6 +450,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave001,
     wave013,
     wave002,
+    wave106, //POWER_UP_STAR
     wave013,
     wave001,
     wave012,
@@ -451,6 +458,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave001,
     wave013,
     wave007,
+    wave106, //POWER_UP_STAR
     wave011,
     wave010,
     wave013,
@@ -469,6 +477,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave013,
     wave006,
     wave005,
+    wave106, //POWER_UP_STAR
     wave006,
     wave010,
     wave015,
@@ -476,6 +485,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave014,
     wave013,
     wave013,
+    wave106, //POWER_UP_STAR
     wave009,
     wave008,
     wave006,
@@ -494,6 +504,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave004,
     wave005,
     wave006,
+    wave106, //POWER_UP_STAR
     wave007,
     wave008,
     wave009,
@@ -501,6 +512,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave010,
     wave011,
     wave012,
+    wave106, //POWER_UP_STAR
     wave013,
     wave014,
     wave015,
@@ -512,7 +524,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave254,
   },
 
-  //WORLD 3
+  //PART 3
   { //STAGE 7
     wave012,
     wave013,
@@ -521,6 +533,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave010,
     wave016,
     wave013,
+    wave106, //POWER_UP_STAR
     wave012,
     wave010,
     wave011,
@@ -528,6 +541,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave011,
     wave007,
     wave016,
+    wave106, //POWER_UP_STAR
     wave011,
     wave010,
     wave013,
@@ -546,6 +560,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave016,
     wave003,
     wave001,
+    wave106, //POWER_UP_STAR
     wave013,
     wave012,
     wave003,
@@ -553,6 +568,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave016,
     wave017,
     wave016,
+    wave106, //POWER_UP_STAR
     wave007,
     wave005,
     wave010,
@@ -571,6 +587,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave004,
     wave005,
     wave006,
+    wave106, //POWER_UP_STAR
     wave007,
     wave008,
     wave016,
@@ -578,6 +595,7 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave017,
     wave018,
     wave012,
+    wave106, //POWER_UP_STAR
     wave013,
     wave014,
     wave015,
