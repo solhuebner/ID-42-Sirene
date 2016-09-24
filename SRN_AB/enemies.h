@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include "globals.h"
+#include "elements.h"
 
 #define ENEMY_FISHY                     0
 #define ENEMY_FISH                      1
@@ -19,12 +20,12 @@
 #define LEVEL_WITH_SEAHORSE             2
 #define LEVEL_WITH_PIRATESHIP           3
 
-#define POINTS_FISHY                    5
-#define POINTS_FISH                     8
-#define POINTS_JELLYFISH                20
-#define POINTS_OCTOPUS                  25
-#define POINTS_SKULL                    4
-#define POINTS_SEAHORSETINY             3
+#define POINTS_FISHY                    30
+#define POINTS_FISH                     50
+#define POINTS_JELLYFISH                75
+#define POINTS_OCTOPUS                  125
+#define POINTS_SKULL                    25
+#define POINTS_SEAHORSETINY             20
 
 #define MAX_HP_FISHY                    1
 #define MAX_HP_FISH                     4
@@ -37,17 +38,11 @@
 #define MAX_HP_SEAHORSE                 42
 #define MAX_HP_PIRATESHIP               60
 
-#define POINTS_SHARK                    100
-#define POINTS_SEAHORSE                 150
-#define POINTS_PIRATESHIP               250
+
 
 #define FRAMES_ENEMY                    3
 #define FRAMES_JELLYFISH                10
 #define FRAMES_DYING                    5
-
-#define MAX_ONSCREEN_ENEMIES            9
-#define MAX_ENEMY_BULLETS               3
-#define MAX_BOSS_BULLETS                6
 
 #define SHARK_IMUNE_TIME                25
 #define SEAHORSE_IMUNE_TIME             25
@@ -206,7 +201,6 @@ void checkEnemies()
     {
       if (arduboy.everyXFrames(3))
       {
-        if (bitRead(enemy[i].characteristics, 4)) scorePlayer += enemiesPoints[enemy[i].type];
         enemy[i].characteristics = enemy[i].characteristics + 1;
       }
       if ((enemy[i].characteristics & B00001111) > FRAMES_DYING)

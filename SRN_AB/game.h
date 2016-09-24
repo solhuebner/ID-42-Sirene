@@ -125,13 +125,12 @@ void stateGamePlaying()
   if (arduboy.everyXFrames(2)) ((FunctionPointer) pgm_read_word (&Levels[level - 1][currentWave]))();
 
   drawBackground();
-  drawPowerUP();
-  
   drawBosses();
   drawEnemies();
   drawEnemyBullet();
   drawMermaid();
   drawWeapons();
+  drawPowerUP();
   drawBonus();
   drawLifeHUD();
   drawScore(SCORE_SMALL_FONT);

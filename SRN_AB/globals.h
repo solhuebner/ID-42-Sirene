@@ -30,6 +30,9 @@
 #define SCORE_SMALL_FONT             0
 #define SCORE_BIG_FONT               1
 
+#define MAX_ONSCREEN_ENEMIES            9
+#define MAX_ENEMY_BULLETS               3
+#define MAX_BOSS_BULLETS                6
 
 Arduboy arduboy;
 Sprites sprites(arduboy);

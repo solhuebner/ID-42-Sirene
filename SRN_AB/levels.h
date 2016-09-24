@@ -380,8 +380,8 @@ const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAV
     wave001,
     wave005,
     wave100, //POWER_UP_HEART
-    wave005,
     wave001,
+    wave005,
     wave007,
     wave000,
     wave254,
@@ -630,6 +630,7 @@ void checkCollisions()
             arduboy.audio.tone(523, 10);
             enemy[i].HP -= bullet[k].damage;
             bitSet(enemy[i].characteristics, 6);
+            if (enemy[i].HP < 1) giveBonus(enemiesPoints[enemy[i].type], enemy[i].x, enemy[i].y);
           }
           if (bullet[k].type != WEAPON_TYPE_MAGIC)
           {
@@ -637,7 +638,6 @@ void checkCollisions()
           }
         }
       }
-      //if (bitRead(endBoss.characteristics, 4) && !bitRead(endBoss.characteristics, 5) && arduboy.collide(bulletsRect, endBossRect))
       if (bitRead(endBoss.characteristics, 4) && !bitRead(endBoss.characteristics, 5) && !bitRead(endBoss.characteristics, 6))
       {
         switch (endBoss.type)
@@ -658,6 +658,8 @@ void checkCollisions()
           bitSet(endBoss.characteristics, 6);
           bullet[k].isVisible = false;
           endBoss.HP -= bullet[k].damage;
+          giveBonus(10, endBossRect.x, endBossRect.y);
+          if (endBoss.HP < 1) giveBonus(5000, endBossRect.x, endBossRect.y);
         }
       }
     }
@@ -738,7 +740,7 @@ void checkCollisions()
       {
         case POWER_UP_HEART:
           if (mermaid.HP < 4) mermaid.HP++;
-          else scorePlayer += 1000;
+          else giveBonus(1000, powerUP.x, powerUP.y);
           break;
         case POWER_UP_SHIELD:
           mermaid.hasShield = true;
@@ -756,7 +758,7 @@ void checkCollisions()
           mermaid.weaponType = WEAPON_TYPE_MAGIC;
           break;
         case POWER_UP_STAR:
-          scorePlayer += 2500;
+          giveBonus(2500, powerUP.x, powerUP.y);
           break;
       }
       powerUP.isActive = false;
@@ -785,7 +787,7 @@ void drawScore(byte fontType)
     switch (fontType)
     {
       case SCORE_SMALL_FONT:
-        sprites.drawSelfMasked(95 + (5 * i), 0, numbersSmall, 0);
+        sprites.drawPlusMask(95 + (5 * i), 0, numbersSmall, 0);
         break;
       case SCORE_BIG_FONT:
         sprites.drawSelfMasked(40 + (7 * i), 40, numbersBig, 0);
@@ -813,7 +815,7 @@ void drawScore(byte fontType)
     switch (fontType)
     {
       case SCORE_SMALL_FONT:
-        sprites.drawSelfMasked(95 + (pad * 5) + (5 * i), 0, numbersSmall, digit);
+        sprites.drawPlusMask(95 + (pad * 5) + (5 * i), 0, numbersSmall, digit);
         break;
       case SCORE_BIG_FONT:
         sprites.drawSelfMasked(40 + (pad * 7) + (7 * i), 40, numbersBig, digit);

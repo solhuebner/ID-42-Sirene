@@ -13,8 +13,9 @@
 #include <Arduino.h>
 #include "globals.h"
 
-int powerUpArrayX[] = {128, 320, 256, 192};
+
 byte powerUpArrayY[] = {11, 47, 23, 41, 35, 29, 17, 53};
+byte bonusCount;
 
 struct Background
 {
@@ -44,7 +45,7 @@ struct Bonus
 
 Background Column[3];
 Elements powerUP;
-Bonus bonus[MAX_ONSCREEN_ENEMIES];
+Bonus bonus[2];
 
 
 void setBackground()
@@ -54,6 +55,7 @@ void setBackground()
   Column[1].x = 92;
   Column[3].x = 128;
 }
+
 
 void checkBackground()
 {
@@ -82,33 +84,42 @@ void checkPowerUP()
 
 void checkBonus()
 {
-  for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; ++i)
+  for (byte i = 0; i < 2; i++)
   {
     if (bonus[i].isActive)
     {
-
+      bonus[i].y--;
+      bonus[i].isVisible = !bonus[i].isVisible;
+      if (bonus[i].y < 2)
+      {
+        bonus[i].isActive = false;
+        bonus[i].isVisible = false;
+      }
     }
   }
 }
 
 
-void giveBonus()
+void giveBonus(int amountBonus, byte positionX, byte positionY)
 {
-  for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; ++i)
-  {
-    
-  }
+  bonusCount++;
+  if (bonusCount > 1) bonusCount = 0;
+  bonus[bonusCount].x = positionX;
+  bonus[bonusCount].y = positionY;
+  bonus[bonusCount].amount = amountBonus;
+  scorePlayer += amountBonus,
+                 bonus[bonusCount].isActive = true;
+  bonus[bonusCount].isVisible = true;
 }
 
 
-void powerUPSet(byte type)
+void powerUPSet(byte typeSet)
 {
-  powerUP.isActive = true;
-  powerUP.x = powerUpArrayX[powerUpSelectorX];
+  powerUP.type = typeSet;
+  powerUP.x = 128;
   powerUP.y = powerUpArrayY[powerUpSelectorY];
-  powerUP.type = type;
-  powerUpSelectorX = (++powerUpSelectorX) % 4;
-  powerUpSelectorX = (++powerUpSelectorY) % 8;
+  powerUP.isActive = true;
+  powerUpSelectorY = (++powerUpSelectorY) % 8;
 }
 
 void drawBackground()
@@ -136,13 +147,38 @@ void drawPowerUP()
 }
 
 
+
 void drawBonus()
 {
-  for (byte i = 0; i < MAX_ONSCREEN_ENEMIES; ++i)
+  for (byte i = 0; i < 2; i++)
   {
     if (bonus[i].isActive && bonus[i].isVisible)
     {
+      char buf[10];
+      ltoa(bonus[i].amount, buf, 10);
+      char charLen = strlen(buf);
 
+      sprites.drawPlusMask(bonus[i].x, bonus[i].y, numbersSmall, 10);
+
+      for (byte k = 0; k < charLen; k++)
+      {
+        char digit = buf[k];
+        byte j;
+        if (digit <= 48)
+        {
+          digit = 0;
+        }
+        else {
+          digit -= 48;
+          if (digit > 9) digit = 0;
+        }
+
+        for (byte z = 0; z < 10; z++)
+        {
+          if (digit == z) j = z;
+        }
+        sprites.drawPlusMask(bonus[i].x + 4 + (5 * k), bonus[i].y, numbersSmall, digit);
+      }
     }
   }
 }
