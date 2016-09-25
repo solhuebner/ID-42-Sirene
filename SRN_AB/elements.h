@@ -9,6 +9,10 @@
 #define POWER_UP_MAGIC             5
 #define POWER_UP_STAR              6
 
+#define SMALL_PILLAR_DEPTH         20
+#define BIG_PILLAR_DEPTH           18
+
+
 
 #include <Arduino.h>
 #include "globals.h"
@@ -133,10 +137,10 @@ void drawBackground()
         sprites.drawSelfMasked(28 + (z * 15) + (8 * i), (8 * i), sunRay, i);
       }
     }
-    sprites.drawPlusMask(Column[0].x, 20, columnSmall_plus_mask, 0);
-    sprites.drawPlusMask(Column[1].x, 20, columnSmall_plus_mask, 0);
-    sprites.drawPlusMask(Column[2].x, 18, columnBig_plus_mask, 0);
-    sprites.drawPlusMask(Column[2].x + 8, 18, columnSmall_plus_mask, 0);
+    sprites.drawPlusMask(Column[0].x, SMALL_PILLAR_DEPTH, columnSmall_plus_mask, 0);
+    sprites.drawPlusMask(Column[1].x, SMALL_PILLAR_DEPTH, columnSmall_plus_mask, 0);
+    sprites.drawPlusMask(Column[2].x, BIG_PILLAR_DEPTH, columnBig_plus_mask, 0);
+    sprites.drawPlusMask(Column[2].x + 8, BIG_PILLAR_DEPTH, columnSmall_plus_mask, 0);
   }
 }
 
