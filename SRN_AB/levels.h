@@ -762,6 +762,9 @@ void checkCollisions()
           break;
       }
       powerUP.isActive = false;
+      arduboy.audio.tone(2093, 15);
+      delay (20);
+      arduboy.audio.tone(4186, 30);
     }
   }
 }
