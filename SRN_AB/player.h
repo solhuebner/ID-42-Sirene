@@ -173,9 +173,12 @@ void checkMermaid()
   // MERMAID dies
   if (mermaid.HP < 2)
   {
-    mermaid.HP = 4;
-    //rightX = 132;
-    //gameState = STATE_GAME_OVER;
+    if (PLAYER_CAN_DIE)
+    {
+      rightX = 132;
+      gameState = STATE_GAME_OVER;
+    }
+    else mermaid.HP = 4;
   }
 
   // MERMAID animation
