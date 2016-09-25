@@ -162,7 +162,7 @@ void checkMermaid()
       mermaid.hasShield = false;
       mermaid.isVisible = true;
     }
-    if (arduboy.everyXFrames(4)) {
+    if (arduboy.everyXFrames(5)) {
       for (byte i = 0; i < MAX_ONSCREEN_SHIELDS; i++)
       {
         shield[i].frame = (++shield[i].frame) % 16;
@@ -199,7 +199,7 @@ void drawMermaid()
   {
     for (byte i = 0; i < MAX_ONSCREEN_SHIELDS; i++)
     {
-      sprites.drawSelfMasked(mermaid.x - 5 + shieldX[shield[i].frame], mermaid.y - 6 + shieldY[shield[i].frame], chargeSparkles, shield[i].frame % 3);
+      sprites.drawSelfMasked(mermaid.x - 7 + shieldX[shield[i].frame], mermaid.y - 7 + shieldY[shield[i].frame], protectionShield, shield[i].frame % 4);
     }
   }
 

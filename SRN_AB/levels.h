@@ -28,7 +28,6 @@ boolean checkEndWave()
   {
     test += bitRead(enemy[i].characteristics, 7);
   }
-  //test += powerUP.isActive;
   if (test < 1) currentWave++;
 }
 
