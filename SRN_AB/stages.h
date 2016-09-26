@@ -1,11 +1,11 @@
-#ifndef LEVELS_H
-#define LEVELS_H
+#ifndef STAGES_H
+#define STAGES_H
 
 #include <Arduino.h>
 #include "globals.h"
 #include "enemies.h"
 
-#define TOTAL_AMOUNT_OF_LEVELS  9
+#define TOTAL_AMOUNT_OF_STAGES  9
 #define TOTAL_AMOUNT_OF_WAVES   25
 
 byte currentWave;
@@ -343,7 +343,7 @@ void wave252()
 ///////////////
 void wave254()
 {
-  gameState = STATE_GAME_NEXT_LEVEL;
+  gameState = STATE_GAME_NEXT_STAGE;
 }
 
 void wave255()
@@ -355,7 +355,7 @@ void wave255()
 
 
 typedef void (*FunctionPointer) ();
-const FunctionPointer PROGMEM Levels[TOTAL_AMOUNT_OF_LEVELS][TOTAL_AMOUNT_OF_WAVES] =
+const FunctionPointer PROGMEM stages[TOTAL_AMOUNT_OF_STAGES][TOTAL_AMOUNT_OF_WAVES] =
 {
   //PART 1
   { //STAGE 1

@@ -16,9 +16,9 @@
 #define ENDBOSS_SEAHORSE                1
 #define ENDBOSS_PIRATESHIP              2
 
-#define LEVEL_WITH_SHARK                1
-#define LEVEL_WITH_SEAHORSE             2
-#define LEVEL_WITH_PIRATESHIP           3
+#define STAGE_WITH_SHARK                1
+#define STAGE_WITH_SEAHORSE             2
+#define STAGE_WITH_PIRATESHIP           3
 
 #define POINTS_FISHY                    30
 #define POINTS_FISH                     50
@@ -393,9 +393,9 @@ void setEndBoss()
   endBossSwitch = true;
   endBossSwimsRight = false;
   endBoss.x = 128;
-  endBoss.y = endBossStartY[(level - 1) / 3];
-  endBoss.HP = endBossMaxHP[(level - 1) / 3];
-  endBoss.type = (level - 1) / 3;
+  endBoss.y = endBossStartY[(stage - 1) / 3];
+  endBoss.HP = endBossMaxHP[(stage - 1) / 3];
+  endBoss.type = (stage - 1) / 3;
 }
 
 

@@ -22,7 +22,7 @@
 #include "player.h"
 #include "enemies.h"
 #include "elements.h"
-#include "levels.h"
+#include "stages.h"
 
 typedef void (*FunctionPointer) ();
 
@@ -33,7 +33,7 @@ const FunctionPointer PROGMEM  mainGameLoop[] = {
   stateMenuPlay,
   stateMenuInfo,
   stateMenuSoundfx,
-  stateGameNextLevel,
+  stateGameNextStage,
   stateGamePlaying,
   stateGamePause,
   stateGameOver,

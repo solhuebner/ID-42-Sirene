@@ -14,7 +14,7 @@
 #define STATE_MENU_SOUNDFX           5
 
 //define game states (on main menu)
-#define STATE_GAME_NEXT_LEVEL        6
+#define STATE_GAME_NEXT_STAGE        6
 #define STATE_GAME_PLAYING           7
 #define STATE_GAME_PAUSE             8
 #define STATE_GAME_OVER              9
@@ -25,7 +25,7 @@
 #define GAME_LEFT                    0
 #define GAME_RIGHT                   128
 
-#define LEVEL_TO_START_WITH          1
+#define STAGE_TO_START_WITH          1
 #define PLAYER_CAN_DIE               1
 
 #define SCORE_SMALL_FONT             0
@@ -41,7 +41,7 @@ Sprites sprites(arduboy);
 byte gameState = STATE_MENU_INTRO;    // start the game with the TEAM a.r.g. logo
 byte menuSelection = STATE_MENU_PLAY; // PLAY menu item is pre-selected
 byte globalCounter = 0;
-byte level = LEVEL_TO_START_WITH -1;
+byte stage = STAGE_TO_START_WITH -1;
 unsigned long scorePlayer; 
 byte backgroundIsVisible;
 byte gameOverAndStageFase;

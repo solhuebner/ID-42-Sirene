@@ -7,13 +7,13 @@
 #include "player.h"
 #include "enemies.h"
 #include "elements.h"
-#include "levels.h"
+#include "stages.h"
 
 boolean objectVisible;
 
 void stateMenuPlay()
 {
-  level = LEVEL_TO_START_WITH - 1;
+  stage = STAGE_TO_START_WITH - 1;
   scorePlayer = 0;
   setWeapons();
   setEnemies();
@@ -23,7 +23,7 @@ void stateMenuPlay()
   globalCounter = 0;
   leftX = -32;
   rightX = 148;
-  gameState = STATE_GAME_NEXT_LEVEL;
+  gameState = STATE_GAME_NEXT_STAGE;
 };
 
 void start()
@@ -36,7 +36,7 @@ void start()
 void slideToMiddle()
 {
   byte amount;
-  if (gameState == STATE_GAME_NEXT_LEVEL) amount = 39;
+  if (gameState == STATE_GAME_NEXT_STAGE) amount = 39;
   else amount = 31;
   if (leftX < amount)
   {
@@ -49,7 +49,7 @@ void slideToMiddle()
 void slideOpen()
 {
   byte amount;
-  if (gameState == STATE_GAME_NEXT_LEVEL) amount = 39;
+  if (gameState == STATE_GAME_NEXT_STAGE) amount = 39;
   else amount = 31;
   if (leftX > amount)
   {
@@ -59,18 +59,18 @@ void slideOpen()
   else gameOverAndStageFase++;
 }
 
-void nextLevelFlicker()
+void nextstageFlicker()
 {
   objectVisible = !objectVisible;
   wait();
 }
 
 
-void nextLevelEnd()
+void nextstageEnd()
 {
   gameState = STATE_GAME_PLAYING;
   gameOverAndStageFase = 0;
-  level++;
+  stage++;
   leftX = -32;
   rightX = 148;
   mermaid.isImune = true;
@@ -80,7 +80,7 @@ void nextLevelEnd()
 }
 
 typedef void (*FunctionPointer) ();
-const FunctionPointer PROGMEM nextLevelFases[] =
+const FunctionPointer PROGMEM nextstageFases[] =
 {
   start,
   wait,
@@ -88,12 +88,12 @@ const FunctionPointer PROGMEM nextLevelFases[] =
   slideOpen,
   slideToMiddle,
   wait,
-  nextLevelFlicker,
-  nextLevelEnd,
+  nextstageFlicker,
+  nextstageEnd,
 };
 
 
-void stateGameNextLevel()
+void stateGameNextStage()
 {
   checkMermaid();
   drawMermaid();
@@ -103,9 +103,9 @@ void stateGameNextLevel()
   if (objectVisible)
   {
     sprites.drawSelfMasked(leftX, 28, textStage, 0);
-    sprites.drawSelfMasked(rightX, 28, numbersBig, level + 1);
+    sprites.drawSelfMasked(rightX, 28, numbersBig, stage + 1);
   }
-  ((FunctionPointer) pgm_read_word (&nextLevelFases[gameOverAndStageFase]))();
+  ((FunctionPointer) pgm_read_word (&nextstageFases[gameOverAndStageFase]))();
 };
 
 
@@ -122,7 +122,7 @@ void stateGamePlaying()
   checkPowerUP();
   checkBonus();
 
-  if (arduboy.everyXFrames(2)) ((FunctionPointer) pgm_read_word (&Levels[level - 1][currentWave]))();
+  if (arduboy.everyXFrames(2)) ((FunctionPointer) pgm_read_word (&stages[stage - 1][currentWave]))();
 
   drawBackground();
   drawBosses();
