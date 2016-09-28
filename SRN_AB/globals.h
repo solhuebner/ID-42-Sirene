@@ -26,7 +26,7 @@
 #define GAME_RIGHT                   128
 
 #define STAGE_TO_START_WITH          1
-#define PLAYER_CAN_DIE               1
+#define PLAYER_CAN_DIE               0
 
 #define SCORE_SMALL_FONT             0
 #define SCORE_BIG_FONT               1

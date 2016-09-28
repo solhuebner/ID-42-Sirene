@@ -11,6 +11,7 @@
 
 #define SMALL_PILLAR_DEPTH         20
 #define BIG_PILLAR_DEPTH           18
+#define SUNRAY_OFFSET              28
 
 
 
@@ -134,7 +135,7 @@ void drawBackground()
     {
       for (byte i = 0; i < 3; i++)
       {
-        sprites.drawSelfMasked(28 + (z * 15) + (8 * i), (8 * i), sunRay, i);
+        sprites.drawSelfMasked(SUNRAY_OFFSET + (z * 15) + (8 * i), (8 * i), sunRay, i);
       }
     }
     sprites.drawPlusMask(Column[0].x, SMALL_PILLAR_DEPTH, columnSmall_plus_mask, 0);

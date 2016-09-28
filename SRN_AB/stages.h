@@ -738,7 +738,7 @@ void checkCollisions()
       switch (powerUP.type)
       {
         case POWER_UP_HEART:
-          if (mermaid.HP < 4) mermaid.HP++;
+          if (mermaid.HP < MAX_HP_MERMAID) mermaid.HP++;
           else giveBonus(1000, powerUP.x, powerUP.y);
           break;
         case POWER_UP_SHIELD:
@@ -766,12 +766,6 @@ void checkCollisions()
       arduboy.audio.tone(4186, 30);
     }
   }
-}
-
-void drawLifeHUD()
-{
-  for (byte i = 0; i < 3; i++) sprites.drawSelfMasked(8 * i, 0, hearts, 0);
-  for (byte i = 0; i < mermaid.HP - 1; i++)sprites.drawSelfMasked(8 * i, 0, hearts, 1);
 }
 
 

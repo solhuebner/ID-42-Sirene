@@ -43,6 +43,9 @@
 #define SEASHELL_COLLISION_OFFSET    0
 #define MAGIC_COLLISION_OFFSET       8
 
+#define AMOUNT_OF_HEARTS             4
+#define MAX_HP_MERMAID               AMOUNT_OF_HEARTS + 1
+
 
 int seaShellSpeedY[] = {SEASHELL_GO_STRAIGHT, SEASHELL_GO_UP, SEASHELL_GO_DOWN};
 byte coolDown[] = { WEAPON_COOLDOWN_TRIDENT, WEAPON_COOLDOWN_BUBBLES, WEAPON_COOLDOWN_SEASHELL, WEAPON_COOLDOWN_MAGIC};
@@ -178,7 +181,7 @@ void checkMermaid()
       rightX = 132;
       gameState = STATE_GAME_OVER;
     }
-    else mermaid.HP = 4;
+    else mermaid.HP = MAX_HP_MERMAID;
   }
 
   // MERMAID animation
@@ -302,6 +305,12 @@ void drawWeapons()
   {
     if (bullet[i].isVisible) sprites.drawSelfMasked(bullet[i].x, bullet[i].y, weapons[bullet[i].type], bullet[i].frame);
   }
+}
+
+void drawLifeHUD()
+{
+  for (byte i = 0; i < AMOUNT_OF_HEARTS; i++) sprites.drawSelfMasked(8 * i, 0, hearts, 0);
+  for (byte i = 0; i < mermaid.HP - 1; i++)sprites.drawSelfMasked(8 * i, 0, hearts, 1);
 }
 
 
