@@ -8,9 +8,6 @@
 #define TOTAL_AMOUNT_OF_STAGES  9
 #define TOTAL_AMOUNT_OF_WAVES   25
 
-byte currentWave;
-byte previousWave;
-
 boolean checkStartWave()
 {
   if (currentWave != previousWave)
@@ -342,11 +339,6 @@ void wave253()
 {
   //Explosions
   checkExplosions();
-  if (globalCounter > 10)
-  {
-    globalCounter = 0;
-    currentWave++;
-  }
 }
 
 

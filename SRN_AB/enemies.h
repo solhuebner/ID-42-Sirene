@@ -352,18 +352,19 @@ void checkExplosions()
 {
   for (byte i = 0; i < 8; i++)
   {
-    enemy[i].x = 60 + shieldX[globalCounter] + shieldX[2 * i];
-    enemy[i].y = 8 + shieldY[globalCounter] + shieldY[2 * i];;
+    byte k = (4+(7*i))%16;
+    enemy[i].x = 84 + shieldX[k];
+    enemy[i].y = 6 + (2 * shieldY[k]);
   }
   if (arduboy.everyXFrames(18))
   {
-    faseTimer++;
-    if (faseTimer >7)
+    enemy[globalCounter%8].characteristics = B00110000;
+    globalCounter++;
+    if (globalCounter > 15)
     {
-      faseTimer = 0;
-      globalCounter +=5;
+      globalCounter = 0;
+      currentWave++;
     }
-    enemy[faseTimer].characteristics = B00110000;
   }
 }
 

@@ -45,10 +45,10 @@ byte stage = STAGE_TO_START_WITH -1;
 unsigned long scorePlayer; 
 byte backgroundIsVisible;
 byte gameOverAndStageFase;
-
+byte currentWave;
+byte previousWave;
 int leftX;
 byte rightX;
-
 byte powerUpSelectorY = 0;
 
 #endif

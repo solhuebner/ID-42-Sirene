@@ -88,7 +88,7 @@ const FunctionPointer PROGMEM nextstageFases[] =
   slideOpen,
   slideToMiddle,
   wait,
-  //nextstageFlicker,
+  nextstageFlicker,
   nextstageEnd,
 };
 
@@ -178,7 +178,7 @@ void stateGameOver()
   sprites.drawSelfMasked(leftX, 16, textGame, 0);
   sprites.drawSelfMasked(rightX, 16, textOver, 0);
   if (objectVisible) {
-    sprites.drawSelfMasked(47, 28, textScore, 0);
+    sprites.drawSelfMasked(35, 28, textHighscore, 0);
     drawScore(SCORE_BIG_FONT);
   }
 };
@@ -198,7 +198,7 @@ void stateGameEnded()
  if (objectVisible) {
     checkMermaid();
     drawMermaid();
-    sprites.drawSelfMasked(47, 28, textScore, 0);
+    sprites.drawSelfMasked(35, 28, textHighscore, 0);
     sprites.drawSelfMasked(41, 16, textTheEnd, 0);
     drawScore(SCORE_BIG_FONT);
   }
