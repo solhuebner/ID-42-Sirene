@@ -9,9 +9,9 @@
 #define POWER_UP_MAGIC             5
 #define POWER_UP_STAR              6
 
-#define SMALL_PILLAR_DEPTH         20
+#define SMALL_PILLAR_DEPTH         28
 #define BIG_PILLAR_DEPTH           18
-#define SUNRAY_OFFSET              28
+#define SUNRAY_OFFSET              32
 
 
 
@@ -163,7 +163,7 @@ void drawBonus()
       ltoa(bonus[i].amount, buf, 10);
       char charLen = strlen(buf);
 
-      sprites.drawPlusMask(bonus[i].x, bonus[i].y, numbersSmall, 10);
+      sprites.drawSelfMasked(bonus[i].x, bonus[i].y, numbersSmall, 10);
 
       for (byte k = 0; k < charLen; k++)
       {
@@ -182,7 +182,7 @@ void drawBonus()
         {
           if (digit == z) j = z;
         }
-        sprites.drawPlusMask(bonus[i].x + 4 + (5 * k), bonus[i].y, numbersSmall, digit);
+        sprites.drawSelfMasked(bonus[i].x + 4 + (5 * k), bonus[i].y, numbersSmall, digit);
       }
     }
   }

@@ -30,7 +30,7 @@
 
 #define MAX_ONSCREEN_BULLETS         9
 #define MAX_ONSCREEN_SPARKLES        8
-#define MAX_ONSCREEN_SHIELDS         3
+#define MAX_ONSCREEN_SHIELDS         2
 
 #define MERMAID_IMUNE_TIME           30
 #define MERMAID_SUPER_TIME           250
@@ -103,16 +103,9 @@ struct Sparkles
     byte frame;
 };
 
-struct Shield
-{
-  public:
-    byte frame;
-};
-
 
 Bullets bullet[MAX_ONSCREEN_BULLETS];
 Sparkles sparkle[MAX_ONSCREEN_SPARKLES];
-Shield shield[MAX_ONSCREEN_SHIELDS];
 
 
 //////// Player functions //////////////////
@@ -126,11 +119,6 @@ void setMermaid()
   mermaid.isVisible = true;
   mermaid.HP = 4;
   mermaid.imuneTimer = 0;
-  for (byte i = 0; i < MAX_ONSCREEN_SHIELDS; i++)
-  {
-    shield[i].frame = i * (16 / MAX_ONSCREEN_SHIELDS);
-  }
-
 }
 
 
@@ -165,12 +153,6 @@ void checkMermaid()
       mermaid.hasShield = false;
       mermaid.isVisible = true;
     }
-    if (arduboy.everyXFrames(5)) {
-      for (byte i = 0; i < MAX_ONSCREEN_SHIELDS; i++)
-      {
-        shield[i].frame = (++shield[i].frame) % 16;
-      }
-    }
   }
 
   // MERMAID dies
@@ -192,7 +174,7 @@ void checkMermaid()
   {
     for (byte i = 0; i < MAX_ONSCREEN_SPARKLES; i++)
     {
-      sparkle[i].frame = (++sparkle[i].frame) % 8;
+      sparkle[i].frame = (++sparkle[i].frame) % 16;
     }
   }
 }
@@ -205,7 +187,7 @@ void drawMermaid()
   {
     for (byte i = 0; i < MAX_ONSCREEN_SHIELDS; i++)
     {
-      sprites.drawSelfMasked(mermaid.x - 7 + shieldX[shield[i].frame], mermaid.y - 7 + shieldY[shield[i].frame], protectionShield, shield[i].frame % 4);
+      sprites.drawSelfMasked(mermaid.x - 7 + shieldX[sparkle[i].frame], mermaid.y - 7 + shieldY[sparkle[i].frame], protectionShield, sparkle[i].frame % 4);
     }
   }
 
@@ -217,7 +199,7 @@ void drawMermaid()
   {
     for (byte i = 0; i < MAX_ONSCREEN_SPARKLES; i++)
     {
-      sprites.drawSelfMasked(mermaid.x + sparkle[i].x + (sparkle[i].speedX * sparkle[i].frame), mermaid.y + sparkle[i].y + (sparkle[i].speedY * sparkle[i].frame), chargeSparkles, sparkle[i].frame);
+      sprites.drawSelfMasked(mermaid.x + sparkle[i].x + (sparkle[i].speedX * (sparkle[i].frame % 8)), mermaid.y + sparkle[i].y + (sparkle[i].speedY * (sparkle[i].frame % 8)), chargeSparkles, sparkle[i].frame % 8);
     }
     sprites.drawPlusMask(mermaid.x, mermaid.y, chargeBar_plus_mask, mermaid.chargeBarFrame);
   }

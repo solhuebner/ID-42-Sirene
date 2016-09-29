@@ -338,6 +338,17 @@ void wave252()
   if (!bitRead(endBoss.characteristics, 7)) currentWave++;
 }
 
+void wave253()
+{
+  //Explosions
+  checkExplosions();
+  if (globalCounter > 10)
+  {
+    globalCounter = 0;
+    currentWave++;
+  }
+}
+
 
 // END WAVES
 ///////////////
@@ -436,7 +447,7 @@ const FunctionPointer PROGMEM stages[TOTAL_AMOUNT_OF_STAGES][TOTAL_AMOUNT_OF_WAV
     wave005,
     wave011,
     wave250,
-    wave000,
+    wave253,
     wave254,
   },
 
@@ -519,7 +530,7 @@ const FunctionPointer PROGMEM stages[TOTAL_AMOUNT_OF_STAGES][TOTAL_AMOUNT_OF_WAV
     wave014,
     wave013,
     wave251,
-    wave000,
+    wave253,
     wave254,
   },
 
@@ -595,14 +606,14 @@ const FunctionPointer PROGMEM stages[TOTAL_AMOUNT_OF_STAGES][TOTAL_AMOUNT_OF_WAV
     wave018,
     wave012,
     wave106, //POWER_UP_STAR
-    wave013,
     wave014,
     wave015,
-    wave100, //POWER_UP_HEART
     wave016,
+    wave100, //POWER_UP_HEART
     wave017,
     wave018,
     wave252,
+    wave253,
     wave255,
   },
 };
@@ -783,7 +794,7 @@ void drawScore(byte fontType)
     switch (fontType)
     {
       case SCORE_SMALL_FONT:
-        sprites.drawPlusMask(95 + (5 * i), 0, numbersSmall, 0);
+        sprites.drawSelfMasked(95 + (5 * i), 0, numbersSmall, 0);
         break;
       case SCORE_BIG_FONT:
         sprites.drawSelfMasked(40 + (7 * i), 40, numbersBig, 0);
@@ -811,7 +822,7 @@ void drawScore(byte fontType)
     switch (fontType)
     {
       case SCORE_SMALL_FONT:
-        sprites.drawPlusMask(95 + (pad * 5) + (5 * i), 0, numbersSmall, digit);
+        sprites.drawSelfMasked(95 + (pad * 5) + (5 * i), 0, numbersSmall, digit);
         break;
       case SCORE_BIG_FONT:
         sprites.drawSelfMasked(40 + (pad * 7) + (7 * i), 40, numbersBig, digit);

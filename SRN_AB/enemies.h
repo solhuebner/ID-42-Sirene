@@ -348,6 +348,24 @@ void drawEnemies()
 
 //////// BOSS functions ////////////////////
 ////////////////////////////////////////////
+void checkExplosions()
+{
+  for (byte i = 0; i < 8; i++)
+  {
+    enemy[i].x = 60 + shieldX[globalCounter] + shieldX[2 * i];
+    enemy[i].y = 8 + shieldY[globalCounter] + shieldY[2 * i];;
+  }
+  if (arduboy.everyXFrames(18))
+  {
+    faseTimer++;
+    if (faseTimer >7)
+    {
+      faseTimer = 0;
+      globalCounter +=5;
+    }
+    enemy[faseTimer].characteristics = B00110000;
+  }
+}
 
 struct EndBosses
 {
