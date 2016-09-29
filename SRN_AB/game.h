@@ -69,7 +69,6 @@ void nextstageFlicker()
 void nextstageEnd()
 {
   gameState = STATE_GAME_PLAYING;
-  //gameState = STATE_GAME_ENDED;    // start the game with the TEAM a.r.g. logo
   gameOverAndStageFase = 0;
   stage++;
   leftX = -32;
@@ -89,7 +88,7 @@ const FunctionPointer PROGMEM nextstageFases[] =
   slideOpen,
   slideToMiddle,
   wait,
-  nextstageFlicker,
+  //nextstageFlicker,
   nextstageEnd,
 };
 
@@ -200,11 +199,9 @@ void stateGameEnded()
     checkMermaid();
     drawMermaid();
     sprites.drawSelfMasked(47, 28, textScore, 0);
-    //sprites.drawSelfMasked(41, 16, textTheEnd, 0);
+    sprites.drawSelfMasked(41, 16, textTheEnd, 0);
     drawScore(SCORE_BIG_FONT);
   }
 }
-
-
 
 #endif
