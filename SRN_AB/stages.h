@@ -629,7 +629,7 @@ void checkCollisions()
         {
           if (!bitRead(enemy[i].characteristics, 6))
           {
-            arduboy.audio.tone(523, 10);
+            sound.tone(523, 10);
             enemy[i].HP -= bullet[k].damage;
             bitSet(enemy[i].characteristics, 6);
             if (enemy[i].HP < 1) giveBonus(enemiesPoints[enemy[i].type], enemy[i].x, enemy[i].y);
@@ -656,7 +656,7 @@ void checkCollisions()
         }
         if (arduboy.collide(bulletsRect, endBossRect))
         {
-          arduboy.audio.tone(523, 10);
+          sound.tone(523, 10);
           bitSet(endBoss.characteristics, 6);
           bullet[k].isVisible = false;
           endBoss.HP -= bullet[k].damage;
@@ -684,7 +684,7 @@ void checkCollisions()
       if (!bitRead(enemy[i].characteristics, 6))
       {
         bitSet(enemy[i].characteristics, 5);
-        arduboy.audio.tone(2349, 15);
+        sound.tone(2349, 15);
       }
     }
   }
@@ -695,7 +695,7 @@ void checkCollisions()
     {
       if (!mermaid.isImune && !mermaid.hasShield)
       {
-        arduboy.audio.tone(2349, 15);
+        sound.tone(2349, 15);
         mermaid.isImune = true;
         mermaid.HP -= BULLET_DAMAGE;
         enemyBullet[i].isVisible = false;
@@ -721,7 +721,7 @@ void checkCollisions()
     {
       if (!bitRead(endBoss.characteristics, 6))
       {
-        arduboy.audio.tone(2349, 15);
+        sound.tone(2349, 15);
         bitSet(endBoss.characteristics, 6);
         endBoss.HP--;
       }
@@ -764,9 +764,9 @@ void checkCollisions()
           break;
       }
       powerUP.isActive = false;
-      arduboy.audio.tone(2093, 15);
+      sound.tone(2093, 15);
       delay (20);
-      arduboy.audio.tone(4186, 30);
+      sound.tone(4186, 30);
     }
   }
 }
