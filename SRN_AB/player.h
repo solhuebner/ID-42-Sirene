@@ -257,7 +257,7 @@ void checkWeapons()
 
 void shootWeapon()
 {
-  arduboy.audio.tone(880, 20);
+  sound.tone(880, 20);
   if (!bullet[mermaid.currentBullet].isVisible)
   {
     if (bullet[mermaid.currentBullet].type != WEAPON_TYPE_SEASHELL)bullet[mermaid.currentBullet].frame = 0;
