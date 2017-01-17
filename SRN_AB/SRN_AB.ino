@@ -1,7 +1,7 @@
 /*
   SIRÈNE: http://www.team-arg.org/srn-manual.html
 
-  Arduboy version 1.2:  http://www.team-arg.org/srn-downloads.html
+  Arduboy version 1.2.1:  http://www.team-arg.org/srn-downloads.html
 
   MADE by TEAM a.r.g. : http://www.team-arg.org/more-about.html
 
