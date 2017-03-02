@@ -353,8 +353,8 @@ void checkExplosions()
   for (byte i = 0; i < 8; i++)
   {
     byte k = (4+(7*i))%16;
-    enemy[i].x = 84 + shieldX[k];
-    enemy[i].y = 6 + (2 * shieldY[k]);
+    enemy[i].x = 84 + pgm_read_byte(&shieldX[k]);
+    enemy[i].y = 6 + (2 * pgm_read_byte(&shieldY[k]));
   }
   if (arduboy.everyXFrames(18))
   {
