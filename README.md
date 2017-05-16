@@ -1,6 +1,5 @@
-#Sirène
-![Image]
-(http://www.team-arg.org/masterfiles/team-arg-srn/images/banner-ID-42.png)
+# Sirène
+![Image](http://www.team-arg.org/masterfiles/team-arg-srn/images/banner-ID-42.png)
 
 Sirène : http://www.team-arg.org/srn-manual.html  
 **Download latest Arduboy version and source :** https://github.com/TEAMarg/ID-42-Sirene/releases/latest  
