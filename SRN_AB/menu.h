@@ -9,12 +9,20 @@ byte eyesSequence[] = {0, 1, 2, 3, 3, 3, 1};
 
 void drawTitleScreen()
 {
-  byte eyesFrame2;
+  byte eyesFrame2 = 0;
+  if (eyesFrame == 1 && random(10) > 7) {
+    eyesBlink = 1;
+  }
   if (arduboy.everyXFrames(10)) hairFrame++;
   if (arduboy.everyXFrames(2)) eyesFrame++;
-  if (eyesFrame > 60)eyesFrame = 0;
-  eyesFrame2 = eyesFrame;
-  if (eyesFrame2 > 6) eyesFrame2 = 0;
+  if (eyesFrame > 30) eyesFrame = 0;
+  if (eyesBlink == 1) {
+    eyesFrame2 = eyesFrame;
+    if (eyesFrame2 > 6) {
+      eyesFrame2 = 0;
+      eyesBlink = 0;
+    }
+  }
   if (hairFrame > 3) hairFrame = 0;
   sprites.drawSelfMasked(36, 1, mermaidTitle, 0);
   sprites.drawSelfMasked(59, 21, mermaidTrident, 0);
