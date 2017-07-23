@@ -5,6 +5,7 @@
 #include "globals.h"
 byte hairFrame = 0;
 byte eyesFrame = 0;
+byte eyesBlink = 0;
 byte eyesSequence[] = {0, 1, 2, 3, 3, 3, 1};
 
 void drawTitleScreen()
