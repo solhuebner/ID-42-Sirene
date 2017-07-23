@@ -41,7 +41,6 @@ void wait()
 
 void wave000()
 {
-  mermaid.isImune = true;
   wait();
 }
 
